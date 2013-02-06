@@ -1,0 +1,137 @@
+<apex:page showHeader="false" sidebar="false" controller="TesterController">
+    <apex:form >
+        <center>
+             <apex:pageMessages /> 
+              <!-- ---------------Requirement info display---------------------- -->
+    <table  width="100%" cellspacing="10" cellpadding="10" align="center">
+    <tr>
+        <td>
+        <fieldset >
+            <legend colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Currently Selected Requierment</legend>
+            <table border="0" width="95%" align="center">
+            <tr>
+                <td style="font-size:14px"><b><apex:outputLabel value="Requirement ID:"/></b></td>           
+                    <TD style="font-size:14px"><apex:outputText value="{!referedReq.Name}"></apex:outputText></TD>
+                </tr>
+                <tr>
+                    <TD style="font-size:14px"><b><apex:outputLabel value="Requirement Name:"/></b></TD>
+                    <TD style="font-size:14px"><apex:outputText value="{!referedReq.reqName__c}"></apex:outputText></TD>
+                </tr>
+                <tr>
+                    <TD style="font-size:14px"><b><apex:outputLabel value="Requirement Description:"/></b></TD>
+                    <TD style="font-size:14px"><apex:outputText value="{!referedReq.reqDescription__c}"></apex:outputText></TD>
+                </tr> 
+            </table>
+        </fieldset>
+        </td>
+    </tr>  
+    </table>                   
+
+    <!-- ---------------------end of requirement info panel -------------------------- --->
+   
+    <table width="30%" align="Left">
+    <tr>
+        <td><apex:image value="{!$Resource.tick}"/></td><td align="left">SUCCESS</td>
+        <td><apex:image value="{!$Resource.pending}"/></td><td align="left">PENDING</td>
+        <td><apex:image value="{!$Resource.cross}"/></td><td align="left">BUG</td>
+    </tr>
+    </table><br></br>
+              <apex:outputPanel title="Test Cases" rendered="{!booleanTestCaseTable}" >
+               <b><i>Please select any test case</i></b> <br></br><br></br>
+                <table width="95%" border="0">
+                   <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Available TestCases for the Requirement:<apex:outputLabel /></th></tr>
+                   <tr><td>
+                        <!-- other build list -->
+                        <apex:dataTable value="{!BuildList}" var="row" style="background-color:white" cellpadding="5" width="100%" rendered="{!testBuild1}">
+                             <apex:column >
+                                 <apex:facet name="header">Status</apex:facet>
+                                    <apex:image url="{!if(row.testCaseId__r.testStatus__c=='success' ,URLFOR($Resource.tick),null)}"/>
+                                    <apex:image url="{!if(row.testCaseId__r.testStatus__c=='bug' ,URLFOR($Resource.cross),null)}"/>
+                                    <apex:image url="{!if(!(row.testCaseId__r.testStatus__c=='success')&&!(row.testCaseId__r.testStatus__c=='bug') ,URLFOR($Resource.pending),null)}"/>
+                             </apex:column>
+                             <apex:column >
+                                 <apex:facet name="header">Name</apex:facet>
+                                      <apex:commandLink value="{!row.testCaseId__r.testName__c}" action="{!callTestCaseForm}" style="font-size:14px" >
+                                           <apex:param name="SelectedTestFormName"
+                                            value="{!row.testCaseId__r.id}"
+                                            assignTo="{!SelectedTestFormName}"/>
+                                      </apex:commandLink>
+                             </apex:column>
+                             <apex:column >
+                                 <apex:facet name="header">Description</apex:facet>
+                                     <apex:outputLabel style="font-size:14px" value="{!row.testCaseId__r.testDescription__c}"></apex:outputLabel>
+                             </apex:column>
+                             <apex:column >
+                                 <apex:facet name="header">Last Executed</apex:facet>
+                                    <!-- <apex:outputText style="font-size:14px" value="{!row.executedOn__c}"></apex:outputText> -->
+                                     <apex:outputText style="font-size:14px" value="{0,date,MM'-'dd'-'yyyy}"><apex:param value="{!row.executedOn__c}"/></apex:outputText>
+                                 </apex:column>
+                                 <apex:column >
+                                 <apex:facet name="header">Actual Result</apex:facet>
+                                     <apex:outputLabel style="font-size:14px" value="{!row.actualOutput__c}"></apex:outputLabel>
+                                 </apex:column>
+                                 <apex:column >
+                                     <apex:facet name="header">Result</apex:facet>
+                                         <apex:outputLabel style="font-size:14px" value="{!row.result__c}"></apex:outputLabel>
+                                 </apex:column>
+                                 <apex:column >
+                                     <apex:facet name="header">Action</apex:facet>
+                                         <apex:commandLink action="{!viewHistory}" value="view history" style="font-size:14px">
+                                              <apex:param name="referedTestObjId"
+                                              value="{!row.testCaseId__r.id}"
+                                              assignTo="{!referedTestObjId}"/>
+                                         </apex:commandLink>
+                                     </apex:column>
+                                </apex:dataTable>
+                                <apex:pageMessage rendered="{!testBuild2}" severity="info" strength="2" summary="No testcase under this requiremnt have been executed yet..."/>
+                                <!-- build list end -->
+                           </td></tr>
+                     <tr><td align="right">
+               <apex:commandButton value="Back" action="{!callBack}"/>
+           </td></tr> 
+       </table><br></br>
+       <apex:outputPanel rendered="{!boolPendingTable}">
+       <br></br><i><b>List of pending Test Cases</b></i><br></br><br></br>
+       <!-- otherlist with no build -->
+        <table width="90%" border="0">
+           <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Pending TestCases</th></tr>
+           <tr><td>
+                <apex:dataTable value="{!noBuildList}" var="row" style="background-color:white" cellpadding="5" width="100%">
+                      <apex:column >
+                            <apex:facet name="header">Status</apex:facet>
+                                   <apex:image value="{!$Resource.pending}"/>
+                      </apex:column>
+                      <apex:column >
+                            <apex:facet name="header">Name</apex:facet>
+                                   <apex:commandLink value="{!row.testName__c}" action="{!callTestCaseForm}" style="font-size:14px" >
+                                       <apex:param name="SelectedTestFormName"
+                                        value="{!row.id}"
+                                        assignTo="{!SelectedTestFormName}"/>
+                                  </apex:commandLink>
+                      </apex:column>
+                      <apex:column >
+                            <apex:facet name="header">Description</apex:facet>
+                                 <apex:outputLabel style="font-size:14px" value="{!row.testDescription__c}"></apex:outputLabel>
+                      </apex:column>
+                      <apex:column >
+                            <apex:facet name="header">Prerequisites</apex:facet>
+                                <apex:outputLabel style="font-size:14px" value="{!row.prerequisites__c}"></apex:outputLabel>
+                      </apex:column>
+                      <apex:column >
+                            <apex:facet name="header">Sample Input</apex:facet>
+                                <apex:outputLabel style="font-size:14px" value="{!row.sampleInputData__c}"></apex:outputLabel>
+                      </apex:column>
+                      <apex:column >
+                            <apex:facet name="header">Expected Output</apex:facet>
+                                <apex:outputLabel style="font-size:14px" value="{!row.expectedOutput__c}"></apex:outputLabel>
+                      </apex:column>
+                                <apex:pageMessage rendered="{!testBuild2}" severity="info" strength="2" summary="No testcase under this requiremnt have been executed yet..."/>                      
+               </apex:dataTable>
+            </td></tr>
+         </table>
+             <!-- build list end -->
+       </apex:outputPanel>
+     </apex:outputPanel> 
+   </center>
+  </apex:form>
+</apex:page>

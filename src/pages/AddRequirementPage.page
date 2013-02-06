@@ -1,0 +1,179 @@
+<apex:page showheader="false" sidebar="false" controller="AddRequirementController">
+  
+  
+    <style>
+    
+       
+      .bodyContainer {
+       position:absolute;
+       left:700px;
+       top:160px;
+       background-color: #D6E9EA;
+       overflow: hidden;
+       padding-top: 6px;
+       padding-left: 6px;
+       padding-right: 6px;
+       border-color: #8F9992;
+       border-width: medium;
+       padding-bottom: 5px;
+      }
+ 
+    </style>
+     <apex:include pageName="header" />
+
+     <apex:form >     
+           
+                 
+           <table border="0" width="50%" cellspacing="13" cellpadding="5">
+           
+           <tr><td rowspan="3" width="20%"></td><td>
+           <fieldset style="width:450px;">
+           <legend>Available Modules</legend>
+           <table border="0">
+               
+           <tr><td><apex:outputPanel id="showModule">
+                   <apex:dataTable value="{!Modules}" var="m">
+                     <apex:column width="45">
+                         <apex:inputcheckbox value="{!m.selected}" />
+                     </apex:column>
+                     <apex:column width="170">
+                         <apex:commandLink value="{!m.moduleObj.moduleName__c}" action="{!Requirements}" >
+                         <apex:param name="SelectedModule" value="{!m.selectedModule}" assignTo="{!moduleParam}"/>
+                         </apex:commandLink>
+                     </apex:column>
+                     
+                     <apex:column >
+                         <apex:commandLink value="edit"/>
+                     </apex:column>
+                 </apex:dataTable>           
+            </apex:outputpanel></td>           
+           
+           <td width="160" align="center"><apex:commandButton value="Add New" action="{!showAddModule}"/><br/><br/><apex:commandButton value="Delete"/></td></tr> 
+           </table></fieldset></td></tr>
+           <tr><td>          
+           <apex:outputPanel id="showReq" rendered="{!checkbool}">
+           <fieldset style="width:500px">
+           <legend>Module Requirements</legend>
+           <table border="0">
+           
+            <tr><td colspan="2" >
+               <table border="0" width="0">
+               <tr><td>ModuleID:</td><td><apex:outputtext value="{!reqList[0].reqObject.moduleID__r.Name}" /></td><td>Name:</td><td><apex:outputText value="{!reqList[0].reqObject.moduleID__r.moduleName__c}" /></td></tr>
+               <tr><td>Specification:</td><td><apex:outputtext value="{!reqList[0].reqObject.moduleID__r.moduleSpecification__c}" /></td><td>Priority:</td><td><apex:outputText value="{!reqList[0].reqObject.moduleID__r.priority__c}" /></td></tr>
+               <tr><td colspan="2"><b>Requirement Details</b></td></tr></table>
+               </td></tr>         
+            
+             
+             <tr><td><apex:datatable value="{!reqList}" var="r">
+                     <apex:column width="45">
+                         <apex:inputcheckbox value="{!r.selected}"/>
+                     </apex:column>
+                     <apex:column width="160">
+                         <apex:commandLink value="{!r.reqObject.reqName__c}" action="{!getTestcases}"> 
+                         <apex:param name="SelectedReq" value="{!r.selectedReq}" assignTo="{!reqParam}"/>
+                         </apex:commandLink>                         
+                     </apex:column>
+                     <apex:column width="110">
+                         <apex:commandLink value="View TestCases"/>
+                     </apex:column> 
+                     <apex:column width="110">
+                         <apex:commandLink value="Add TestCases"/>
+                     </apex:column>   
+                     <apex:column width="45">
+                         <apex:commandLink value="edit" action="{!showid}">
+                           <apex:param name="showid" value="{!r.selectedReq}" assignTo="{!reqid}"/>
+                         </apex:commandLink>
+                     </apex:column>            
+                 </apex:datatable></td>
+                 <td><apex:commandButton value="Add New" action="{!showAddRequiement}"/><br/><br/><apex:commandButton value="Delete"/></td>
+             <apex:outputpanel id="ajax1">
+             <apex:outputtext value="{!req.reqName__c}"></apex:outputtext>
+             </apex:outputpanel>
+             
+             </tr>
+             
+             </table></fieldset>
+           </apex:outputPanel></td></tr>
+           
+           
+           
+           </table> 
+            
+           <div id="coreBody" Class="bodyContainer">
+               <apex:outputPanel id="addModule" rendered="{!addModuleBool}">
+                   <table border="0" cellpadding="0" cellspacing="0" >
+                      <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Insert Module</th></tr>
+                      <tr><th width="100" height="40" align="center">Module Name</th><td><apex:inputtext id="moduleName" value="{!moduleInstance.moduleName__c}" size="50"/></td></tr>
+                      <tr><th width="100" height="40" align="center">Specification</th><td><apex:inputtextarea id="specification" rows="4" cols="55" value="{!moduleInstance.moduleSpecification__c}" /></td></tr>
+                       <tr><th width="100" height="40" align="center">Priority</th>
+                           <td><apex:selectList id="priority" multiselect="false" size="1" value="{!moduleInstance.priority__c}">
+                                   <apex:selectOption itemlabel="higher" itemvalue="higher"></apex:selectOption> 
+                                   <apex:selectoption itemlabel="medium" itemvalue="medium"></apex:selectoption>
+                                   <apex:selectoption itemlabel="low" itemvalue="low"></apex:selectoption>              
+                               </apex:selectList>
+                
+                           </td>
+                       </tr>
+                       <tr><th width="100" height="40" align="center">Start Date</th><td><apex:inputfield id="sdate" value="{!moduleInstance.startDate__c}" /></td></tr>
+                       <tr><th width="100" height="40" align="center">End Date</th><td><apex:inputfield id="enddate" value="{!moduleInstance.endDate__c}"/></td></tr>
+                        
+                        <tr><td align="right"><apex:commandButton value="Save" action="{!addModule}"/></td><td height="60" align="center"><apex:commandbutton value="Add Employee"/></td>
+                       </tr>
+                       </table>
+
+               </apex:outputPanel>
+               <apex:outputPanel id="addRequirement" rendered="{!addReqBool}">
+               
+                  <table border="0" cellpadding="0" cellspacing="0" >
+                      <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Insert Requirements</th></tr>
+                      <tr><th width="100" height="40" align="center">Requirement Name</th><td><apex:inputtext id="reqName" value="{!reqInstance.reqName__c}" size="50"/></td></tr>
+                      <tr><th width="100" height="40" align="center">Description</th><td><apex:inputtextarea id="description" rows="4" cols="55" value="{!reqInstance.reqDescription__c}" /></td></tr>
+                       <tr><th width="100" height="40" align="center">Priority</th>
+                           <td><apex:selectList id="reqpriority" multiselect="false" size="1" value="{!reqInstance.reqPriority__c}">
+                                   <apex:selectOption itemlabel="higher" itemvalue="higher"></apex:selectOption> 
+                                   <apex:selectoption itemlabel="medium" itemvalue="medium"></apex:selectoption>
+                                   <apex:selectoption itemlabel="low" itemvalue="low"></apex:selectoption>              
+                               </apex:selectList>
+                
+                           </td>
+                      </tr>
+                      <tr><th width="100" height="40" align="center">Proposed By</th><td><apex:inputtext id="reqproposedby" value="{!reqInstance.reqProposedBy__c}" size="50"/></td></tr>
+                     <tr><th width="100" height="40" align="center">Type</th>
+                           <td><apex:selectList id="reqstype" multiselect="false" size="1" value="{!reqInstance.reqType__c}">
+                                   <apex:selectOption itemlabel="Functional" itemvalue="Functional"></apex:selectOption> 
+                                   <apex:selectoption itemlabel="Non-Functional" itemvalue="Non-Functional"></apex:selectoption>
+                                                 
+                               </apex:selectList>
+                
+                           </td>
+                      </tr>
+                      <tr><th width="100" height="40" align="center">Status</th>
+                           <td><apex:selectList id="reqstatus" multiselect="false" size="1" value="{!reqInstance.reqStatus__c}">
+                                   <apex:selectOption itemlabel="Running" itemvalue="Running"></apex:selectOption> 
+                                   <apex:selectoption itemlabel="Pending" itemvalue="Pending"></apex:selectoption>
+                                                 
+                               </apex:selectList>
+                
+                           </td>
+                      </tr> 
+                       <tr><th width="100" height="40" align="center">Version</th>
+                           <td><apex:selectList id="version" multiselect="false" size="1" value="{!reqInstance.reqVersion__c}">
+                                   <apex:selectOption itemlabel="1.0" itemvalue="1.0"></apex:selectOption> 
+                                   <apex:selectoption itemlabel="2.0" itemvalue="2.0"></apex:selectoption>
+                                                 
+                               </apex:selectList>
+                
+                           </td>
+                      </tr>  
+                      <tr><td align="right"><apex:commandButton value="Save" /></td><td height="60" align="center"><apex:commandbutton value="Save and New"/></td>
+                      </tr>
+                    </table>
+
+               </apex:outputPanel>
+           </div>             
+         
+        <apex:outputpanel id="ajax">
+        
+        </apex:outputpanel>    
+     </apex:form>
+</apex:page>

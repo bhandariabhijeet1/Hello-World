@@ -1,0 +1,33 @@
+<apex:page controller="DefectCon" showHeader="false" sidebar="false">
+     <apex:form >
+         <center>
+         <table width="50%">
+         <tr>
+            <td><apex:outputLabel value="Defect Name"></apex:outputLabel></td>
+            <td><apex:inputText value="{!defectIns.defectName__c}" required="true"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Defect Description"></apex:outputLabel></td>
+            <td><apex:inputTextarea value="{!defectIns.defectDescription__c}" required="true"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Defect Status"></apex:outputLabel></td>
+            <td><apex:inputText value="{!defectIns.defectStatus__c}" required="true"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Defect Type"></apex:outputLabel></td>
+            <td><apex:inputText value="{!defectIns.defectType__c}" required="true"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Defect Assign To"></apex:outputLabel></td>
+            <td><apex:inputText value="{!defectIns.defectAssignTo__c}" required="true"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Testcase ID"></apex:outputLabel></td>
+            <td><apex:inputField value="{!defectIns.testID__c}" required="true"/></td>
+         </tr>
+         </table>
+         <apex:commandButton value="Submit" action="{!addItems}"/><br></br>
+         </center>
+     </apex:form>
+</apex:page>

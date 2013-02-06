@@ -1,0 +1,190 @@
+<apex:page sidebar="false" showheader="false" controller="ViewModuleDetail">
+     <style>
+         .head    {   font-size:14px;color:white;background-color:#3399CC;border-style:none; }              
+     </style>  
+     <script>
+      function showusers()
+      {
+           document.getElementById("showuser").style.visibility = "visible";
+      }
+     
+    </script>  
+      
+    
+    <Table cellpadding="5" cellspacing="5" >
+     
+     <TR>
+         <TD  valign="Top">
+          <apex:outputpanel id="moduleList" >
+           <apex:form >
+             <apex:dataTable cellpadding="5" cellspacing="5" style="background-color:white" headerClass="head" value="{!Display}" var="req"  >
+                 <apex:column >
+                     <apex:facet name="header">Module Name</apex:facet>
+                     <apex:CommandLink value="{!req.moduleName__c}" action="{!navigateModule}">
+                         <apex:param assignTo="{!selectedModule}" value="{!req.moduleName__c}" name="selectedModule"/>
+                     </apex:CommandLink>
+                 </apex:column>
+             </apex:dataTable> 
+          </apex:form>
+          </apex:outputPanel>
+         </TD>
+         <TD valign="top" width="80%">
+             <apex:outputPanel id="moduleDetailInfo">
+             <apex:form rendered="{!showModuleInfo}">
+           
+             <Table cellpadding="5" cellspacing="5"  width="100%">
+                  <TR>
+                      <TH colspan="2" style="font-size:14px;color:white;background-color:#3399CC;">Module Information</TH>
+                  </TR>
+                  <TR>
+                      <TH>Module Name</TH>
+                      <TD><apex:outputText value="{!selectedList[i].moduleName__c}"/></TD>
+                  </TR>
+                   <TR>
+                      <TH>Module Specification</TH>
+                      <TD><apex:outputText value="{!selectedList[i].moduleSpecification__c}"/></TD>
+                  </TR>
+                   <TR>
+                      <TH>Module Priority</TH>
+                      <TD><apex:outputtext value="{!selectedList[i].priority__c}"/></TD>
+                  </TR>
+                   <TR>
+                      <TH>Start Date</TH>
+                      <TD><apex:outputText value="{!selectedList[i].startDate__c}" ><apex:param value="{!selectedList[0].startDate__c}"/></apex:outputText></TD>
+                  </TR>
+                   <TR>
+                      <TH>End Date</TH>
+                      <TD><apex:outputText value="{!selectedList[i].startDate__c}" ><apex:param value="{!selectedList[0].endDate__c}"/></apex:outputText></TD>
+                  </TR>
+                   <TR>
+                      <TD colspan="2" align="right">
+                          
+                        <apex:commandButton value="Previous" action="{!showPrevious}" disabled="{!prevDisabled}" />&nbsp;&nbsp;&nbsp;&nbsp;
+                        <apex:commandButton value="Next" action="{!showNext}" disabled="{!nextDisabled}" />&nbsp;&nbsp;&nbsp;&nbsp;
+                        <apex:commandButton value="Edit" action="{!callEdit}" >
+                          <apex:param name="SelectedName" value="{!selectedList[i].id}" assignTo="{!SelectedName}"/>
+                        </apex:commandButton>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input class="btn" type="button" value="Delete" onclick="javascript:if (window.confirm('Are you sure?')) deletedModule('{!selectedList[i].id}');"/>
+                     </TD>
+                  </TR>
+                   <TR>
+                      <TH colspan="2" style="font-size:14px;color:white;background-color:#3399CC;">Module Team</TH>
+                  </TR>           
+                  <tr><td colspan="2">
+                          <apex:pageMessages ></apex:pageMessages>
+                         <div id="showuser" style="visibility:visible"> 
+                             <apex:dataTable headerClass="head" rendered="{!showEmployee}" value="{!showModuleUser}" var="req"  width="100%" cellpadding="5" rowClasses="RowEven,RowOdd" columnClasses="center" >
+                                   <apex:column >
+                                        <apex:facet name="header" >EmpID</apex:facet>
+                                        <apex:outputtext value="{!req.EmpID__r.Name}"/>
+                                    </apex:column>
+                                    <apex:column >
+                                         <apex:facet name="header">Emp Name</apex:facet>
+                                        <apex:outputText value="{!req.EmpID__r.empName__c}"/>
+                                    </apex:column>
+                                    <apex:column >
+                                        <apex:facet name="header">Designation</apex:facet>
+                                        <apex:outputText value="{!req.EmpID__r.empDesignation__c}"/>
+                                    </apex:column>
+                                    <apex:column >
+                                        <apex:facet name="header">Role</apex:facet>
+                                        <apex:outputtext value="{!req.ProjectUserRole__r.projectRole__c}"/>
+                                   </apex:column>                                                        
+                                </apex:dataTable>
+                            </div>
+                         </td>
+                     </tr>
+             </Table>
+            
+             </apex:form>
+              </apex:outputpanel>
+             <apex:form rendered="{!showEditPanel}" >
+             
+              <table border="0" cellpadding="5" cellspacing="5">
+                   <TR>
+                      <TH colspan="2" style="font-size:14px;color:white;background-color:#3399CC;">Edit Module Information</TH>
+                  </TR>
+                 <tr>
+                    <th><apex:outputLabel value="Module Name"></apex:outputLabel></th>
+                    <td><apex:inputText value="{!editedModuleInst.moduleName__c}" required="true" size="70"/></td>
+                 </tr>
+                 <tr>
+                    <th><apex:outputLabel value="Module Specification"></apex:outputLabel></th>
+                    <td><apex:inputTextarea value="{!editedModuleInst.moduleSpecification__c}" required="true" cols="78"/></td>
+                 </tr>
+                  <tr>
+                        <th><apex:outputLabel value="Priority"></apex:outputLabel></th>
+                        <td><apex:selectList value="{!editedModuleInst.priority__c}" size="1" required="true" >
+                            <apex:selectOption itemValue="High" itemLabel="High"/>
+                            <apex:selectOption itemValue="Medium" itemLabel="Medium"/>
+                            <apex:selectOption itemValue="Low" itemLabel="Low"/>
+                            </apex:selectList> 
+                        </td>
+                 </tr>
+                 <tr>
+                        <th><apex:outputLabel value="Start Date"></apex:outputLabel></th>
+                        <td><apex:inputfield value="{!editedModuleInst.startDate__c}" required="true" /></td>
+                 </tr>
+                 <tr>
+                        <th><apex:outputLabel value="End Date"></apex:outputLabel></th>
+                        <td><apex:inputfield value="{!editedModuleInst.endDate__c}" required="true" /></td>
+                 </tr> 
+                 <tr>
+                         <td colspan="2" height="70"><apex:commandButton value="Save" action="{!updateModule}" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                         
+                             <apex:commandButton value="cancel" action="{!returnEdit}"/> 
+                         </td>
+                 </tr>   
+                 <TR>
+                      <TH colspan="2" style="font-size:14px;color:white;background-color:#3399CC;">Module Team</TH>
+                  </TR>           
+                  <tr><td colspan="2">
+                          <apex:outputpanel id="edituserlist">
+                         <div id="showuser" style="visibility:visible"> 
+                             <apex:dataTable headerClass="head" value="{!showModuleUser}" var="req" cellpadding="5" rowClasses="RowEven,RowOdd" columnClasses="center" >
+                                   <apex:column width="80">
+                                        <apex:facet name="header" >EmpID</apex:facet>
+                                        <apex:outputtext value="{!req.EmpID__r.Name}"/>
+                                    </apex:column>
+                                    <apex:column width="100">
+                                         <apex:facet name="header">Emp Name</apex:facet>
+                                        <apex:outputText value="{!req.EmpID__r.empName__c}"/>
+                                    </apex:column>
+                                    <apex:column width="130">
+                                        <apex:facet name="header">Designation</apex:facet>
+                                        <apex:outputText value="{!req.EmpID__r.empDesignation__c}"/>
+                                    </apex:column>
+                                    <apex:column width="200">
+                                        <apex:facet name="header">Role</apex:facet>
+                                        <apex:outputtext value="{!req.ProjectUserRole__r.projectRole__c}"/>
+                                   </apex:column>
+                                   <apex:column width="100">
+                                      <apex:facet name="header">Action</apex:facet>                      
+                                      <a href="javascript:if (window.confirm('Are you sure?')) deleteModuleUser('{!req.id}');" style="font-weight:bold">Remove</a>
+                                   </apex:column>                        
+                                </apex:dataTable>
+                            </div>
+                           </apex:outputPanel>
+                         </td>
+                     </tr>
+              </table>
+      
+      
+     </apex:form>
+         </TD>
+     </TR>
+     
+     </Table>
+     <apex:form >
+     <apex:actionFunction action="{!deleteModule}" name="deletedModule" rerender="moduleList,moduleDetailInfo">
+          <apex:param name="moduleName" value="" assignTo="{!SelectedName1}" />
+     </apex:actionFunction>
+
+    <apex:actionFunction action="{!deleteModuleUser}" name="deleteModuleUser" rerender="moduleList,moduleDetailInfo,edituserlist">
+          <apex:param name="moduleuserName" value="{!selectedList[i].id}" assignTo="{!SelectedName2}"/>
+    </apex:actionFunction>     
+      
+      
+    </apex:form>
+           
+</apex:page>

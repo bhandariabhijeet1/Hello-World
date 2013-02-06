@@ -1,0 +1,63 @@
+<apex:page showHeader="false" sidebar="false"  controller="RequirementController">
+<style>
+.center
+{
+    text-align:center;
+}
+fieldset 
+{ 
+    border:1px solidgreen;
+}
+
+legend 
+{
+    padding: 0.2em 0.5em;
+    border:1px  solid green;
+    color:green;
+    font-size:90%;
+    text-align:right;
+}
+</style> 
+   
+<apex:form id="form" >
+      <!-- <apex:pageMessages /> -->
+     <center>
+         <table border="0" cellpadding="5" cellspacing="5"  width="95%">
+                <tr><th colspan="2" style="font-size:14px;font-weight:bolder;color:white;background-color:#3399CC;">Available TestCases</th></tr>
+           <tr><td><apex:outputPanel title="TestCases">
+             <apex:dataTable width="100%" value="{!testCaseWrapperList}" var="row" style="background-color:white" cellpadding="5" headerClass="left" rendered="{!viewTC1}">                 
+                <apex:column >
+                     <apex:facet name="header">Id</apex:facet>
+                     <apex:outputText style="font-size:14px" value="{!row.tCase.Name}"/>
+                </apex:column>
+                <apex:column >
+                     <apex:facet name="header">Name</apex:facet>
+                     <apex:outputText style="font-size:14px" value="{!row.tCase.testName__c}"/>
+                </apex:column>
+                <apex:column >
+                     <apex:facet name="header">Description</apex:facet>
+                     <apex:outputText style="font-size:14px" value="{!row.tCase.testDescription__c}"/>
+                </apex:column>
+                <apex:column >
+                     <apex:facet name="header">Status</apex:facet>
+                     <apex:outputLabel rendered="{!row.nullCheck1}" style="font-weight:bold">Nil</apex:outputLabel>
+                     <apex:outputText rendered="{!row.nullcheck11}" style="font-size:14px" value="{!row.tCase.testStatus__c}"/>
+                </apex:column>
+                <apex:column >
+                     <apex:facet name="header">Result</apex:facet>
+                     <apex:outputLabel rendered="{!row.nullCheck2}" style="font-weight:bold">Nil</apex:outputLabel>
+                     <apex:outputText rendered="{!row.nullCheck21}" style="font-size:14px" value="{!row.tCase.testResult__c}"/>
+                </apex:column>
+                <apex:column >
+                     <apex:facet name="header">Action</apex:facet>
+                     <apex:outputLabel rendered="{!row.message}" style="font-weight:bold">No TestBuilds</apex:outputLabel>
+                         <apex:commandLink value="View TestBuilds" action="{!checkBuild}" style="font-weight:bold" rendered="{!row.haveTestCase}">                          
+                                  <apex:param value="{!row.tCase.id}" assignTo="{!referedTestObjId}" name="referedTestObjId"/>
+                         </apex:commandLink>
+               </apex:column>
+          </apex:dataTable>
+              <apex:pageMessage rendered="{!viewTC2}" strength="2" severity="info" summary="No testcases have been added to the project yet..."/>
+        </apex:outputPanel></td></tr></table>
+     </center>
+   </apex:form>
+</apex:page>

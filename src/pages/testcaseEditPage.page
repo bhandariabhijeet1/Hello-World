@@ -1,0 +1,75 @@
+<apex:page controller="RequirementController" showHeader="false" sidebar="false">
+         <apex:form id="TestCaseEditForm">
+    <Table cellpadding="20" cellspacing="20" align="left" width="100%" border="0">
+
+    <TR>
+    <TD valign="top">
+  
+
+            <Table border="0" cellpadding="5" cellspacing="5"  width="100%">
+                  <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">TestCaseEditForm</th></tr>
+                <TR>
+                    <TH width="100" height="40" align="center">TestCase Name</TH> 
+                    <TD align="center"><apex:inputText value="{!tobeEdited2.testName__c}"/></TD>
+                </TR>
+                <TR>
+                    <TH  width="100" height="40" align="center">TestCase Desc</TH>
+                    <TD align="center"><apex:inputTextarea value="{!tobeEdited2.testDescription__c}" /> </TD>
+                </TR>
+                <TR>
+                    <TH  width="100" height="40" align="center">Test Steps</TH>
+                    <TD align="center"><apex:inputTextarea value="{!tobeEdited2.testSteps__c}" /> </TD>
+                </TR>
+                <!-- <TR>
+                    <TH width="100" height="40" align="center">TestCase AssignTo</TH>
+                    <TD align="center"><apex:inputText value="{!tobeEdited2.testAssignTo__c}"/></TD>
+                </TR> -->
+                <!--<TR>
+                    <TH width="100" height="40" align="center">TestCase AssignTo</TH>
+                   
+                    <td align="center"><apex:selectList value="{!tobeEdited2.testAssignTo__c}" size="1" >
+                                     <apex:selectOptions value="{!options}"/>
+                         </apex:selectList>
+
+                    </td>
+                    
+
+                </TR>-->
+
+                <TR>
+                    <TH width="100" height="40" align="center">Sample InputData</TH>
+                    <TD align="center"><apex:inputText value="{!tobeEdited2.sampleInputData__c}"/></TD>
+                </TR>
+                <TR>
+                    <TH width="100" height="40" align="center">TestCase Expected Output</TH>
+                    <TD align="center"><apex:inputText value="{!tobeEdited2.expectedOutput__c}"/></TD>
+                
+                </TR>
+                <!--<TR>
+                    <TH width="100" height="40" align="center">Last Executed</TH>
+                    <TD><apex:inputTextArea value="{!tobeEdited2.lastExecuted__c}"/></TD>
+                
+                </TR>
+                <TR>
+                    <TH width="100" height="40" align="center">TestCase Actual Output</TH>
+                    <TD><apex:inputTextArea value="{!tobeEdited2.actualOutput__c}"/></TD>
+                
+                </TR>
+                <TR>
+                    <TH width="100" height="40" align="center">TestCase Result</TH>
+                    <TD><apex:inputTextArea value="{!tobeEdited2.testResult__c}"/></TD>
+                
+                </TR>
+                -->
+                <TR>
+                    <TD align="center"><apex:commandButton value="Save" action="{!updatetestcase}" /></TD>
+                    <TD align="center"><apex:commandButton value="Back" action="{!returnEdit}" /></TD>
+                    
+                      
+                </TR></Table>
+  </TD>
+  </TR>
+  </Table>
+  </apex:form>
+        
+         </apex:page>

@@ -1,0 +1,26 @@
+<apex:page controller="projectReportController" showHeader="false" sidebar="false">
+  <apex:form id="form">
+    <apex:outputLabel value="Project"></apex:outputLabel>
+         <apex:selectList value="{!result}" required="true" size="1">
+            <apex:selectOption itemValue="Incomplete" itemLabel="Incomplete" ></apex:selectOption>
+            <apex:selectOption itemValue="complete" itemLabel="complete"></apex:selectOption>
+            <apex:selectOption itemValue="Working" itemLabel="Working"></apex:selectOption>
+            <apex:selectOption itemValue="All" itemLabel="All"></apex:selectOption>
+         </apex:selectList>
+       <apex:commandButton value="Filter" action="{!viewProjectReport}"></apex:commandButton>
+            <apex:pageBlock title="Project">
+               <apex:pageMessages ></apex:pageMessages>
+                  <apex:pageBlockTable value="{!projectlist}" var="project">
+                     <apex:column headerValue="ProjectID">
+                         <apex:outputText value="{!project.Name}"/>
+                     </apex:column>
+                        <apex:column headerValue="Project Title">
+                               <apex:outputText value="{!project.projectTitle__c}"/>
+                        </apex:column>
+                              <apex:column headerValue="Project Status">
+                                   <apex:outputText value="{!project.status__c}"/>
+                        </apex:column>
+                 </apex:pageBlockTable> 
+          </apex:pageBlock>
+       </apex:form>
+</apex:page>

@@ -1,0 +1,87 @@
+<apex:page controller="RequirementHomeCon" sidebar="false" showHeader="false">
+<apex:includeScript value="{!$Resource.jquery}"/>
+<script type="text/javascript">
+$(document).ready(function(){
+$(".req").hide(1000);
+  $(".but").click(function(){
+    $("p").hide(1000);
+    $(".req").show(1000);
+  });
+});
+</script>
+<style>
+div
+{
+    text-align:center;  
+}
+</style>
+    <apex:form >
+        <table width="80%" align="center" style="font-family:Arial;" border="1">
+            <tr>
+                <td>
+                    <div>
+                        <apex:outputLabel value="Module Info:"/>
+                        <br/>
+                        <br/>                    
+                        <table border="0">
+                        <tr>
+                            <td><apex:outputLabel value="Module Name"/></td>
+                            <td><apex:outputLabel value="{!moduleInstance.moduleName__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Module Specification"/></td>
+                            <td><apex:outputLabel value="{!moduleInstance.moduleSpecification__c}"/></td>
+                        </tr>
+                        </table>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <table border="0">
+                            <tr><apex:outputLabel value="Do You Want to Add Requirement?"/><br/><br/></tr>                       
+                            <tr><input class="but" type="button" value="Add Requirement" onclick="afFunction();"></input></tr>
+                            
+                            <!--
+                            <apex:actionFunction name="afFunction" rendered="false" reRender="harder"/>
+                            -->
+                        </table>                    
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <apex:outputLabel value="Project Information:"/>
+                        <br/>
+                        <br/>
+                        <table border="0">
+                        <tr>
+                            <td><apex:outputLabel value="Project Name"/></td>
+                            <td><apex:outputLabel value="{!projectInstance.projectTitle__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Project Version"/></td>
+                            <td><apex:outputLabel value="{!projectInstance.projectVersion__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Project Technology"/></td>
+                            <td><apex:outputLabel value="{!projectInstance.technology__c}"/></td>
+                        </tr>
+                        </table> 
+                    </div>
+                </td>
+            </tr>
+            <table width="80%" align="center" style="font-family:Arial;" border="0">
+            <tr>
+            <td colspan="3">
+            <center>
+            <p><apex:outputLabel value="No Requirements Exist for this Module..." id="harder" /></p>
+            </center>
+            </td>
+            </tr>
+            </table>
+            <div class="req">
+            <apex:iframe src="/apex/Requirement"  scrolling="false" id="wizardFrame" frameborder="true" width="80%">
+            </apex:iframe>  
+            </div>      
+        </table>
+    </apex:form>
+</apex:page>

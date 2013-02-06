@@ -1,0 +1,56 @@
+<apex:page controller="TestCaseCon" showHeader="false" sidebar="false">
+    <style>
+        div
+        {
+            align:center;
+        }
+    </style>
+    <div>
+     <apex:form >
+         <table width="50%">
+         <tr>
+            <td><apex:outputLabel value="Test Assigned To:"></apex:outputLabel></td>
+            <td><apex:inputText value="{!testCaseIns.testAssignTo__c}"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Test Name"></apex:outputLabel></td>
+            <td><apex:inputText value="{!testCaseIns.testName__c}"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Test Description"></apex:outputLabel></td>
+            <td><apex:inputTextarea value="{!testCaseIns.testDescription__c}"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Sample Input Data"></apex:outputLabel></td>
+            <td><apex:inputTextarea value="{!testCaseIns.sampleInputData__c}"/></td>
+         </tr>
+         
+         <tr>
+            <td><apex:outputLabel value="Actual Output"></apex:outputLabel></td>
+            <td><apex:inputTextarea value="{!testCaseIns.actualOutput__c}"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Last Executed On:"></apex:outputLabel></td>
+            <td><apex:inputField value="{!testCaseIns.lastExecuted__c}"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="expectedOutput"></apex:outputLabel></td>
+            <td><apex:inputTextarea value="{!testCaseIns.expectedOutput__c}"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Test Result"></apex:outputLabel></td>
+            <td><apex:inputTextarea value="{!testCaseIns.testResult__c}"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="RequirementID"></apex:outputLabel></td>
+            <td><apex:inputField value="{!testCaseIns.reqID__c}"/></td>
+         </tr>
+         
+         <tr>
+           <td><apex:commandButton value="Submit" action="{!addItem}"/></td>
+           </tr>
+           
+         </table>
+     </apex:form>
+         </div>
+</apex:page>

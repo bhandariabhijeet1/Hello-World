@@ -1,0 +1,121 @@
+<apex:page showHeader="false" sidebar="false"  controller="RequirementController">
+<style>
+.center
+{
+    text-align:center;
+}
+fieldset 
+{ 
+    border:1px solidgreen;
+}
+
+legend 
+{
+    padding: 0.2em 0.5em;
+    border:1px  solid green;
+    color:green;
+    font-size:90%;
+    text-align:right;
+}
+</style>
+<script>
+  var newWin=null; 
+  var mybool={!booleanAttachjs};
+  if(mybool)
+  {
+  url='https://c.ap1.content.force.com/servlet/servlet.FileDownload?file=00P90000000KTbb';
+  newWin=window.open('{!url}', 'Popup','height=550,width=450,left=100,top=100,res?izable=no,scrollbars=yes,toolbar=no,status=no');
+  mybool=false;
+  }
+</script>
+
+ <apex:outputPanel id="testBuilds" rendered="{!showTestBuildTable}">    
+   <apex:form id="form" >
+     <center>
+          <table border="0" cellpadding="5" cellspacing="5"  width="95%">
+                     <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">TestCase Builds</th></tr>
+                     <tr><td>
+              <apex:dataTable width="100%" value="{!buildWrapperList}" var="row" style="background-color:white" cellpadding="5" headerClass="left">                 
+                         <apex:column >
+                                 <apex:facet name="header">TestBuildID</apex:facet>
+                                 <apex:outputText style="font-size:14px" value="{!row.build.Name}"/>
+                         </apex:column>
+                         <apex:column >
+                                 <apex:facet name="header">Execution Date</apex:facet>
+                                 <apex:outputText style="font-size:14px" value="{0,date,MM'-'dd'-'yyyy}"><apex:param value="{!row.build.executedOn__c}"/></apex:outputText>
+                         </apex:column>
+                         <apex:column width="50%">
+                                 <apex:facet name="header">Actual Output</apex:facet>
+                                 <apex:outputText style="font-size:14px" value="{!row.build.actualOutput__c}"/>
+                         </apex:column>
+                         <apex:column >
+                                 <apex:facet name="header">Result</apex:facet>
+                                 <apex:outputText style="font-size:14px" value="{!row.build.result__c}"/>
+                         </apex:column>
+                         <apex:column >
+                                 <apex:facet name="header">Action</apex:facet>
+                                 <apex:outputLabel rendered="{!row.message1}" style="font-weight:bold">No Defects</apex:outputLabel>
+                              <apex:commandLink style="font-weight:bold" value="View Defects" action="{!checkAttachment}" rendered="{!row.haveBuild}">                          
+                                         <apex:param value="{!row.build.Id}" assignTo="{!referedTestBuildObjId}" name="referedTestBuildObjId"/>
+                              </apex:commandLink>
+                         </apex:column>
+              </apex:dataTable>
+            </td></tr>
+        </table>
+      </center>
+      
+    </apex:form>
+</apex:outputPanel>
+<apex:form >
+<apex:outputPanel rendered="{!boolRenderBack1}">
+<div align="right"><apex:commandButton value="Back" action="{!backToTestCases}"/></div>
+</apex:outputPanel>
+</apex:form>
+     <apex:outputPanel id="defects" rendered="{!showDefectsTable}">   
+           <apex:form id="form1" >
+              <br/>
+              <br/>
+                <center>
+                   <table border="0" cellpadding="5" cellspacing="5"  width="95%">
+                     <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Defects</th></tr>
+                     <tr><td>
+                      <apex:dataTable width="100%" value="{!defectWrapperList}" var="def" style="background-color:white" cellpadding="5" headerClass="left">                 
+                             <apex:column >
+                                     <apex:facet name="header">DefectID</apex:facet>
+                                     <apex:outputText style="font-size:14px" value="{!def.defect.Name}"/>
+                             </apex:column>
+                             <apex:column >
+                                     <apex:facet name="header">Name</apex:facet>
+                                     <apex:outputText style="font-size:14px" value="{!def.defect.defectName__c}"/>
+                             </apex:column>
+                             <apex:column >
+                                     <apex:facet name="header">Description</apex:facet>
+                                     <apex:outputText style="font-size:14px" value="{!def.defect.defectDescription__c}"/>
+                             </apex:column>
+                             <apex:column >
+                                     <apex:facet name="header">Severity</apex:facet>
+                                     <apex:outputText style="font-size:14px" value="{!def.defect.defectSeverity__c}"/>
+                             </apex:column>
+                             <apex:column >
+                                     <apex:facet name="header">Status</apex:facet>
+                                     <apex:outputText style="font-size:14px" value="{!def.defect.defectStatus__c}"/>
+                             </apex:column>
+                             <apex:column >
+                                     <apex:facet name="header">Attachment/s</apex:facet>
+                                     <apex:outputLabel rendered="{!def.message2}" style="font-weight:bold">No Attachment</apex:outputLabel> <!-- style="font-size:14px" -->
+                                        <apex:commandLink value="View Attachment" style="font-weight:bold" action="{!selectAttach}" rendered="{!def.haveAttachment}" >
+                                            <apex:param assignTo="{!defectAttachId}" name="defectAttachId" value="{!def.defect.Id}"/>                                                          
+                                        </apex:commandLink>
+                             </apex:column>
+                 </apex:dataTable>
+              </td></tr></table>
+         </center>
+             <!-- <div align="right"><apex:commandButton value="Back" action="{!backToTestCases}"/></div> -->
+     </apex:form>
+   </apex:outputPanel>
+   <apex:form > 
+   <apex:outputPanel rendered="{!boolRenderBack2}">
+<div align="right"><apex:commandButton value="Back" action="{!backToTestCases}"/></div>
+</apex:outputPanel>  
+</apex:form>
+</apex:page>

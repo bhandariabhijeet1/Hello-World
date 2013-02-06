@@ -1,0 +1,79 @@
+<apex:page showHeader="false" sidebar="false" controller="RequirementReportsController" contentType="application/vnd.ms-excel#Report.xls" >
+  
+  
+  <style>
+        .exstyle{height:80px;width:350px;border:1px solid blue;}
+        
+        .center
+          {
+             text-align:center;
+          }
+          .RowEven
+          {
+             background-color:#E6E6FA;
+           }
+           
+          .RowOdd
+          {bakground-color:white;}
+  
+          .headerstyle{height:30px;font-size:16px;font-weight:bold;color:black;text-align:left;}
+
+
+    </style>     
+  
+  <Center><h2>Cloud Based Test Case Management Tool</h2><br/><apex:outputText value="DATE: {!NOW()}" />
+  </Center><br/>
+  <table border="0"><tr><td><b>Project Title:</b></td><td><apex:outputtext value="{!projectObj.projectTitle__c}"/></td>
+         <td align="center"><b>StartDate:</b></td><td><apex:outputtext value="{!projectObj.startDate__c}" /></td></tr>
+         <tr><td><b>Project Version:</b></td><td align="center"><apex:outputtext value="{!projectObj.projectVersion__c}" /></td>
+         <td align="center"><b>End Date:</b></td><td><apex:outputtext value="{!projectObj.endDate__c}"/></td></tr>
+  </table>
+  <br/><br/>
+  
+         <apex:repeat value="{!requirementReport}" var="outer" id="theRepeat">
+
+                 <div>
+                     <apex:outputtext value="{!searchParam}:" styleclass="headerstyle"></apex:outputtext>
+                     <apex:outputText value="{!outer.reportParam} " styleclass="headerstyle"/>
+                     <apex:outputText value="({!outer.count}records)" styleclass="headerstyle" />
+                     
+                 </div>
+                        <apex:datatable value="{!outer.reqList}" var="inner" border="" width="100%" cellpadding="5" rowClasses="RowEven,RowOdd" columnClasses="center" headerClass="center">
+                             
+                             <apex:column >
+                               
+                                <apex:outputText value="{!inner.Name}" />
+                             </apex:column>
+                             <apex:column >
+                                
+                                <apex:outputText value="{!inner.reqName__c}" />
+                             </apex:column>
+                             <apex:column >
+                               
+                                <apex:outputText value="{!inner.reqDescription__c}" />
+                             </apex:column>
+                             <apex:column >
+                              
+                                <apex:outputText value="{!inner.reqPriority__c}" />
+                             </apex:column>
+                             <apex:column >
+                              
+                                <apex:outputText value="{!inner.reqStatus__c}" />
+                             </apex:column>
+                             <apex:column >
+                              
+                                <apex:outputText value="{!inner.reqVersion__c}" />
+                             </apex:column>
+                             <apex:column >
+                              
+                                <apex:outputText value="{!inner.moduleID__r.moduleName__c}" />
+                             </apex:column>
+                              <apex:column >
+                                <apex:outputText value="{0,date,dd'-'MM'-'yyyy}" ><apex:param value="{!inner.CreatedDate}"/></apex:outputText>
+                              </apex:column>
+                        </apex:datatable>
+                   
+             </apex:repeat>
+
+    
+</apex:page>

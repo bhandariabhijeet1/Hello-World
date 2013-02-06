@@ -1,0 +1,29 @@
+<apex:page controller="paginationController" showHeader="false" sidebar="false">
+  <apex:form >
+   <!-- <apex:pageBlock >
+        <apex:pageBlockTable value="{!accountList}" var="o">
+            <apex:column value="{!o.Name}"/>
+            <apex:column value="{!o.reqName__c}"/>
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+    -->
+    
+      <apex:pageBlock >
+   <apex:outputPanel id="r">  
+    <apex:pageBlockSection title="Category Results -  Page #{!pageNumber}" columns="1">
+        <apex:pageBlockTable value="{!accountList}" var="c">
+            <apex:column value="{!c.reqName__c}"/>
+          <apex:column value="{!c.Name}" headerValue="Name"/>
+        </apex:pageBlockTable>
+      </apex:pageBlockSection>
+      </apex:outputPanel>
+      </apex:pageBlock>
+      <apex:commandLink value="next" action="{!callPage}"/>
+    
+      <!--<apex:param name="pageNo" value="2" assignTo="pageNo"/>
+      </apex:commandLink>
+      <apex:commandLink value="3" action="{!callPage}">
+        <apex:param name="pageNo" value="3" assignTo="pageNo"/>
+      </apex:commandLink> -->
+</apex:form>
+</apex:page>

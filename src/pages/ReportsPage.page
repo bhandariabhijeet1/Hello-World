@@ -1,0 +1,227 @@
+<apex:page sidebar="false" showheader="false" controller="ReportsController">
+ 
+  <script>
+   
+          var newWindow=null;
+          function openPopup(ctr)
+          {   
+              if(ctr==1)
+                    var url="https://ap1.salesforce.com/00O90000001Vgih";       
+              if(ctr==2)
+                     var url="https://ap1.salesforce.com/00O90000001VgrZ";
+              if(ctr==3)
+                     var url="https://ap1.salesforce.com/00O90000001VgrU";       
+              newWindow=window.open(url, 'Popup','height=750,width=950,left=200,top=100,res​izable=no,scrollbars=yes,toolbar=no,status=no');
+              newWindow.focus();       
+              return false; 
+           }
+
+   </script>
+  
+   <style> 
+   .background1
+          {
+             background-color:lightgray;
+           }
+           
+   </style>
+   
+    <apex:form ><br/><br/><br/>
+       <Table cellpadding="5" cellspacing="5" align="center" width="70%" border="0">
+         <tr><td colspan="3" style="color:white;background-color:#3399CC;font-weight:bolder;">Standard Reports</td></tr>
+         <tr><td colspan="3"><apex:commandLink id="StandardReqReport" value="Requirements Reports" onclick="openPopup(1);" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+         <apex:commandLink id="standardTestReport" value="TestCase Reports" onclick="openPopup(2);"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+         <apex:commandLink id="standardDefectReport" value="Defect Log"  onclick="openPopup(3);"/></td></tr>
+         
+         <tr><td style="color:white;background-color:#3399CC;font-weight:bolder;" colspan="3">Custom Report</td></tr>
+         <tr><td colspan="3"><apex:commandLink id="customReqReport" value="Requirements Reports" action="{!reqReports}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+         <apex:commandLink id="customTestReport" value="TestCase Reports" action="{!testcaseReports}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+         <apex:commandLink id="customDefectReport" value="Defect Log"  action="{!defectReports}"/></td></tr>
+         
+         <tr><td></td></tr>
+         <tr><td></td></tr>
+         
+         <tr><td colspan="3">
+         
+         <apex:outputPanel id="reqReports" rendered="{!bool1}" >
+             <table border="0" width="99%"><tr><td>
+              <apex:outputtext value="{!projectObj.projectTitle__c}" /></td><td><apex:outputText value="DATE: {!NOW()}" />
+</td><td align="right">
+              <apex:commandButton value="Export" action="{!showReq}"/></td></tr>
+             </table> 
+            
+            <apex:dataTable value="{!reqList1}" style="background-color:lightgray;" var="req" border="1" cellpadding="5">
+            
+               <apex:column width="80">
+
+                        <apex:facet name="header" >ReqID</apex:facet>
+                        <apex:outputtext value="{!req.Name}"/>
+
+                </apex:column>
+                <apex:column width="350">
+
+                        <apex:facet name="header">Requirement Name</apex:facet>
+                        <apex:outputText value="{!req.reqName__c}"/>
+
+                </apex:column>
+                
+                <apex:column width="400">
+
+                        <apex:facet name="header">Requirement Description</apex:facet>
+                       
+                        <apex:outputtext id="reqDesc" value="{!req.reqDescription__c}"/>
+
+                </apex:column>
+                
+                <apex:column width="100">
+
+                        <apex:facet name="header">Priority</apex:facet>
+                        <apex:outputText value="{!req.reqPriority__c}"/>
+
+                </apex:column>
+                <apex:column width="100">
+
+                        <apex:facet name="header">Status</apex:facet>
+                        <apex:outputText value="{!req.reqStatus__c}"/>
+
+                </apex:column>
+                
+                 <apex:column width="100">
+
+                        <apex:facet name="header">Module</apex:facet>
+                        <apex:outputText value="{!req.moduleID__r.moduleName__c}" />
+
+                </apex:column>
+
+
+            </apex:dataTable>
+        
+         </apex:outputPanel>
+         <apex:outputPanel id="testcaseReports" rendered="{!bool2}">
+             <table border="0" width="99%"><tr><td>
+              <apex:outputtext value="{!projectObj.projectTitle__c}" /></td><td><apex:outputText value="DATE: {!NOW()}" />
+</td><td align="right">
+              <apex:commandButton value="Export" action="{!showTestCase}"/></td></tr>
+             </table>
+         
+             <apex:dataTable value="{!testCaseList1}" style="background-color:lightgray;" var="r" border="1" cellpadding="5">
+            
+               <apex:column width="80">
+
+                        <apex:facet name="header" >TestCase ID</apex:facet>
+                        <apex:outputtext value="{!r.Name}"/>
+
+                </apex:column>
+                <apex:column width="200">
+
+                        <apex:facet name="header">TestCase Name</apex:facet>
+                        <apex:outputText value="{!r.testName__c}"/>
+
+                </apex:column>
+                
+                <apex:column width="200">
+
+                        <apex:facet name="header">Description</apex:facet>
+                       
+                        <apex:outputtext value="{!r.testDescription__c}"/>
+
+                </apex:column>
+                
+                <apex:column width="100">
+
+                        <apex:facet name="header">Requirement Name</apex:facet>
+                        <apex:outputText value="{!r.reqID__r.reqName__c}"/>
+
+                </apex:column>
+                <apex:column width="100">
+
+                        <apex:facet name="header">Module Name</apex:facet>
+                        <apex:outputText value="{!r.reqID__r.moduleID__r.moduleName__c}"/>
+
+                </apex:column>
+                <apex:column width="100">
+
+                        <apex:facet name="header">Assigned TO</apex:facet>
+                        <apex:outputText value="{!r.testAssignTo__c}"/>
+
+                </apex:column>
+                <apex:column width="100">
+
+                        <apex:facet name="header">Expected OutPut</apex:facet>
+                        <apex:outputText value="{!r.expectedOutput__c}" />
+
+                </apex:column>
+                 <apex:column width="100">
+
+                        <apex:facet name="header">Actual OutPut</apex:facet>
+                        <apex:outputText value="{!r.actualOutput__c}" />
+
+                </apex:column>
+                 <apex:column width="100">
+
+                        <apex:facet name="header">TestCase Result</apex:facet>
+                        <apex:outputText value="{!r.testResult__c}" />
+
+                </apex:column>
+
+           </apex:dataTable>
+        
+         </apex:outputPanel>
+         <apex:outputPanel id="defectreqReports" rendered="{!bool3}"><table border="0" width="99%"><tr><td>
+              <apex:outputtext value="{!projectObj.projectTitle__c}" /></td><td><apex:outputText value="DATE: {!NOW()}" />
+</td><td align="right">
+              <apex:commandButton value="Export" action="{!showdefects}"/></td></tr>
+             </table>
+         
+             <apex:dataTable value="{!defectList1}" style="background-color:lightgray;" var="r" border="1" cellpadding="5">
+            
+               <apex:column width="80">
+
+                        <apex:facet name="header" >Defect ID</apex:facet>
+                        <apex:outputtext value="{!r.Name}"/>
+
+                </apex:column>
+                <apex:column width="200">
+
+                        <apex:facet name="header">Defect Name</apex:facet>
+                        <apex:outputText value="{!r.defectName__c}"/>
+
+                </apex:column>
+                
+                <apex:column width="200">
+
+                        <apex:facet name="header">Description</apex:facet>
+                       
+                        <apex:outputtext value="{!r.defectDescription__c}"/>
+
+                </apex:column>
+                
+                <apex:column width="100">
+
+                        <apex:facet name="header">Defect Type</apex:facet>
+                        <apex:outputText value="{!r.defectType__c}"/>
+
+                </apex:column>
+                <apex:column width="100">
+
+                        <apex:facet name="header">Defect Status</apex:facet>
+                        <apex:outputText value="{!r.defectStatus__c}" />
+
+                 </apex:column>
+                 <apex:column width="100">
+
+                        <apex:facet name="header">Severity</apex:facet>
+                       <apex:outputText value="{!r.defectSeverity__c}"/>
+
+                 </apex:column>
+                 <apex:column >
+                        <apex:facet name="header">TestCase Name</apex:facet>
+                        <apex:outputtext value="{!r.TestCaseBuildID__r.testCaseId__r.testName__c}" />
+                 </apex:column> 
+           </apex:dataTable>        
+         </apex:outputPanel> </td></tr>
+         
+        </table>
+              
+    </apex:form>
+ </apex:page>

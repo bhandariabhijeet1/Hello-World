@@ -1,0 +1,58 @@
+<apex:page showHeader="false" sidebar="false" controller="ReportsController" contentType="application/vnd.ms-excel#Report.xls" >
+      
+       <center><h2>Cloud Based Test Case Management Tool</h2><br/><apex:outputText value="DATE: {!NOW()}" />
+</Center><br/>
+       <table border="0"><tr><td><b>Project Title:</b></td><td><apex:outputtext value="{!projectObj.projectTitle__c}"/></td>
+              <td align="center"><b>StartDate:</b></td><td><apex:outputtext value="{!projectObj.startDate__c}" /></td></tr>
+              <tr><td><b>Project Version:</b></td><td align="center"><apex:outputtext value="{!projectObj.projectVersion__c}" /></td>
+              <td align="center"><b>End Date:</b></td><td><apex:outputtext value="{!projectObj.endDate__c}"/></td></tr>
+       </table>
+       <br/><br/>
+        <apex:dataTable value="{!reqList1}" var="req" border="1">
+            
+               <apex:column width="80">
+
+                        <apex:facet name="header" >ReqID</apex:facet>
+                        <apex:outputtext value="{!req.Name}"/>
+
+                </apex:column>
+                <apex:column width="200">
+
+                        <apex:facet name="header">Requirement Name</apex:facet>
+                        <apex:outputText value="{!req.reqName__c}"/>
+
+                </apex:column>
+                
+                <apex:column width="200">
+
+                        <apex:facet name="header">Requirement Description</apex:facet>
+                       
+                        <apex:outputtext id="reqDesc" value="{!req.reqDescription__c}"/>
+
+                </apex:column>
+                
+                <apex:column width="100">
+
+                        <apex:facet name="header">Priority</apex:facet>
+                        <apex:outputText value="{!req.reqPriority__c}"/>
+
+                </apex:column>
+                <apex:column width="100">
+
+                        <apex:facet name="header">Status</apex:facet>
+                        <apex:outputText value="{!req.reqStatus__c}"/>
+
+                </apex:column>
+               
+                 <apex:column width="100">
+
+                        <apex:facet name="header">Module</apex:facet>
+                        <apex:outputText value="{!req.moduleID__r.moduleName__c}" />
+
+                </apex:column>
+
+
+            </apex:dataTable>
+
+    
+</apex:page>

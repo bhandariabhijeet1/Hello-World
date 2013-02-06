@@ -1,0 +1,70 @@
+<apex:page controller="ModuleDetail" sidebar="false" showheader="false">
+
+     <STYLE TYPE="text/css">
+
+         .B { font-size: 10pt; line-height: 2 } 
+
+     </STYLE> 
+ 
+      <center><br/><br/><br/><br/><br/><br/>
+       <apex:form >
+          
+       <table border="0">
+       
+       <tr><th colspan="2">
+       <table border="0" bgcolor="lightseagreen">
+       <tr><th width="95" align="center">UserId</th><th width="105">Name</th><th width="110">Designation</th><th width="55">BU</th><th width="78">Manager</th></tr>
+       </table></th></tr>
+       
+       
+       <tr bgcolor="lightseagreen"><td>
+       
+        <apex:selectcheckboxes value="{!employees}" layout="pageDirection" styleClass="B">
+        
+                  <apex:selectOptions value="{!Employee}"/>
+
+                    
+        </apex:selectcheckboxes></td><td>       
+        
+    
+     <apex:outputpanel id="ajaxPart">
+     <apex:dataTable value="{!Detail}" var="emp" border="0" bgcolor="lightseagreen" cellspacing="4" cellpadding="6">
+               
+                
+                <apex:column >
+
+                        
+                        <apex:outputText value="{!emp.userName__c}"/>
+
+                </apex:column>
+                <apex:column >
+
+                        
+                        <apex:outputText value="{!emp.userRole__c}"/>
+
+                </apex:column>
+                <apex:column >
+
+                       
+                        <apex:outputText value="{!emp.BU__c}"/>
+
+                </apex:column>
+                <apex:column >
+
+                       
+                        <apex:outputText value="{!emp.manager__c}"/>
+
+                </apex:column>
+
+        </apex:dataTable>
+       </apex:outputpanel></td></tr>
+       
+       <tr><td height="50">
+
+        <apex:commandButton value="Previous" action="{!previous}" /></td><td height="50" align="center">
+        <apex:commandbutton value="Save" action="{!addObject}"/></td></tr></table>
+        
+       
+   </apex:form>
+  </center> 
+</apex:page>

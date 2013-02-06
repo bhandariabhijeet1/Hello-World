@@ -1,0 +1,16 @@
+<apex:page sidebar="false" showHeader="false">
+
+ 
+    <apex:form >
+    
+         
+         <table border="0">
+         
+               <tr><td><apex:commandlink value="Available Users"/></td><td><apex:commandLink value="Insert Users"/></td>
+                   <td><apex:commandLink value="Delete Users" /></td><td><apex:commandLink value="Lock Users"/></td>
+                   <td><apex:commandLink value="UnLock Users" /></td>
+               </tr>
+         </table>
+    </apex:form>
+
+</apex:page>

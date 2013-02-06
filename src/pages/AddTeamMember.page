@@ -1,0 +1,18 @@
+<apex:page sidebar="false" showHeader="false">
+<Table align="left" cellpadding="5" cellspacing="5">
+    <TR>
+        <TH colspan="2"> Currently Selected Module</TH>
+    </TR>
+    <TR>
+        <apex:form >
+            <fieldset>
+            <legend>Module Information</legend>
+            <TH>Module Name:</TH><TD></TD>
+            <TH>Specification:</TH><TD></TD>
+            </fieldset>
+        </apex:form>
+    </TR>
+ </Table>
+    
+  
+</apex:page>

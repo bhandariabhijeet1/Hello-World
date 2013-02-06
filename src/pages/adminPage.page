@@ -1,0 +1,66 @@
+<apex:page showHeader="false" sidebar="false" controller="ProjectPageController">
+    <apex:include pageName="header"/>
+         <Table cellpadding="10" cellspacing="2" width="80%" align="center">
+             <TR><TD colsapn="2">
+                     <Table cellpadding="5" cellspacing="5" align="center"  width="100%">
+                              <TR>
+                                  <TH colspan="4" style="color:white;background-color:#3399CC;">Project Details </TH>
+                              </TR>
+                              <TR>
+                                  <TD style="font-weight:bolder;"> <apex:outputLabel value="Project Title: "></apex:outputLabel> </TD>
+                                  <TD><apex:outputLabel value="{!projObj.projectTitle__c}" /></TD>
+                                  <TD style="font-weight:bolder;"><apex:outputLabel value="Project Version: "></apex:outputLabel></TD>
+                                  <TD><apex:outputLabel value="{!projObj.projectVersion__c}" /></TD>
+                              </TR>
+                              <apex:OutputPanel rendered="{!more}">
+                               <TR>
+                                  <TD style="font-weight:bolder;"><apex:outputLabel value="Project Description: "></apex:outputLabel></TD>
+                                  <TD ><apex:outputLabel value="{!projObj.ProjectDescription__c}" /></TD>
+                                  <TD style="font-weight:bolder;"><apex:outputLabel value="Technology: "></apex:outputLabel></TD>
+                                  <TD ><apex:outputLabel value="{!projObj.technology__c}" /></TD>
+                              </TR>
+                              <TR>
+                                  <TD style="font-weight:bolder;"><apex:outputLabel value="Status: "></apex:outputLabel></TD>
+                                  <TD><apex:outputLabel value="{!projObj.status__c}" /></TD>
+                                  <TD style="font-weight:bolder;"><apex:outputLabel value="Budget: "></apex:outputLabel></TD>
+                                  <TD><apex:outputLabel value="{!projObj.budget__c}" /></TD>
+                              </TR>
+                              <TR>
+                                  <TD style="font-weight:bolder;"><apex:outputLabel value="Start date: "></apex:outputLabel></TD>
+                                  <TD><apex:outputLabel value="{!projObj.startDate__c}" /></TD>
+                                  <TD style="font-weight:bolder;"><apex:outputLabel value="Proposed end date: "></apex:outputLabel></TD>
+                                  <TD><apex:outputLabel value="{!projObj.endDate__c}" /></TD>
+                              </TR>
+                              
+                           </apex:OutputPanel>
+                            <TR>
+                                  <TD colspan="4" align="right"><apex:form ><apex:commandButton rendered="{!less}" value="More" action="{!showProjectDetail}"/><apex:commandButton rendered="{!more}" value="Less" action="{!showProjectDetail}"/></apex:form>
+                                  </TD>
+                              </TR>
+                       </Table>
+                    </TD>
+                 </TR>  
+                  <TR>
+                      <TD colsapn="2">
+                           <apex:form >
+                                   <table width="25%" align="left">
+                                          <TR>
+                                             <TH colspan="2" style="color:white;background-color:#3399CC;">Module Details </TH>
+                                         </TR>
+                                          <TR>
+                                             <TD>
+                                                 <apex:commandButton value="Add new Module" action="/apex/moduleDetail"/>
+                                                 <apex:commandButton value="View Module detail" action="/apex/viewModuleDetail"/>
+                                             </TD>
+                                         </TR>
+                                     </table>
+                             </apex:form>
+                  </TD>
+         </TR>  
+     </Table>
+     
+     
+     
+     
+     
+</apex:page>

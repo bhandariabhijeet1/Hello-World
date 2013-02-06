@@ -1,0 +1,97 @@
+<apex:page showHeader="false" sidebar="false" controller="ViewModuleDetail"  >
+   <script>
+      function showusers()
+      {
+           document.getElementById("showuser").style.visibility = "visible";
+      }
+</script>
+
+<apex:form >
+         <center>
+         <br/><br/><br/>
+         <table border="0" >
+         <tr>
+            <td><apex:outputLabel value="Module Name"></apex:outputLabel></td>
+            <td><apex:inputText value="{!editedModuleInst.moduleName__c}" required="true" size="70"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Module Specification"></apex:outputLabel></td>
+            <td><apex:inputTextarea value="{!editedModuleInst.moduleSpecification__c}" required="true" cols="78"/></td>
+         </tr>
+         
+         <tr>
+            <td><apex:outputLabel value="Priority"></apex:outputLabel></td>
+            <td><apex:selectList value="{!editedModuleInst.priority__c}" size="1" required="true" >
+                <apex:selectOption itemValue="High" itemLabel="High"/>
+                <apex:selectOption itemValue="Medium" itemLabel="Medium"/>
+                <apex:selectOption itemValue="Low" itemLabel="Low"/>
+                </apex:selectList> </td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Start Date"></apex:outputLabel></td>
+            <td><apex:inputfield value="{!editedModuleInst.startDate__c}" required="true" /></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="End Date"></apex:outputLabel></td>
+            <td><apex:inputfield value="{!editedModuleInst.endDate__c}" required="true" /></td>
+         </tr> 
+         <tr><td colspan="2" height="70"><apex:commandButton value="edit" action="{!updateModule}" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+         <input type="button" value="Show users" onclick="showusers()" />&nbsp;&nbsp;&nbsp;&nbsp;
+         <apex:commandButton value="cancel" action="{!returnEdit}"/> </td></tr>              
+         <tr><td colspan="2">
+         <div id="showuser" style="visibility:hidden"> 
+    
+         <apex:dataTable value="{!showModuleUser}" var="req" border="1" cellpadding="5" rowClasses="RowEven,RowOdd" columnClasses="center" headerClass="center">
+                
+                <apex:column width="80">
+
+                        <apex:facet name="header" >EmpID</apex:facet>
+                        <apex:outputtext value="{!req.EmpID__r.Name}"/>
+
+                </apex:column>
+                <apex:column width="100">
+
+                        <apex:facet name="header">Emp Name</apex:facet>
+                        <apex:outputText value="{!req.EmpID__r.empName__c}"/>
+
+                </apex:column>
+                <apex:column width="130">
+
+                        <apex:facet name="header">Designation</apex:facet>
+                        <apex:outputText value="{!req.EmpID__r.empDesignation__c}"/>
+
+                </apex:column>
+                <apex:column width="200">
+
+                        <apex:facet name="header">manager</apex:facet>
+                       
+                        <apex:outputtext value="{!req.EmpID__r.managerID__c}"/>
+
+                </apex:column>
+                              
+                <apex:column width="100">
+         
+                         <apex:facet name="header">Action</apex:facet>                      
+                         <a href="javascript:if (window.confirm('Are you sure?')) deleteModuleUser('{!req.id}');" style="font-weight:bold">Del</a>
+
+                </apex:column>                        
+
+        </apex:dataTable></div></td></tr>
+              
+         </table>
+       
+      <apex:actionFunction action="{!deleteModuleUser}" name="deleteModuleUser" reRender="ajaxPart">
+      <apex:param name="moduleuserName" value="" assignTo="{!SelectedName2}"/>
+      </apex:actionFunction>
+      
+       
+              
+        
+         
+        
+       
+         </center>
+     </apex:form>
+
+  
+</apex:page>

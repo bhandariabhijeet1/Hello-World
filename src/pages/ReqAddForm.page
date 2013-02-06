@@ -1,0 +1,151 @@
+<apex:page controller="ReqAddCon" showHeader="false" sidebar="false" id="reqAddPage">
+  <apex:includeScript value="{!$Resource.ValidationForm}"/>
+
+<style>
+fieldset { border:1px solidgreen;
+  width:500px;
+ }
+
+legend {
+  padding: 0.2em 0.5em;
+  border:1px  solid green;
+  color:green;
+  font-size:90%;
+  text-align:right;
+  }
+P{font-size:10pt;font-style:regular;color:red;}
+  
+</style>
+    <script>
+         function ReqFormValidation(x)
+         {
+                var ctr=1; 
+                document.getElementById("dreqName").innerHTML="";
+                document.getElementById("dreqDescription").innerHTML="";
+                //document.getElementById("dproposedBy").innerHTML="";  
+                
+                if((document.getElementById("reqAddPage:reqAddForm:reqName").value=="")||(isDigit(document.getElementById("reqAddPage:reqAddForm:reqName").value)))
+                {
+                    //document.getElementById("dcorg").style.visibility = 'visible';
+                    document.getElementById("dreqName").innerHTML="<P>Error: You must enter a valid Requirement name</P>";
+                    ctr=0;
+                }    
+                if(document.getElementById("reqAddPage:reqAddForm:reqDescription").value=="")
+                {
+                    //document.getElementById("dcname").style.visibility = 'visible';
+                    document.getElementById("dreqDescription").innerHTML="<P>Error: You must enter valid Description</P>";
+                    ctr=0;
+                }
+                
+                /*if((document.getElementById("reqAddPage:reqAddForm:proposedBy").value=="")||(isDigit(document.getElementById("reqAddPage:reqAddForm:proposedBy").value)))
+                {
+                    //document.getElementById("demailid").style.visibility = 'visible';
+                    document.getElementById("dproposedBy").innerHTML="<P>Error: You must enter a valid Name</P>";
+                    ctr=0;
+                }*/
+                if(ctr)
+                {  
+                      if(x==1)
+                        AddReq();
+                        
+                      else
+                      
+                        AddManyReq();
+                                    
+                }
+          } 
+      </script>
+
+    <!-- <apex:pageMessages /> -->
+    <apex:form id="reqAddForm">
+    <br/>
+     <center>
+        <apex:outputPanel id="form" >           
+            <table border="0" cellpadding="5" cellspacing="5"  width="70%">
+                <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Add Requirements for the Module:<apex:outputLabel value="{!modname.moduleName__c}"/></th></tr>
+                <tr>
+                    <td ><apex:outputLabel value="Requirement Name"></apex:outputLabel></td>
+                    <td ><apex:inputText id="reqName" size="40" value="{!name}" /><br/><div id="dreqName" style="background-color:white;visibility:visible;"></div></td>                                 
+                </tr>
+                <tr>
+                    <td><br/><apex:outputLabel value="Requirement Type"></apex:outputLabel></td>
+                    <td>
+                        <apex:selectList value="{!reqtype}"  size="1">            
+                            <apex:selectOption itemValue="functional" itemLabel="functional" ></apex:selectOption>
+                            <apex:selectOption itemValue="Non functional" itemLabel="Non functional"></apex:selectOption>
+                        </apex:selectList> 
+                    </td>                                 
+                </tr>
+                <tr>
+                    <td><apex:outputLabel value="Requirement Description"></apex:outputLabel></td>                    
+                    <td><apex:inputTextarea id="reqDescription" cols="43" value="{!description}" /><br/><div id="dreqDescription" style="background-color:white;visibility:visible;"></div></td>           
+                </tr>
+                <tr>
+                    <td><apex:outputLabel value="Priority"></apex:outputLabel></td>
+                    <td>
+                        <apex:selectList value="{!priority}"  size="1">            
+                            <apex:selectOption itemValue="high" itemLabel="High" ></apex:selectOption>
+                            <apex:selectOption itemValue="medium" itemLabel="Medium"></apex:selectOption>
+                            <apex:selectOption itemValue="low" itemLabel="Low"></apex:selectOption>
+                        </apex:selectList>                                
+                    </td>                               
+                </tr> 
+                <tr>
+                    <td><apex:outputLabel value="Requirement Version"></apex:outputLabel></td>
+                    <td><apex:inputText size="40" value="{!ver}" /></td>
+                               
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div align="left">
+                           <apex:commandButton value="Attach file" action="{!boolattach}"/>
+                        </div>
+                    </td>
+                </tr>
+               
+                <tr><td colspan="2">
+                <apex:outputPanel rendered="{!booleanAttach}">
+                   <apex:dataTable value="{!dynamicAttachmentList}" var="d">
+                       <apex:column >
+                       <center>
+                           <fieldset>
+                           <legend>Attachment</legend>
+                               <table cellpadding="5" cellspacin="5">
+                                   <tr>
+                                       <td>FileName:</td>
+                                       <td><apex:inputText size="34" value="{!d.name}"/></td>
+                                   </tr>
+                                   <tr>
+                                       <td>File:</td>
+                                       <td><apex:inputFile value="{!d.body}" filename="{!d.name}"/></td>
+                                   </tr>
+                                   <tr>
+                                       <td>File Description:</td>
+                                       <td><apex:inputTextarea cols="34" value="{!d.description}"/></td>
+                                   </tr>
+                               </table>                          
+                           </fieldset>
+                       </center>
+                       </apex:column>
+                   </apex:dataTable>
+                   <br/>
+                   <div align="right"><apex:commandButton value="Add more" action="{!AttachMoreList1}"/></div>
+                </apex:outputPanel></td></tr>
+                <tr><td colspan="2">
+                <div align="right">
+                    <!--<apex:commandButton value="Save" action="{!additems}"/>-->
+                    <input class="btn" type="button" value="Save" onclick="ReqFormValidation(1);" />&nbsp;
+                    <!--<apex:commandButton value="Save & New" action="{!addManyItems}"/>-->
+                    <input class="btn" type="button" value="Save & New" onclick="ReqFormValidation(2)" />
+                    &nbsp;<apex:commandButton value="Cancel" action="{!cancelForm}" />
+                </div>
+                </td></tr>
+            </table>                     
+            <br/>                       
+            <br/>                              
+        </apex:outputPanel>       
+    </center>
+    <apex:actionFunction name="AddReq" action="{!additems}"/>
+    <apex:actionFunction name="AddManyReq" action="{!addManyItems}"/>
+    </apex:form>
+</apex:page>

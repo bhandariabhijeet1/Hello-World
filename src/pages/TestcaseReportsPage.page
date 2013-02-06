@@ -1,0 +1,134 @@
+<apex:page sidebar="false" showheader="false" controller="TestcaseReportsController" id="myPage">
+  
+    <style>
+        .exstyle{height:80px;width:350px;border:1px solid blue;}
+        
+        .center
+          {
+             text-align:center;
+          }
+          .RowEven
+          {
+             background-color:#E6E6FA;
+           }
+           
+          .RowOdd
+          {bakground-color:white;}
+  
+          .headerstyle{height:30px;font-weight:bold;color:white;background-color:#008AB8;text-align:left;}
+
+
+    </style>     
+    <script>
+         
+          function openPopup()
+          {   
+              var newWindow=null;
+              var url="https://ap1.salesforce.com/00O90000001VgrZ";             
+              newWindow=window.open(url, 'Popup','height=750,width=950,left=200,top=100,res​izable=no,scrollbars=yes,toolbar=no,status=no');
+              newWindow.focus();       
+              return false; 
+          }
+    </script>
+    
+    <apex:form id="myForm"><br/><br/><br/>
+       <Table cellpadding="10" cellspacing="10" align="center" width="50%" border="0">
+         <tr><td colspan="2" align="right"><apex:commandLink value="Standard Salesforce TestCase Report" onclick="openPopup();"/></td></tr>
+         <tr><td colspan="2" style="color:white;background-color:#3399CC;font-weight:bolder;">Custom Testcases Report</td></tr>
+         
+         <tr><td>
+             <apex:outputpanel id="TestcaseReport">
+              <table border="0">
+                    <tr><td>Summarise Information By:</td></tr>
+                    <tr><td><div class="exstyle" id="summariseInfo"><br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                       <apex:selectList id="info" size="1" value="{!SummariseParam}">
+                           <apex:selectOption itemlabel="-Any-" itemvalue="-Any-"/>
+                           <apex:selectOption itemlabel="Testcase Status" itemValue="Testcase Status" />
+                           <apex:selectOption itemlabel="Requirement Name" itemvalue="Requirement Name" />
+                           <apex:selectOption itemlabel="Testcase Writer" itemvalue="Testcase Writer" />
+                                           
+                       </apex:selectList></div></td></tr>                           
+                  
+              </table>
+            </apex:outputpanel>  
+         </td><td>
+        <fieldset style="border:1px solid blue"><legend>Time frame</legend>
+         <table border="0"><tr><td></td><td></td></tr>
+             <tr><td>From</td><td>To</td></tr>
+             <tr><td><apex:inputfield id="StartDate" value="{!startDate.dateField__c}" /></td><td><apex:inputfield id="EndDate" value="{!endDate.dateField__c}"/></td></tr>
+            
+         </table></fieldset></td></tr>   
+         <!--<tr><td></td><td></td></tr>-->
+         <tr><td align="right"><input type="button" value="Create Reports" class="btn" onclick="SummariseReports();"/>
+             &nbsp;&nbsp;&nbsp;&nbsp;<apex:commandButton value="Print" onclick="javascript:window.print();"/>
+             </td>
+             <td><apex:commandButton value="Export" action="{!ShowTestcaseReportPage}"/>&nbsp;&nbsp;&nbsp;&nbsp;
+             
+             <apex:actionFunction name="SummariseReports" action="{!ReportSummarise}"/>
+             
+             </td></tr>
+     
+       <tr><td colspan="2">
+       
+       <apex:outputPanel rendered="{!summaryShow}">
+             <!--<table width="100%" border="1">
+                 <tr><td>ReqID</td><td>Name</td><td>Description</td><td>Priority</td><td>Status</td><td>Version</td><td>Module</td><td>CreatedDate</td></tr>
+             </table>-->
+             <apex:repeat value="{!TestcaseReport}" var="outer" id="theRepeat">
+
+                 <div class="headerstyle">
+                     <apex:outputtext value="{!searchParam}:"></apex:outputtext>
+                     <apex:outputText value="{!outer.reportParam} " />
+                     <apex:outputText value="({!outer.count}records)" />
+                     
+                 </div>
+                        <apex:datatable value="{!outer.testcaseList}" var="inner" border="" width="100%" cellpadding="5" rowClasses="RowEven,RowOdd" columnClasses="center" headerClass="center">
+                             
+                             <apex:column >
+                               
+                                <apex:outputText value="{!inner.Name}" />
+                             </apex:column>
+                             <apex:column >
+                                
+                                <apex:outputText value="{!inner.testName__c}" />
+                             </apex:column>
+                             <apex:column >
+                               
+                                <apex:outputText value="{!inner.testDescription__c}" />
+                             </apex:column>
+                             <apex:column >
+                              
+                                <apex:outputText value="{!inner.expectedOutput__c}" />
+                             </apex:column>
+                             <apex:column >
+                              
+                                <apex:outputText value="{!inner.actualOutput__c}" />
+                             </apex:column>
+                             <apex:column >
+                              
+                                <apex:outputText value="{!inner.testStatus__c}" />
+                             </apex:column>
+                             <apex:column >
+                              
+                                <apex:outputText value="{!inner.reqID__r.reqName__c}" />
+                             </apex:column>
+                             <apex:column >
+                              
+                                <apex:outputText value="{!inner.reqID__r.moduleID__r.moduleName__c}" />
+                             </apex:column>
+                             <!--<apex:column >
+                              
+                                <apex:outputText value="{!if(SummariseParam=='Module Name',"",inner.moduleID__r.moduleName__c)}" />
+                             </apex:column>-->
+                              <apex:column >
+                                <apex:outputText value="{0,date,dd'-'MM'-'yyyy}" ><apex:param value="{!inner.CreatedDate}"/></apex:outputText>
+                              </apex:column>
+                        </apex:datatable>
+                   
+             </apex:repeat>
+             
+       </apex:outputPanel>
+       </td></tr></table>
+       
+    </apex:form>  
+</apex:page>

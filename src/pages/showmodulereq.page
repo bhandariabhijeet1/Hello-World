@@ -1,0 +1,125 @@
+<apex:page showHeader="false" sidebar="false" controller="RequirementController">
+ 
+ <style>
+        .progressBar{
+            background-color: #f8f8f8;
+            border:1px solid #DDDDDD;
+            height: 19px;
+            width: 150px;
+            -moz-border-radius: 5px; 
+            -webkit-border-radius: 5px;
+        }
+        .progress{
+            background-color:#CAFF70;
+            border:1px solid #CAFF70;
+            height: 100%;
+            margin: -1px;
+            text-align: center;
+            -moz-border-radius: 5px; 
+            -webkit-border-radius: 5px;
+            line-height: 18px;
+        }
+         
+    </style>
+ <apex:form >
+    <!-- <apex:pageMessages /> -->
+            <center>               
+        <table width="90%" border="0" cellpadding="5" cellspacing="5">
+           <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Click on any module name to view related requirements</th></tr>
+           <tr>    
+             <td>
+               <apex:OutputPanel id="showModule"> 
+                     <!-- wrapper table -------------------------------------------------------------------------->
+                   <apex:dataTable align="center" value="{!moduleListWrapper}" var="row" cellpadding="5" cellspacing="5" rendered="{!testMod1}">
+                         <apex:column >
+                             <apex:facet name="header">Module Name</apex:facet>
+                               <apex:commandLink style="font-size:14px" value="{!row.modObj.moduleName__c}" action="{!showreq}">                          
+                                   <apex:param value="{!row.modObj.id}" assignTo="{!SelectedModuleName}" name="SelectedModule"/>
+                               </apex:commandLink>
+                         </apex:column>
+                         <apex:column >
+                               <apex:facet name="header">Description</apex:facet>
+                               <apex:outputText style="font-size:14px" value="{!row.modObj.moduleSpecification__c}"/>
+                         </apex:column>
+                         <apex:column >
+                               <apex:facet name="header">Status</apex:facet>
+                               <div class="progressBar">
+                                    <div class="progress" style="width: {!row.width}%;">
+                                         {!row.width}%
+                                    </div>
+                               </div>
+                         </apex:column>
+                         <apex:column >
+                               <apex:facet name="header">Priority</apex:facet>
+                               <apex:outputText style="font-size:14px" value="{!row.modObj.priority__c}"/>    
+                         </apex:column>
+                         <apex:column >
+                               <apex:facet name="header">Start Date</apex:facet>
+                               <apex:outputText value="{0,date,MM'-'dd'-'yyyy}"><apex:param value="{!row.modObj.startDate__c}" /> </apex:outputText>
+                         </apex:column>
+                         <apex:column >
+                               <apex:facet name="header">End Date</apex:facet>
+                               <apex:outputText value="{0,date,MM'-'dd'-'yyyy}"><apex:param value="{!row.modObj.endDate__c}" /> </apex:outputText>
+                         </apex:column>
+                    </apex:dataTable>
+                       <apex:pageMessage summary="No modules added yet under this module..." strength="2" severity="info" rendered="{!testMod2}"/> 
+                       <!-- wrapper table end----------------------------------------------------------------------->
+                 </apex:OutputPanel>
+              </td>
+            </tr>
+          </table>
+          </center>
+   </apex:form>
+<br></br>
+    <apex:outputpanel id="refresh" rendered="{!showreqtable}">
+    <center> 
+        <apex:outputLabel value=" Please select any requirement to view related test cases"/> 
+            <apex:form >
+                <table width="90%" border="0" cellpadding="5" cellspacing="5">
+                  <tr><th colspan="2" style="font-size:14px;font-weight:bolder;color:white;background-color:#3399CC;">Requirements For The Module:<apex:outputLabel value="{!modname.moduleName__c}"/></th></tr>
+                  <tr>    
+                    <td>
+                        <apex:dataTable align="center" style="background-color:white" value="{!reqlist}" var="req" cellpadding="5" cellspacing="5" rendered="{!testReq1}">
+                             <apex:column >
+                                    <apex:facet name="header">Req ID</apex:facet>
+                                <apex:commandLink value="{!req.Name}" action="{!calltestcases}" style="font-size:14px" >
+                                    <apex:param name="SelectedReq"
+                                    value="{!req.Name}"
+                                    assignTo="{!SelectedReqName}"/>
+                                </apex:commandLink>
+                             </apex:column>
+                             <apex:column >
+                                    <apex:facet name="header" >ReqName</apex:facet>
+                                    <apex:outputText style="font-size:14px" value="{!req.reqName__c}"/>
+                            </apex:column>
+                            <apex:column >
+                                    <apex:facet name="header">Description</apex:facet>
+                                    <apex:outputtext style="font-size:14px" value="{!req.reqDescription__c}"/>
+                            </apex:column>
+                            <apex:column >
+                                    <apex:facet name="header">Priority</apex:facet>
+                                    <apex:outputText style="font-size:14px" value="{!req.reqDescription__c}"/>
+                            </apex:column>
+                            
+                            <apex:column >
+                                    <apex:facet name="header">Status</apex:facet>
+                                    <apex:outputText style="font-size:14px" value="{!req.reqStatus__c}"/>
+                            </apex:column>
+                            <apex:column >
+                                    <apex:facet name="header">Type</apex:facet>
+                                    <apex:outputText style="font-size:14px" value="{!req.reqType__c}"/>
+                            </apex:column>
+                            <apex:column >
+                                    <apex:facet name="header">Version</apex:facet>
+                                    <apex:outputText style="font-size:14px" value="{!req.reqVersion__c}"/>
+                            </apex:column>
+                      </apex:dataTable>
+            <apex:pageMessages />
+                   </td>
+                 </tr>
+            </table>
+
+       </apex:form>
+      </center> 
+   </apex:outputpanel>
+</apex:page>

@@ -1,0 +1,10 @@
+<apex:page id="pageHeader">
+  <Table  width="80%"  align="center" style="font-family:Arial;"  >
+         <TR>
+             <TD Width="20%"> <apex:image id="logoImage" value="{!$Resource.PersistentLogo}"/>           
+             </TD>
+             <TD colspan="2" align="right"><apex:image id="bannerImage" value="{!$Resource.prekshana}"/><br/>
+             </TD>
+         </TR>
+    </Table>
+</apex:page>

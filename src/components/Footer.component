@@ -1,0 +1,6 @@
+<apex:component >
+<br/>
+<HR width="100%" color="black" size="3px" />
+<center>&copy; 2011 Persistent Systems and Solutions Ltd. </center>
+ <HR width="100%" color="black" size="3px" />
+</apex:component>

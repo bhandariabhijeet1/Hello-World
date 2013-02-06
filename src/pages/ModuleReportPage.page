@@ -1,0 +1,97 @@
+<apex:page controller="moduleReportController" showHeader="false" sidebar="false">
+
+ <apex:form id="form">
+<fieldset style="width:80%;">
+           <legend>Module Report</legend>
+          
+      <tr>
+      <td><apex:outputLabel value="Module Status"></apex:outputLabel>
+      <apex:selectList value="{!result}" required="true" size="1">
+            <apex:selectOption itemValue="all" itemLabel="All"></apex:selectOption>
+            <apex:selectOption itemValue="inprogress" itemLabel="Inprogress" ></apex:selectOption>
+            <apex:selectOption itemValue="completed" itemLabel="Completed"></apex:selectOption>
+            
+      </apex:selectList>
+      </td>
+      </tr>
+     <TD colspan="2" align="right">
+      <apex:commandButton value="Filter" action="{!showReport}"/>                      
+      </TD>
+    
+     
+      <!--<tr>
+      <td><apex:outputLabel value="Module Priority"></apex:outputLabel>
+      <apex:selectList value="{!result1}" required="true" size="1">
+            <apex:selectOption itemValue="all" itemLabel="All"></apex:selectOption>
+            <apex:selectOption itemValue="High" itemLabel="High" ></apex:selectOption>
+            <apex:selectOption itemValue="Medium" itemLabel="Medium"></apex:selectOption>
+            <apex:selectOption itemValue="Low" itemLabel="Low"></apex:selectOption>
+      </apex:selectList>
+      </td>
+      
+      <TD colspan="2" align="right">
+      //<apex:commandButton value="Filter" action="{!showModuleReport}"/>                      
+      </TD>
+      </tr>
+     -->
+      </fieldset>
+      </apex:form> 
+  
+
+<apex:outputpanel id="refresh" rendered="{!showReport1}"> 
+    <apex:form id="form1">
+    <center>
+    <apex:dataTable border="true" style="background-color:white" value="{!modulelist}" var="module" cellpadding="5" 
+
+columnClasses="center" headerClass="center">
+
+                 <apex:column >
+
+                        <apex:facet name="header">Module ID</apex:facet>
+                        <apex:outputText value="{!module.Name}"/>
+
+                </apex:column>
+                <apex:column width="100" >
+
+                        <apex:facet name="header" >Module Name</apex:facet>
+                        <apex:outputText value="{!module.moduleName__c}"/>
+
+                </apex:column>
+               
+                <apex:column >
+
+                        <apex:facet name="header">Status</apex:facet>
+                        <apex:outputText value="{!module.moduleStatus__c}"/>
+
+                </apex:column>
+                <apex:column >
+
+                        <apex:facet name="header">Priority</apex:facet>
+                        <apex:outputText value="{!module.priority__c}"/>
+
+                </apex:column>
+          </apex:dataTable>
+    </center>
+</apex:form>
+</apex:outputpanel>
+<apex:pageBlock title="Modules">
+          <apex:pageMessages ></apex:pageMessages>
+            <apex:pageBlockTable value="{!modulelist1}" var="module">
+
+                 <apex:column headerValue="ModuleID">
+                       <apex:outputText value="{!module.Name}"/>
+                 </apex:column>
+                 <apex:column headerValue="ModuleName">
+                       <apex:outputText value="{!module.moduleName__c}"/>
+                 </apex:column>
+                 <apex:column headerValue="ModuleResult">
+                       <apex:outputText value="{!module.moduleStatus__c}"/>
+                 </apex:column>
+                 <apex:column headerValue="ModuleStatus">
+                       <apex:outputText value="{!module.priority__c}"/>
+                 </apex:column>
+
+            </apex:pageBlockTable> 
+         </apex:pageBlock>
+
+</apex:page>

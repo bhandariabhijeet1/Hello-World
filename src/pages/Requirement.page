@@ -1,0 +1,38 @@
+<apex:page controller="RequirementController" showHeader="false" sidebar="false">
+     <apex:form >
+         <center>
+         <table width="50%">
+         <tr>
+            <td><apex:outputLabel value="Requirement Name"></apex:outputLabel></td>
+            <td><apex:inputText value="{!reqIns.reqName__c}" required="true"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Requirement Type"></apex:outputLabel></td>
+            <td><apex:inputTextarea value="{!reqIns.reqType__c}" required="true"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Requirement Description"></apex:outputLabel></td>
+            <td><apex:inputTextarea value="{!reqIns.reqDescription__c}" required="true"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Priority"></apex:outputLabel></td>
+            <td><apex:inputField value="{!reqIns.reqPriority__c}" required="true"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Requirement Proposed By:"></apex:outputLabel></td>
+            <td><apex:inputText value="{!reqIns.reqProposedBy__c}" required="true"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Requirement Status"></apex:outputLabel></td>
+            <td><apex:inputText value="{!reqIns.reqStatus__c}" required="true"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Requirement Version"></apex:outputLabel></td>
+            <td><apex:inputText value="{!reqIns.reqVersion__c}" required="true"/></td>
+         </tr>
+         
+         </table>
+         <apex:commandButton value="Submit" action="{!addItems}" onclick=""/><br></br>
+         </center>
+     </apex:form>
+</apex:page>

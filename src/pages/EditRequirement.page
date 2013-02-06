@@ -1,0 +1,44 @@
+<apex:page showHeader="false" sidebar="false" controller="AddRequirementController" >
+       <apex:form >
+         <center>
+         <br/><br/><br/>
+         <table border="1">
+         <tr>
+            <td><apex:outputLabel value="Requirement Name"></apex:outputLabel></td>
+            <td><apex:inputText value="{!req.reqName__c}" required="true" size="23"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="id"></apex:outputLabel></td>
+            <td><apex:inputTextarea value="{!req.Name}" required="true" cols="23"/></td>
+         </tr>
+         <!--<tr>
+            <td><apex:outputLabel value="Requirement Description"></apex:outputLabel></td>
+            <td><apex:inputTextarea value="{!editedReqInst.reqDescription__c}" required="true" cols="23"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Priority"></apex:outputLabel></td>
+            <td><apex:selectList value="{!editedReqInst.reqPriority__c}" size="1" required="true" >
+                <apex:selectOption itemValue="High" itemLabel="High"/>
+                <apex:selectOption itemValue="Medium" itemLabel="Medium"/>
+                <apex:selectOption itemValue="Low" itemLabel="Low"/>
+                </apex:selectList> </td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Requirement Proposed By:"></apex:outputLabel></td>
+            <td><apex:inputText value="{!editedReqInst.reqProposedBy__c}" required="true" size="23"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Requirement Status"></apex:outputLabel></td>
+            <td><apex:inputText value="{!editedReqInst.reqStatus__c}" required="true" size="23"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Requirement Version"></apex:outputLabel></td>
+            <td><apex:inputText value="{!editedReqInst.reqVersion__c}" size="23" required="true"/></td>
+         </tr>
+           
+         <tr><td align="center"><apex:commandButton value="edit" action="{!updateRequirement}"/></td>
+         <td align="center"> <apex:commandButton value="cancel" action="{!returnEdit}"/></td></tr>   -->      
+         </table>
+        </center>
+     </apex:form>
+  </apex:page>

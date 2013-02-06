@@ -1,0 +1,49 @@
+<apex:page controller="AttachmentUploadController" sidebar="false" showHeader="false">
+  <script>
+  var newWin=null; 
+  url='https://c.ap1.content.force.com/servlet/servlet.FileDownload?file=00P90000000KTbb';
+  newWin=window.open('{!url}', 'Popup','height=550,width=450,left=100,top=100,res?izable=no,scrollbars=yes,toolbar=no,status=no');
+  </script>
+  <apex:sectionHeader title="Visualforce Example" subtitle="Attachment Upload Example"/>
+ 
+  <apex:form enctype="multipart/form-data"><apex:outputText value="{!cnt}">here </apex:outputText>>
+    <apex:pageMessages />
+    <apex:pageBlock title="Upload a Attachment">
+ 
+      <apex:pageBlockButtons >
+        <apex:commandButton action="{!upload}" value="Save"/>
+      </apex:pageBlockButtons>
+ 
+ <apex:dataTable align="center" value="{!reqList}" var="mow" cellpadding="5" cellspacing="5">
+                           <apex:column width="200">
+                               <apex:facet name="header">Module Name</apex:facet>
+                               <apex:commandLink value="{!mow.reqName__c}" action="{!dispReq}">                          
+                                   <apex:param value="{!mow.id}" assignTo="{!modID}" name="modID"/>
+                               </apex:commandLink>
+                           </apex:column>
+ </apex:dataTable><apex:outputLabel value="{!reqObj.Name}"> dId</apex:outputLabel>
+ <apex:outputLabel value="{!modID}">moduleid</apex:outputLabel>
+      <apex:pageBlockSection showHeader="false" columns="2" id="block1">
+ 
+        <apex:pageBlockSectionItem >
+          <apex:outputLabel value="File Name" for="fileName"/>
+          <apex:inputText value="{!attachment.name}" id="fileName"/>
+        </apex:pageBlockSectionItem>
+ 
+        <apex:pageBlockSectionItem >
+          <apex:outputLabel value="File" for="file"/>
+          <apex:inputFile value="{!attachment.body}" filename="{!attachment.name}" id="file"/>
+        </apex:pageBlockSectionItem>
+ 
+        <apex:pageBlockSectionItem >
+          <apex:outputLabel value="Description" for="description"/>
+          <apex:inputTextarea value="{!attachment.description}" id="description"/>
+        </apex:pageBlockSectionItem>
+ 
+      </apex:pageBlockSection>
+ <apex:commandButton value="view file" action="{!viewAttach}"/>
+ <apex:outputLabel value="{!child}">child</apex:outputLabel>
+    </apex:pageBlock>
+    <apex:outputText value="{!bodyContent}"></apex:outputText>>
+  </apex:form>
+</apex:page>

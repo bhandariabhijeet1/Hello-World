@@ -1,0 +1,17 @@
+<apex:page showHeader="false" sidebar="false">
+     <apex:include pageName="header"/>
+     <Table cellpadding="10" cellspacing="10" width="80%" align="center">
+         <TR>
+             <TH colspan="2" style="background-color:#3399CC;color:white;font-size:20px;">Create new Project</TH>
+          </TR>
+          <TR>
+          <TD colsapn="2">
+             <apex:iframe src="/apex/project"  scrolling="false" id="wizardFrame" frameborder="false" width="100%">
+        
+             </apex:iframe>
+         </TD></TR>  
+
+     </Table> 
+ 
+ 
+</apex:page>

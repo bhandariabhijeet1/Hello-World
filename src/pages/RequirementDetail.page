@@ -1,0 +1,125 @@
+<apex:page sidebar="false" showheader="false" controller="RequirementDetail">
+
+  
+     <style>
+          .center
+          {
+             text-align:center;
+          }
+          .RowEven
+          {
+             background-color:pink;
+           }
+           
+          .RowOdd
+          {bakground-color:white;}
+
+      </style> 
+      <script> 
+        var newWin=null; 
+        function openPopup()
+        {   
+           var url="/apex/EditRequirement";    
+           newWin=window.open(url, 'Popup','height=500,width=400,left=100,top=100,res​izable=no,scrollbars=yes,toolbar=no,status=no');
+           newWin.focus();       
+           return false; 
+         }
+     
+     </script>
+
+  <br/><br/><br/>
+  <center>
+  
+    
+    <table border="1" width="71%" cellpadding="5">
+    <tr><td>Project ID:</td><td><apex:outputtext value="{!moduleInstance.projectID__r.Name}" /></td>
+    
+         <td>Project Name:</td><td><apex:outputtext value="{!moduleInstance.projectID__r.projectTitle__c}" /></td></tr>
+    
+    <tr><td>Module ID:</td><td><apex:outputtext value="{!moduleInstance.Name}" /></td>
+    
+         <td>Module Name:</td><td><apex:outputtext value="{!moduleInstance.moduleName__c}" /></td></tr>
+        
+         <tr><td colspan="2">Module Description:</td><td colspan="2"><apex:outputtext value="{!moduleInstance.moduleSpecification__c}" /></td></tr>
+    
+    </table>
+    
+    <apex:form id="form">
+    <apex:outputpanel id="ajaxPart"> 
+    
+    
+    <apex:dataTable value="{!Display}" var="req" border="1" cellpadding="5" rowClasses="RowEven,RowOdd" columnClasses="center" headerClass="center">
+                
+
+                <apex:column width="80">
+
+                        <apex:facet name="header" >ReqID</apex:facet>
+                        <apex:outputtext value="{!req.Name}"/>
+
+                </apex:column>
+                <apex:column width="100">
+
+                        <apex:facet name="header">Requirement Name</apex:facet>
+                        <apex:outputText value="{!req.reqName__c}"/>
+
+                </apex:column>
+                <apex:column width="130">
+
+                        <apex:facet name="header">Requirement Type</apex:facet>
+                        <apex:outputText value="{!req.reqType__c}"/>
+
+                </apex:column>
+                <apex:column width="200">
+
+                        <apex:facet name="header">Description</apex:facet>
+                       
+                        <apex:outputtext id="reqDesc" value="{!req.reqDescription__c}"/>
+
+                </apex:column>
+                
+                <apex:column width="100">
+
+                        <apex:facet name="header">Priority</apex:facet>
+                        <apex:outputText value="{!req.reqPriority__c}"/>
+
+                </apex:column>
+                <apex:column width="100">
+
+                        <apex:facet name="header">Status</apex:facet>
+                        <apex:outputText value="{!req.reqStatus__c}"/>
+
+                </apex:column>
+                <apex:column width="100">
+
+                        <apex:facet name="header">ProposedBy</apex:facet>
+                        <apex:outputText value="{!req.reqProposedBy__c}" />
+
+                </apex:column>
+
+                
+                <apex:column width="100">
+         
+                         <apex:facet name="header">Action</apex:facet>
+                                              
+                        <apex:commandLink value="edit" action="{!callEdit}" style="font-weight:bold" >
+                        <apex:param name="SelectedName" value="{!req.id}" assignTo="{!SelectedName}"/>
+                        </apex:commandLink>&nbsp;|&nbsp;
+                       
+                       <a href="javascript:if (window.confirm('Are you sure?')) DeleteRequirement('{!req.id}');" style="font-weight:bold">Del</a>
+
+                </apex:column>                        
+
+        </apex:dataTable>
+        
+        <apex:outputtext value="{!SelectedName1}" />
+        
+      </apex:outputpanel> 
+      <apex:actionFunction action="{!DeleteRequirement}" name="DeleteRequirement" reRender="ajaxPart">
+           <apex:param name="requirement" value="" assignTo="{!SelectedName1}"/>
+        </apex:actionFunction>
+      
+      </apex:form>
+     
+    </center>
+
+</apex:page>

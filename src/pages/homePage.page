@@ -1,0 +1,105 @@
+<apex:page showHeader="false" sidebar="false" controller="OrganizationLoginController"  >
+   <script language="JavaScript">
+    function noBack(){
+        window.history.forward();
+        }
+    noBack();
+    window.onload=noBack;
+    window.onpageshow=function(evt){if(evt.persisted)noBack()}
+    window.onunload=function(){void(0)}
+    </script>
+
+    <apex:include pageName="header" />
+    <apex:styleSheet value="{!$Resource.contentSliderStyle} " />
+    <apex:includeScript value="{!$Resource.contentSliderScript}"/> 
+    <Table cellpadding="10" cellspacing="10" width="80%"  align="center" style="font-family:Arial;"  topmargin="0" >
+        <TR>
+            <TD colspan="3"><HR color="#3399CC" size="8px" width="100%"/></TD>
+        </TR>
+         <TR>                   
+              <TD valign="top" >
+                 <Table cellpadding="5" cellspacing="5" align="left" style="font-size:14px;">
+                      <TR><TH  style="color:white;background-color:#3399CC;">Requirement Management</TH></TR>
+                      <TR>
+                          <TD>
+                            <ul><li>Manage your project requirements</li><li>Group requirements into modules</li><li>Keeping track of requirement fulfillment</li></ul>                          
+                          </TD>
+                      </TR>
+                      <TR><TH colspan="2" style="color:white;background-color:#3399CC;">Test Case Management</TH></TR>
+                      <TR>
+                          <TD>
+                              <ul><li>Write test cases</li><li>Map test cases to requirements</li><li>Tracking test case execution history through test case builds.</li></ul>   
+                          </TD>
+                      </TR>
+                      <TR><TH colspan="2" style="color:white;background-color:#3399CC;">Reports</TH></TR>
+                      <TR>
+                          <TD>
+                              <ul><li>Requirement and Testcase reports</li><li> Defect reports </li></ul>   
+                          </TD>
+                      </TR>
+                 </Table>
+              </TD>
+              <TD align="center" valign="top">
+                 <div id="slider1" class="sliderwrapper" >
+                        <div class="contentdiv" style="color:white;background-color:#3399CC;font-weight:bolder;font-size:16px;">MANAGE YOUR PROJECT REQUIREMENTS
+                                <apex:image value="{!$Resource.step1}"/> 
+                        </div>
+                        <div class="contentdiv" style="color:white;background-color:#3399CC;font-weight:bolder;font-size:16px;">WRITE TEST CASES AS PER REQUIREMENTS
+                                <apex:image value="{!$Resource.step2}"/> 
+                        </div>
+                        <div class="contentdiv" style="color:white;background-color:#3399CC;font-weight:bolder;font-size:16px;">DEFECT TRACKING AND MANAGEMENT
+                                <apex:image value="{!$Resource.step3}"/> 
+                        </div>
+                 </div>
+                 <div id="paginate-slider1" class="pagination"></div>
+                 <script >
+                    featuredcontentslider.init({
+                        id: "slider1",  //id of main slider DIV
+                        contentsource: ["inline", ""],  //Valid values: ["inline", ""] or ["ajax", "path_to_file"]
+                        toc: "#increment",  //Valid values: "#increment", "markup", ["label1", "label2", etc]
+                        nextprev: ["Previous", "Next"],  //labels for "prev" and "next" links. Set to "" to hide.
+                        revealtype: "click", //Behavior of pagination links to reveal the slides: "click" or "mouseover"
+                        enablefade: [true, 0.2],  //[true/false, fadedegree]
+                        autorotate: [true, 3000],  //[true/false, pausetime]
+                        onChange: function(previndex, curindex){  //event handler fired whenever script changes slide
+                        //previndex holds index of last slide viewed b4 current (1=1st slide, 2nd=2nd etc)
+                        //curindex holds index of currently shown slide (1=1st slide, 2nd=2nd etc)
+                        }
+                    })
+                 </script><br/>
+              </TD>
+              <TD valign="top" align="center" width="30%">                      
+                     <apex:form >
+                        <Table cellpadding="5" cellspacing="5" align="center"  width="100%">
+                            <TR>
+                                 <TH colspan="2" style="font-size:14px;color:white;background-color:#3399CC;">Login Here </TH>
+                            </TR>
+                            <TR>
+                                  <TD style="font-weight:bolder;"> <apex:outputLabel value="Login ID: " for="chooseName" ></apex:outputLabel> </TD>
+                                  <TD><apex:inputText size="20" value="{!name}" style="{!nameStyle}" id="chooseName"/></TD>
+                            </TR>
+                            <TR>
+                                  <TD style="font-weight:bolder;"><apex:outputLabel value="Password: " for="choosePass" ></apex:outputLabel></TD>
+                                  <TD><apex:inputSecret size="20" value="{!pass}" id="choosePass" style="{!passStyle}" /></TD>
+                            </TR>
+                             <TR>
+                                   <TD colspan="2" align="center"><apex:commandButton value="login" action="{!login}" /></TD>                         
+                            </TR>                                 
+                             <TR>   
+                                   <TH colspan="2" style="color:white;background-color:#3399CC;"></TH>
+                             </TR>
+                             <TR>
+                                 <TD colspan="2">Note:Use your organization login ID and password to login.</TD>
+                             </TR>
+                          </Table>
+                        <apex:pageMessages ></apex:pageMessages>
+                    </apex:form> <br/> <br/> <br/>
+              </TD>
+           </TR>
+        <TR>
+            <TD colspan="3"><HR color="#3399CC" size="8px" width="100%"/></TD>
+        </TR>   
+        <TR> <TD colspan="3"> <c:Footer /></TD>
+        </TR> 
+     </Table>     
+</apex:page>

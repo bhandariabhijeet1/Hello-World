@@ -1,0 +1,177 @@
+<apex:page sidebar="false" showHeader="false" controller="ProjectAccountController">
+<script>
+     function noBack(){
+window.history.forward();
+}
+noBack();
+window.onload=noBack;
+window.onpageshow=function(evt){if(evt.persisted)noBack()}
+window.onunload=function(){void(0)}
+</script>
+     <apex:include pageName="header" />      
+       <Table cellpadding="5" cellspacing="5" align="center" width="80%" style="background-color:#EFF5FC;" >
+         <TR>
+              <TD align="right" colspan="2" style="font-size:14px;"><apex:form >Welcome <apex:outputLabel value="{!currentUser}" /> | 
+              <apex:commandlink action="{!backToHomePage}">My Projects</apex:commandLink> |&nbsp;&nbsp;  
+              <apex:commandlink action="/apex/homePage">Logout</apex:commandLink></apex:form> </TD>
+          </TR>          
+                 
+           <TR>
+             <TD width="23%" valign="top">
+                 <Table cellpadding="5" cellspacing="5" width="100%" align="left" style="background-color:white;">
+                      <TR><TH colspan="4" style="color:white;background-color:#3399CC;">Currently selected Project</TH></TR>
+                      <TR>
+                             <TD style="font-weight:bolder;"> <apex:outputLabel value="Project Title: "></apex:outputLabel> </TD>
+                             <TD><apex:outputLabel value="{!projObj.projectTitle__c}" /></TD>
+                             
+                        </TR>
+                        <apex:outputPanel rendered="{!showDetail}">                   
+                         
+                         <TR>
+                              <TD style="font-weight:bolder;"><apex:outputLabel value="Start date: "></apex:outputLabel></TD>
+                              <TD><apex:outputText value="{0,date,MM'-'dd'-'yyyy}" ><apex:param value="{!projObj.startDate__c}"/></apex:outputText></TD>
+                         </TR>
+                         <TR>
+                              <TD style="font-weight:bolder;"><apex:outputLabel value="Proposed end date: "></apex:outputLabel></TD>
+                              <TD><apex:outputText value="{0,date,MM'-'dd'-'yyyy}" ><apex:param value="{!projObj.endDate__c}"/></apex:outputText></TD>
+                          </TR>
+                          </apex:outputPanel>
+                          <TR>
+                              <TD colspan="4" align="right" >
+                                  <apex:form >
+                                          <apex:commandButton value="View more" rendered="{!more}" action="{!showProjectDetail}"/>
+                                          <apex:commandButton value="View less" rendered="{!less}" action="{!showProjectDetail}"/>
+                                  </apex:form>
+                              </TD>
+                          </TR>
+                    </Table>
+                   </TD>
+                   <TD rowspan="4" valign="top">
+                    <apex:pageMessages ></apex:pageMessages>
+                    <apex:iframe scrolling="true" src="{!frameSource}" height="650px"  width="850px"  >
+                    
+                    </apex:iframe>
+                    </TD>
+                    </TR>
+                    <TR>
+                    <TD valign="top">
+                     <Table align="right" cellpadding="5" cellspacing="5" width="100%" style="background-color:white;">
+                        <TR>
+                            <TH colspan="2" style="color:white;background-color:#3399CC;">Current Project Status </TH>
+                        </TR>
+                        <TR>
+                            <TH>Total number of modules:
+                            </TH>
+                            <TD><apex:outputLabel value="{!ModuleCount}" />
+                            </TD>
+                        </TR>
+                        <TR>
+                            <TH>Number of requirements:
+                            </TH>
+                            <TD><apex:outputLabel value="{!RequirementCount}" />
+                            </TD>
+                        </TR>
+                        <TR>
+                            <TH>Team Members:
+                            </TH>
+                            <TD><apex:outputLabel value="{!TeamCount}" />
+                            </TD>
+                        </TR>
+                        <TR>
+                            <TH>Test Cases:
+                            </TH>
+                            <TD><apex:outputLabel value="{!TestCaseCount}" />
+                            </TD>
+                        </TR>
+                        <TR>
+                            <TH>Number of Defect discovered:
+                            </TH>
+                            <TD><apex:outputLabel value="{!DefectCount}" />
+                            </TD>
+                        </TR>
+                        <TR>
+                            <TD colspan="2" align="right"> <apex:form ><apex:commandButton value="Refresh Statistics" /></apex:form>
+                            </TD>
+                        </TR>
+                    </Table>
+                    </TD>                  
+         </TR>
+         <TR>
+         <TD>
+         <apex:form >
+         <apex:panelbar width="100%"  contentStyle="background-color:white;" headerStyle="font-size:14px;color:white;background-image:none;background-color:#3399CC;"  >
+             <apex:panelbaritem label="Modules"    >
+                 <Table cellpadding="5" cellspacing="5" width="100%">
+                      <TR>
+                         <TD align="right">
+                             <apex:commandButton value="View Modules" disabled="{!disableViewModule}" action="{!viewModule}" /> 
+                              <apex:commandButton value="Add Module"  action="{!addModule}"/>                                                       
+                         </TD>
+                      </TR>
+                 </Table>
+           </apex:panelbaritem>
+           <apex:panelbarItem label="Requirements">
+                 <Table cellpadding="5" cellspacing="5" width="100%">
+                    
+                      <TR>
+                          <TD align="right">
+                             <apex:commandButton value="View all" action="{!viewRequirement}"/> 
+                              <apex:commandButton value="Add new" action="{!addRequirement}"/>                                                       
+                         </TD>
+                      </TR>
+                 </Table>
+             </apex:panelbaritem>
+           <apex:panelbarItem label="Project Team">
+                  <Table cellpadding="5" cellspacing="5" width="100%">
+                      <TR>
+                          <TD align="right">
+                             <apex:commandButton value="Manage Team" action="{!teamManage}"/> 
+                            <!-- <apex:commandButton value="Add member" action="{!addUser}"/>-->                                                        
+                         </TD>
+                      </TR>
+                 </Table>
+              </apex:panelbaritem>
+           <apex:panelbarItem label="Test Cases">
+              
+                  <Table cellpadding="5" cellspacing="5" width="100%" >
+                       <TR>
+                          <TD align="right">
+                             <apex:commandButton value="View all" action="{!viewAllTestCases}"/> <!-- action="{!fetchTestCase}"/>  -->
+                             <apex:commandButton value="Add new" action="{!viewModules}"/> <!-- action="{!fetchTestForm}" /> -->                                                      
+                         </TD>
+                      </TR>
+                 </Table>
+              </apex:panelbaritem>
+               <apex:panelbarItem label="Reports">
+                 <Table cellpadding="5" cellspacing="5" width="100%" border="0">
+                    
+                      <TR>
+                          <TD align="right">
+                             <apex:commandButton value="Requirement Reports" action="{!viewRequirementReports}"/>                                                                                
+                         </TD></tr>
+                      <tr><td align="right">
+                             <apex:commandButton value="TestCase Reports" action="{!viewTestcaseReports}"/>
+                         </td>
+                      </tr>
+                      
+                 </Table>
+             </apex:panelbaritem>
+           </apex:panelbar>
+             </apex:form>
+             </TD>
+            
+         </TR>
+         <TR>
+             <TD height="200px" valign="top" align="center">
+             <apex:form >
+             <!--<apex:commandLink action="{!viewReports}" rendered="false">
+             <apex:image id="viewReport" value="{!$Resource.viewReports}"/> 
+             </apex:commandLink>-->
+             </apex:form>
+             </TD>
+         </TR>
+      <TR> <TD colspan="3"> <c:Footer /></TD>
+        </TR> 
+
+     </Table>
+</apex:page>

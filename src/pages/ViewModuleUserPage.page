@@ -1,0 +1,95 @@
+<apex:page sidebar="false" showheader="false" controller="ViewModuleUserController">
+  
+     <style>
+          .head
+          {
+             text-align:center;font-size:14px;color:white;background-image:none;background-color:#3399CC;
+          }
+       
+      </style> 
+      <script> 
+        var newWin=null; 
+        function openPopup()
+        {   
+           var url="/apex/EditRequirement";    
+           newWin=window.open(url, 'Popup','height=500,width=400,left=100,top=100,res​izable=no,scrollbars=yes,toolbar=no,status=no');
+           newWin.focus();       
+           return false; 
+         }
+     
+     </script>
+    <Table cellpadding="5" cellspacing="5" width="100%">
+      
+        <TR>
+        <TD>
+ 
+    
+    <apex:form id="form">
+    <apex:outputpanel id="ajaxPart"> 
+    <apex:dataTable style="background-color:white" value="{!Display}" var="req" cellpadding="10" cellspacing="5" columnClasses="center" headerClass="head">
+
+                 <apex:column >
+
+                        <apex:facet name="header">EmpID</apex:facet>
+                        <apex:outputText value="{!req.Name}"/>
+
+                </apex:column>
+                <apex:column width="100" >
+
+                        <apex:facet name="header" >EmpName</apex:facet>
+                        <apex:outputText value="{!req.EmpID__r.empName__c}"/>
+
+                </apex:column>
+                <apex:column >
+
+                        <apex:facet name="header">Designation</apex:facet>
+                       
+                        <apex:outputtext value="{!req.EmpID__r.empDesignation__c}"/>
+
+                </apex:column>
+                
+                <apex:column >
+
+                        <apex:facet name="header">BU</apex:facet>
+                        <apex:outputText value="{!req.EmpID__r.BU__c}"/>
+
+                </apex:column>
+                <apex:column >
+
+                        <apex:facet name="header">Role in Project</apex:facet>
+                        <apex:outputText value="{!req.ProjectUserRole__r.projectRole__c}"/>
+
+                </apex:column>
+               
+                <apex:column >
+
+                        <apex:facet name="header">Module</apex:facet>
+                        <apex:outputText value="{!req.user_of_module__r.moduleName__c}"/>
+
+                </apex:column>
+                <apex:column >
+         
+                         <apex:facet name="header">Action</apex:facet>
+                                              
+                        <apex:commandLink value="edit" action="{!callEdit}" style="font-weight:bold">
+                        <apex:param name="SelectedName" value="{!req.id}" assignTo="{!SelectedName}"/>
+                        </apex:commandLink>&nbsp;|&nbsp;
+                       
+                       <a href="javascript:if (window.confirm('Are you sure?')) deleteUser('{!req.id}');" style="font-weight:bold">Del</a>
+
+                </apex:column>                        
+
+        </apex:dataTable>
+        
+      </apex:outputpanel> 
+      <apex:actionFunction action="{!deleteUser}" name="deleteUser" reRender="ajaxPart">
+           <apex:param name="UserName" value="" assignTo="{!SelectedName1}"/>
+        </apex:actionFunction>
+      
+      </apex:form>
+    </TD>
+    </TR>
+    </Table> 
+    
+
+</apex:page>

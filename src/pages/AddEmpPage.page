@@ -1,0 +1,68 @@
+<apex:page sidebar="false" showheader="false" controller="AddModuleController">
+  
+     <script>
+           
+           
+           function checkUp(x)
+           {
+                if(x==1)
+                  showEmpDetail();
+                else
+                  showModuleDetail();  
+           }      
+     </script>
+     
+     
+       <apex:form >
+       
+        <center>
+        
+          <br/><br/><br/><br/>
+          <table border="1" width="50%" cellpadding="15" cellspacing="5">
+              <tr><td align="center"><apex:outputLabel id="userNameLabel" for="userNameSelect">Available User:</apex:outputLabel></td>
+              <td><apex:selectList id="userNameSelect" value="{!userName}" size="1" multiselect="false" onchange="checkUp(1)">
+                   <apex:selectOptions value="{!Employee}" />
+
+                   </apex:selectList></td><td rowspan="3" width="5"></td><td rowspan="3" width="180">
+                   
+                   <apex:outputPanel id="first" rendered="{!boolean1}">
+                      EmpId:{!empObject.Name}<br/><br/>
+                      Name:{!empObject.empName__c}<br/><br/>
+                      BusinessUnit:{!empObject.BU__c}<br/><br/>
+                      Designation:{!empObject.empDesignation__c}<br/><br/>
+                      Manager:{!empObject.managerID__c}
+                   </apex:outputPanel>  
+                   
+                   <apex:outputPanel id="second" rendered="{!boolean2}">
+                      ModuleId:{!module.Name}<br/><br/>
+                      Name:{!module.moduleName__c}<br/><br/>
+                      Priority:{!module.priority__c}<br/><br/>
+                      ProjectID:{!module.projectID__c}<br/><br/>
+                   </apex:outputPanel>
+                   
+                   </td></tr>
+              <tr><td align="center"><apex:outputlabel id="moduleNameLabel" for="moduleNameSelect">Select Modules:</apex:outputlabel></td>
+              <td><apex:selectList id="moduleNameSelect" value="{!moduleName}" size="1" multiselect="false" onchange="checkUp(2)">
+                   <apex:selectOptions value="{!AllModule}" />
+
+                   </apex:selectList></td></tr>
+              
+              <tr><td align="center"><apex:outputlabel id="userRoleLabel" for="userRoleSelect">Select Role:</apex:outputlabel></td>
+                  <td><apex:selectList id="userRoleSelect" value="{!role}" size="1">
+                      <apex:selectoption itemlabel="RequirementWriter" itemvalue="RequirementWriter"></apex:selectoption>
+                      <apex:selectoption itemlabel="Testcase Writer" itemvalue="Testcase Writer"></apex:selectoption>
+                      <apex:selectoption itemlabel="Tester" itemvalue="Tester"></apex:selectoption>
+                      </apex:selectList></td></tr>
+              <tr><td colspan="3" align="center"><apex:commandButton value="Add" action="{!addObject}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <apex:commandButton value="cancel"/></td></tr>        
+           </table>           
+        
+         
+         </center>
+         
+         <apex:actionFunction name="showEmpDetail" action="{!showEmpDetail}" />
+         <apex:actionFunction name="showModuleDetail" action="{!showModuleDetail}" />
+         <!--<apex:param value="{!userName}" assignTo="{!param}" name="param"/>-->
+         
+       </apex:form>
+</apex:page>

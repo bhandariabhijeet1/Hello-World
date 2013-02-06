@@ -1,0 +1,44 @@
+<apex:page showHeader="false" sidebar="false" controller="globalController">
+  
+  <script>
+function DisableButton()
+{
+
+var btn=document.getElementById("{!$Component.form1.btnTest}");
+
+btn.disabled = true;
+btn.className = 'btnDisabled';
+
+}
+function enableButton(){
+var btn = document.getElementById("{!$Component.form1.btnTest}");
+
+btn.disabled = false;
+btn.className = 'btn';
+
+}
+
+
+</script>
+
+  
+ 
+  <apex:form id="form1">m here
+   <apex:commandButton value="test" id="btnTest" onclick="DisableButton();" onComplete="return false;" />
+     <apex:commandButton value="enable" onclick="enableButton();" oncomplete="return false;" />
+      <apex:commandButton value="disable" onclick="DisableButton();" oncomplete="return false;" />
+     <!-- <apex:dataTable value="{!empList}" var="v">m here
+          <apex:column value="{!v.EmpID__r.empName__c}"/>
+      </apex:dataTable>glbal list
+      -->
+     
+      <apex:dataTable value="{!testList}" var="v">m here
+          <apex:column value="{!v.Name}"/>
+          <apex:column value="{!v.id}"/>
+      </apex:dataTable>glbal list
+    
+  <apex:commandButton value="save" action="{!fetchGlobalUser}" />
+  <apex:commandButton value="testList" action="{!check}" />
+  
+  </apex:form>
+</apex:page>

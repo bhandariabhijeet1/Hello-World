@@ -1,0 +1,33 @@
+<apex:page showHeader="false" sidebar="false" controller="ProjectPageController">
+ <apex:form >
+  <table>
+     <TR>
+         <table width="25%" align="left">
+             <TR>
+                 <TH colspan="2" style="color:white;background-color:#3399CC;">Module Details </TH>
+             </TR>
+             <TR>
+                 <TD>
+<apex:dataTable value="{!moduleList}" var="row">
+                 <apex:column >
+                     <apex:commandLink value="{!row.moduleName__c}" style="font-weight:bold" >
+                           <apex:param name="SelectedName"
+                                    value="{!row.id}"
+                                    assignTo="{!SelectedName}"/> 
+                      </apex:commandLink>
+                 </apex:column>
+            </apex:dataTable>
+            
+
+                </TD>
+            </TR>
+             <TR>
+                 <TD>
+                     <apex:commandButton value="add"/>
+                      </TD>
+                 </TR>
+         </table>
+     </TR>
+  </table>
+ </apex:form>
+</apex:page>

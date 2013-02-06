@@ -1,0 +1,158 @@
+<apex:page showHeader="false" sidebar="false"  controller="RequirementViewController">
+<style>
+    .center
+    {
+        text-align:center;
+    }
+    .progressBar
+    {
+        background-color: #f8f8f8;
+        border:1px solid #DDDDDD;
+        height: 19px;
+        width: 150px;
+        -moz-border-radius: 5px; 
+        -webkit-border-radius: 5px;
+    }
+    .progress
+    {     
+        background-color:#CAFF70;            
+        border:1px solid #CAFF70;
+        height: 100%;
+        margin: -1px;
+        text-align: center;
+        -moz-border-radius: 5px; 
+        -webkit-border-radius: 5px;
+        line-height: 18px;
+    }
+</style>
+
+<script>
+    var newWin=null; 
+    var mybool={!booleanAttachjs};
+    if(mybool)
+    {
+        newWin=window.open('{!url}', 'Popup','height=550,width=450,left=100,top=100,res?izable=no,scrollbars=yes,toolbar=no,status=no');
+        mybool=false;
+    }
+    /*function abc()
+    {
+         neutralize();
+    }
+    window.onunload=neutralize;*/
+  
+</script>  
+  
+    <apex:form id="form">
+     <center>
+    <apex:outputPanel rendered="{!mod}">
+    <table border="0" cellpadding="5" cellspacing="5"  width="95%">
+        <tr><th colspan="2" style="font-size:14px;font-weight:bolder;color:white;background-color:#3399CC;">Select a module to view Requirements related to it</th></tr>
+        <tr>
+            <td>
+                <apex:outputPanel title="Modules">                
+                    <apex:dataTable width="100%" border="0" value="{!moduleListWrapper}" var="mow" style="background-color:white" cellpadding="5" cellspacing="5" rendered="{!modView1}">             
+                        <apex:column >
+                            <apex:facet name="header">Module Name</apex:facet>
+                            <apex:commandLink style="font-size:14px" value="{!mow.modObj.moduleName__c}" action="{!verifyAttachments}">
+                                <apex:param assignTo="{!modID}"  name="modID" value="{!mow.modObj.id}"/>
+                            </apex:commandLink>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Description</apex:facet>
+                            <apex:outputText style="font-size:14px" value="{!mow.modObj.moduleSpecification__c}"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Status</apex:facet>
+                            <div class="progressBar">
+                                <div class="progress" style="width: {!mow.width}%;">
+                                    <apex:outputLabel value="{!mow.width}">%</apex:outputLabel>
+                                </div>
+                            </div>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Priority</apex:facet>
+                            <apex:outputText style="font-size:14px" value="{!mow.modObj.priority__c}"/>    
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Start Date</apex:facet>
+                            <apex:outputText value="{0,date,MM'-'dd'-'yyyy}"><apex:param value="{!mow.modObj.startDate__c}" /> </apex:outputText>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">End Date</apex:facet>
+                            <apex:outputText value="{0,date,MM'-'dd'-'yyyy}"><apex:param value="{!mow.modObj.endDate__c}" /> </apex:outputText>
+                        </apex:column>
+                    </apex:dataTable>
+                    <apex:pageMessage rendered="{!modView2}" summary="No modules added yet under this project..." strength="2" severity="info"/>
+                </apex:outputPanel>
+            </td>
+        </tr>
+    </table>
+    </apex:outputPanel>
+    <br/><br/>
+    <apex:outputPanel rendered="{!req}">
+    <table border="0" cellpadding="5" cellspacing="5"  width="95%">
+        <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Requirements for Module:<apex:outputLabel value="{!modname.moduleName__c}"/></th></tr>
+        <tr>
+            <td>
+                <apex:outputPanel title="Requirement">
+                <apex:dataTable width="100%" border="0" value="{!holder}" var="row" style="background-color:white" cellpadding="5" cellspacing="5" rendered="{!reqView1}">                 
+                 <apex:column width="175">
+                     <apex:facet name="header">Name</apex:facet>
+                     <apex:outputText style="font-size:14px" value="{!row.req.reqName__c}"/>
+                 </apex:column>
+                 <apex:column width="250">
+                     <apex:facet name="header">Description</apex:facet>
+                     <apex:outputText style="font-size:14px" value="{!row.req.reqDescription__c}"/>
+                 </apex:column>
+                 <apex:column width="90">
+                     <apex:facet name="header">Priority</apex:facet>
+                     <apex:outputText style="font-size:14px" value="{!row.req.reqPriority__c}"/>
+                 </apex:column>
+                 <apex:column >
+                     <apex:facet name="header">Requirement Type</apex:facet>
+                     <apex:outputText style="font-size:14px" value="{!row.req.reqType__c}"/>
+                 </apex:column>
+                 <apex:column style="font-weight:bolder;">
+                     <apex:facet name="header">Attachment/s</apex:facet>
+                     <apex:commandLink style="font-size:14px" value="View Attachment" rendered="{!row.checkAttach}" action="{!openAttach}">
+                         <apex:param assignTo="{!reqAttachId}" name="reqAttachId" value="{!row.req.id}"/>
+                     </apex:commandLink>
+                     <apex:outputLabel rendered="{!row.message}">No Attachments</apex:outputLabel>
+                 </apex:column>
+                </apex:dataTable>
+                <!-- <apex:pageMessage></apex:pageMessage> -->
+                <!--<apex:outputLabel rendered="{!reqView2}">No Requirements added yet under this module...</apex:outputLabel>-->
+                </apex:outputPanel>
+                <apex:pageMessages />
+            </td>
+         </tr>
+     </table>
+     </apex:outputPanel>
+     <apex:outputPanel rendered="{!atmt}">
+         <table border="0" cellpadding="5" cellspacing="5"  width="60%">
+             <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Attachment/s for Requirement:<apex:outputLabel value="{!reqname.reqName__c}"/></th></tr>
+             <tr>
+             <td>
+                 <apex:outputLabel style="font-size:14px;font-style:italic;">Click on the name to View the Attachment</apex:outputLabel>
+                 <br/><br/>
+                 <apex:dataTable border="1" style="background-color:white" value="{!reqAttachList}" var="v" cellpadding="5" width="100%">
+                     <apex:column style="font-align:left;">
+                     <apex:facet name="header">Attachment Name/s</apex:facet>
+                         <apex:outputLabel style="font-weight:bold;">></apex:outputLabel>&nbsp;&nbsp;
+                         <apex:commandLink value="{!v.Name}" action="{!viewAttach}">
+                             <apex:param name="selectedAttachmentId" value="{!v.id}" assignTo="{!selectedAttachmentId}"/>
+                         </apex:commandLink>
+                     </apex:column>
+                 </apex:dataTable>
+             </td>
+             </tr>
+             <tr>
+                 <td align="right"><apex:commandButton value="Back" action="{!back}"/></td>
+             </tr>
+        </table>
+    </apex:outputPanel>              
+    </center>
+    
+    </apex:form>
+
+</apex:page>

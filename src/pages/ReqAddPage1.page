@@ -1,0 +1,153 @@
+<apex:page controller="ReqAddCon" showHeader="false" sidebar="false">
+<style>
+fieldset { border:1px solidgreen;
+  }
+
+legend {
+  padding: 0.2em 0.5em;
+  border:1px  solid green;
+  color:green;
+  font-size:90%;
+  text-align:right;
+  }
+
+</style>
+ <script>
+  var newWin=null; 
+  var mybool={!booleanAttachjs};
+  if(mybool)
+  {
+  url='https://c.ap1.content.force.com/servlet/servlet.FileDownload?file=00P90000000KTbb';
+  newWin=window.open('{!url}', 'Popup','height=550,width=450,left=100,top=100,res?izable=no,scrollbars=yes,toolbar=no,status=no');
+  mybool=false;
+  }
+  </script>
+    <apex:form >
+    
+    <br/>
+    <br/>
+    <center>               
+        <table>
+           <tr>    
+               <td>
+                   <apex:outputPanel rendered="{!var2}">
+                   <fieldset style="width:600px;">
+                   <legend>Available Modules</legend>
+                   <apex:OutputPanel id="only"> 
+                       <apex:dataTable align="center" value="{!modList}" var="mow" cellpadding="5" cellspacing="5">
+                           <apex:column width="200">
+                               <apex:facet name="header">Module Name</apex:facet>
+                               <apex:commandLink style="font-size:14px" value="{!mow.moduleName__c}" action="{!checkAttachment}">                          
+                                   <apex:param value="{!mow.id}" assignTo="{!modID}" name="modID"/>
+                               </apex:commandLink>
+                           </apex:column>
+                           <apex:column width="200">
+                               <apex:facet name="header">Status</apex:facet>
+                               <apex:outputText style="font-size:14px" value="{!mow.moduleStatus__c}"/>
+                           </apex:column>
+                           <apex:column width="200">
+                               <apex:facet name="header">Priority</apex:facet>
+                               <apex:outputText style="font-size:14px" value="{!mow.priority__c}"/>    
+                           </apex:column>
+                       </apex:dataTable>
+                    </apex:OutputPanel>
+                    </fieldset>
+                    </apex:outputPanel>
+                </td>
+            </tr>
+            <tr>
+                <table align="center" width="600">
+                <tr>
+                <td width="230" align="left">                                                    
+                    <apex:outputPanel rendered="{!var1}">
+                    <fieldset style="width:230px;">
+                    <legend>Requirements</legend>    
+                        <table>
+                            <tr>
+                                <td>
+                                    <apex:outputPanel id="refresh" >                            
+                                        <apex:dataTable value="{!reqWrapperList}" var="row">
+                                            <apex:column >
+                                            <table cellspacing="5" cellpadding="5">
+                                                <tr>
+                                                    <td width="200">
+                                                    <apex:commandLink style="font-size:14px" value="{!row.req.reqName__c}" action="{!populate}">
+                                                        <apex:param assignTo="{!reqName}" name="reqName" value="{!row.req.Name}"/>
+                                                    </apex:commandLink>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            </apex:column>
+                                        </apex:dataTable>                                        
+                                    </apex:outputPanel>
+                                </td>                         
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="right"><apex:commandButton value="Add Requirement" action="{!loadForm}"/></div >                             
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    </apex:outputPanel>                                                    
+                </td>
+                <td>                                                    
+                    <apex:outputPanel rendered="{!atmt}">
+                    <fieldset>
+                    <legend>Requirement Specifications</legend>    
+                        <table cellspacing="5" cellpadding="5">
+                            <tr>
+                                <td><apex:outputLabel >Requirement Name</apex:outputLabel></td>
+                                <td><apex:outputLabel value="{!reqInfoIns.reqName__c}"></apex:outputLabel></td>
+                            </tr>
+                            <tr>
+                                <td><apex:outputLabel >Requirement Description</apex:outputLabel></td>
+                                <td><apex:outputLabel value="{!reqInfoIns.reqDescription__c}"></apex:outputLabel></td>
+                            </tr>
+                            <tr>
+                                <td><apex:outputLabel >Requirement Priority</apex:outputLabel></td>
+                                <td><apex:outputLabel value="{!reqInfoIns.reqPriority__c}"></apex:outputLabel></td>
+                            </tr>
+                            <tr>
+                                <td><apex:outputLabel >Requirement Proposed By</apex:outputLabel></td>
+                                <td><apex:outputLabel value="{!reqInfoIns.reqProposedBy__c}"></apex:outputLabel></td>
+                            </tr>
+                            <tr>
+                                <td><apex:outputLabel >Requirement Type</apex:outputLabel></td>
+                                <td><apex:outputLabel value="{!reqInfoIns.reqType__c}"></apex:outputLabel></td>
+                            </tr>
+                            <tr>
+                                <td><apex:outputLabel >Requirement Status</apex:outputLabel></td>
+                                <td><apex:outputLabel value="{!reqInfoIns.reqStatus__c}"></apex:outputLabel></td>
+                            </tr>
+                            <tr>
+                                <td><apex:outputLabel >Attachments</apex:outputLabel></td>
+                                <td>
+                                    <apex:dataTable value="{!reqAttachList}" var="v">
+                                    <apex:column >
+                                        <apex:commandLink value="{!v.Name}" action="{!viewAttach}">
+                                            <apex:param name="selectedAttachmentId" value="{!v.id}" assignTo="{!selectedAttachmentId}"/>
+                                        </apex:commandLink>
+                                    </apex:column>
+                                </apex:dataTable>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="right">
+                                    <apex:commandLink value="Edit" style="font-weight:bold" action="{!loadEdit}"/>
+                                    &nbsp;
+                                    <a href="javascript:if (window.confirm('Are you sure?')) DeleteRequirement();" style="font-weight:bold">Del</a>
+                                    <apex:actionFunction action="{!delReq}" name="DeleteRequirement" reRender="refresh"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    </apex:outputPanel>    
+                </td>
+                </tr>
+                </table>
+            </tr>
+        </table>                    
+    </center>
+    </apex:form>
+</apex:page>

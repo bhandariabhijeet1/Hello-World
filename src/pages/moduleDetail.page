@@ -1,0 +1,105 @@
+<apex:page sidebar="false" showheader="false" controller="AddModuleController" id="insertModulePage">
+
+    
+     <apex:includeScript value="{!$Resource.ValidationForm}"/>
+     <script>
+     
+           if('{!boolean1}'==true)
+           {
+               document.getElementById('myPage:myForm:AddUsers').disabled=false; 
+           }
+           function checkUp(x)
+           {
+                if(x==1)
+                  showEmpDetail();
+                else
+                  showModuleDetail();  
+           } 
+           function moduleFormValidation(x)
+             {
+                    var ctr=1;
+                    document.getElementById("dmoduleName").innerHTML="";
+                    document.getElementById("dSpecification").innerHTML="";
+                    document.getElementById("dateCheck").innerHTML=""; 
+                    var startDate=document.getElementById("insertModulePage:moduleForm:sdate").value;
+                    var endDate=document.getElementById("insertModulePage:moduleForm:enddate").value;
+                    
+                    if((document.getElementById("insertModulePage:moduleForm:moduleName").value=="") || (isDigit(document.getElementById("insertModulePage:moduleForm:moduleName").value)))
+                    {
+                       //document.getElementById("title").style.visibility = 'visible';
+                       document.getElementById("dmoduleName").innerHTML="<P>Error: You must enter a valid Module Name</P>";
+                        ctr=0;
+                    }    
+                    if((document.getElementById("insertModulePage:moduleForm:specification").value==""))
+                    {
+                       //document.getElementById("dSpecification").style.visibility = 'visible';
+                       document.getElementById("dSpecification").innerHTML="<P>Error: You must enter a valid Specification</P>";
+                       ctr=0;
+                    }
+                    if(startDate==endDate)
+                    {
+                         document.getElementById("dateCheck").innerHTML="<P>Error: Start Date and End Date can not be same!</P>";
+                         ctr=0;
+                    }       
+                    if(ctr)
+                    {  
+                       
+                        if(x==1)
+                           InsertModule();
+                        
+                        else
+                      
+                           AddManyModule();
+                    }   
+              }
+               
+      </script>
+
+      <style>
+         P{font-size:10pt;font-style:regular;color:red;}
+      </style>
+     <Table width="80%" align="center">
+     <TR>
+         <TD align="center">
+            <apex:form id="moduleForm">    
+                  <table border="0" cellpadding="10" cellspacing="10" >
+                      <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Insert Module wizard</th></tr>
+                      <tr><th colspan="2"><apex:pageMessages ></apex:pageMessages></th></tr>
+                      <tr><th width="100" height="40" align="center">Module Name</th><td><apex:inputtext id="moduleName" value="{!moduleObj.moduleName__c}" size="50"/>
+                      
+                      <br/><div id="dmoduleName" style="background-color:white;visibility:visible;"></div></td></tr>
+                      
+                      <tr><th width="100" height="40" align="center">Specification</th><td><apex:inputtextarea id="specification" rows="4" cols="55" value="{!moduleObj.moduleSpecification__c}" />
+                      
+                      <br/><div id="dSpecification" style="background-color:white;visibility:visible;"></div></td></tr>
+                      
+                       <tr><th width="100" height="40" align="center">Priority</th>
+                           <td><apex:selectList id="priority" multiselect="false" size="1" value="{!moduleObj.priority__c}">
+                                   <apex:selectOption itemlabel="higher" itemvalue="higher"></apex:selectOption> 
+                                   <apex:selectoption itemlabel="medium" itemvalue="medium"></apex:selectoption>
+                                   <apex:selectoption itemlabel="low" itemvalue="low"></apex:selectoption>              
+                               </apex:selectList>
+                
+                           </td>
+                       </tr>
+                       <tr><th width="100" height="40" align="center">Start Date</th><td><apex:inputfield id="sdate" value="{!moduleObj.startDate__c}" required="true" /></td></tr>
+                       <tr><th width="100" height="40" align="center">End Date</th>
+                       <td><apex:inputfield id="enddate" value="{!moduleObj.endDate__c}" required="true" /><br/><div id="dateCheck" style="background-color:white;visibility:visible;"></div></td></tr>
+                        
+                        <tr><td align="right"><input type="Button" class="btn" value="Save" onclick="moduleFormValidation(1);" />
+                        
+                        <!--<apex:commandButton value="Save" action="{!addModule}"/>--></td>
+                        
+                        <th height="60" align="center"><input id="Addmore" type="Button" value="Save & New" class="btn" onclick="moduleFormValidation(2);" /> </th>
+                       </tr>
+                   </table>
+                <apex:actionfunction name="InsertModule" action="{!addModule}"/>
+                <apex:actionFunction name="AddManyModule" action="{!addManyModule}"/>
+             </apex:form>
+           </TD>
+        </TR>
+      </Table>
+    
+     
+
+</apex:page>

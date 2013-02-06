@@ -1,0 +1,22 @@
+<apex:page controller="UserCon" showHeader="false" sidebar="false" >
+    <apex:form >
+         <table width="50%">
+         
+         <tr>
+            <td><apex:outputLabel value="User Name"></apex:outputLabel></td>
+            <td><apex:inputText value="{!userIns.userName__c}"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="User Role"></apex:outputLabel></td>
+            <td><apex:inputText value="{!userIns.userRole__c}"/></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Email"></apex:outputLabel></td>
+            <td><apex:inputText value="{!userIns.userEmail__c}"/></td>
+         </tr>
+         <tr>
+           <td><apex:commandButton value="Insert" action="{!addItems}"/></td>
+         </tr>
+         </table>
+   </apex:form>
+</apex:page>

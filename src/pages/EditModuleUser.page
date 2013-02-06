@@ -1,0 +1,54 @@
+<apex:page showHeader="false" sidebar="false" controller="ViewModuleUserController"  id="myPage">
+   
+<script>
+
+      function show(check)
+      {
+           
+            if(check==1)
+            {
+                //document.getElementById("myPage:myForm:m1").disabled="false";
+                document.getElementById("myPage:myForm:m1").value=document.getElementById("myPage:myForm:m").value;
+            
+            }
+            else
+            document.getElementById("myPage:myForm:r1").value=document.getElementById("myPage:myForm:r").value;
+           
+      }  
+</script>
+<style>
+      .exstyle{height:150px;width:550px;border:1px solid blue;"}
+</style>
+<apex:form id="myForm">
+        
+         <br/><br/><br/>
+         <apex:outputpanel layout="block" styleClass="exstyle">
+         <table border="0" >
+         <tr>
+            <td><apex:outputLabel id="n" value="Name"></apex:outputLabel></td>
+            <td><apex:inputText id="k" value="{!ModuleUserInst1.EmpID__r.empName__c}" size="" disabled="true"/></td>
+            <td></td><td></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Module Name"></apex:outputLabel></td>
+            <td><apex:inputtext id="m1" value="{!moduleSelected}" /></td>
+            <td><apex:selectList id="m" value="{!module}" multiselect="false" size="1" onchange="show(1);">
+                    <apex:selectOptions value="{!Modules}"/>
+                </apex:selectList></td><td>*select to edit</td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Role In Project"></apex:outputLabel></td>
+            <td><apex:inputText id="r1" value="{!roleSelected}"/></td>
+            <td><apex:selectList id="r" value="{!role}" multiselect="false" size="1" onchange="show(2);">
+                   <apex:selectoptions value="{!Roles}"></apex:selectoptions>
+                </apex:selectList></td>
+            <td>*select to edit</td>
+         </tr>
+         
+         <tr><td colspan="2" height="70" align="center"><apex:commandButton value="Save" action="{!updateUser}" /></td>
+         <td colspan="2"><apex:commandButton value="cancel" action="{!returnEdit}"/></td></tr> 
+         </table>
+         </apex:outputpanel>
+        
+       </apex:form>
+</apex:page>

@@ -1,0 +1,219 @@
+<apex:page controller="RequirementController" showHeader="false" sidebar="false" id="myPage">
+  <apex:includeScript value="{!$Resource.ValidationForm}"/>
+
+ <style>
+    
+       
+      .bodyContainer {
+       position:absolute;
+       left:75px;
+       top:250px;
+       background-color: #D6E9EA;
+       overflow: hidden;
+       padding-top: 6px;
+       padding-left: 6px;
+       padding-right: 6px;
+       border-color: #8F9992;
+       border-width: medium;
+       padding-bottom: 5px;
+      }
+    P{font-size:10pt;font-style:regular;color:red;}  
+
+ </style>
+    <script>
+    
+          function TestcaseFormValidation(str)
+             {
+               
+                var ctr=1; 
+                document.getElementById("dtestName").innerHTML="";
+                document.getElementById("dSpecification").innerHTML="";
+                document.getElementById("dPrerequisite").innerHTML="";
+                document.getElementById("dteststeps").innerHTML="";
+                document.getElementById("expectedOutput").innerHTML="";
+                 
+                if(document.getElementById("myPage:AddTestCaseForm:testName").value=="")
+                {
+                    //document.getElementById("dcorg").style.visibility = 'visible';
+                    document.getElementById("dtestName").innerHTML="<P>Error: You must enter a Testcase Name</P>";
+                    ctr=0;
+                }    
+               
+                if(document.getElementById("myPage:AddTestCaseForm:specification").value=="")
+                {
+                    //document.getElementById("dcorg").style.visibility = 'visible';
+                    document.getElementById("dSpecification").innerHTML="<P>Error: You must enter a Testcase Specification</P>";
+                    ctr=0;
+                }    
+                if(document.getElementById("myPage:AddTestCaseForm:prerequisite").value=="")
+                {
+                    //document.getElementById("dcorg").style.visibility = 'visible';
+                    document.getElementById("dPrerequisite").innerHTML="<P>Error: You must enter a prerequisite condition</P>";
+                    ctr=0;
+                }    
+                if(document.getElementById("myPage:AddTestCaseForm:teststeps").value=="")
+                {
+                    //document.getElementById("dcorg").style.visibility = 'visible';
+                    document.getElementById("dteststeps").innerHTML="<P>Error: You must enter a TestSteps</P>";
+                    ctr=0;
+                }    
+                 if(document.getElementById("myPage:AddTestCaseForm:expectedoutput").value=="")
+                {
+                    //document.getElementById("dcorg").style.visibility = 'visible';
+                    document.getElementById("expectedOutput").innerHTML="<P>Error: You must enter a Expected output</P>";
+                    ctr=0;
+                }    
+                if(ctr)
+                {  
+                      addTestcase(str)
+                      
+                         
+                }
+             } 
+   
+    </script>
+    <table width="100%" cellspacing="10" cellpadding="10" align="center">
+           <tr>
+             <td>
+               <fieldset>
+                 <legend colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Currently Selected Requirement</legend>
+      <table border="0" width="100%" align="center">
+           <tr><td style="font-size:14px"><apex:outputLabel value="Requirement ID:"/></td>           
+                              <TD style="font-size:14px"><apex:outputText value="{!reqIns1.Name}"></apex:outputText></TD></tr>
+           <tr><TD style="font-size:14px"><apex:outputLabel value="Requirement Name:"/></TD>
+                              <TD style="font-size:14px"><apex:outputText value="{!reqIns1.reqName__c}"></apex:outputText></TD></tr>
+           <tr><TD style="font-size:14px"><apex:outputLabel value="Requirement Description:"/></TD>
+                              <TD style="font-size:14px"><apex:outputText value="{!reqIns1.reqDescription__c}"></apex:outputText></TD>
+           </tr>
+             <TR><apex:form >
+               <TD colspan="2" align="left">    
+                             <apex:commandButton value="view Testcases" action="{!viewtestcases}"/>                 
+               </TD>
+               <TD colspan="2" align="right">
+                             <apex:commandButton value="Add test cases" action="{!viewForm}"/>                      
+               </TD>
+               </apex:form>
+           </TR>
+       </table></fieldset></td></tr>  
+   </table>                   
+ <apex:outputpanel id="refresh" rendered="{!showtable}"> 
+  <apex:form id="form">
+    <center>
+    <table width="95%" border="0" cellpadding="5" cellspacing="5">
+           <tr><th colspan="2" style="font-size:14px;font-weight:bolder;color:white;background-color:#3399CC;">Available TestCases</th></tr>
+           <tr>    
+             <td>
+             <apex:dataTable align="center"  value="{!testlist}" var="test" cellpadding="5" rendered="{!testCount1}">
+                 <apex:column >
+                       <apex:facet name="header">Test ID</apex:facet>
+                          <apex:outputText style="font-size:14px" value="{!test.Name}"/>
+
+                 </apex:column>
+                 <apex:column width="100" >
+                        <apex:facet name="header" >TestName</apex:facet>
+                        <apex:outputText style="font-size:14px" value="{!test.testName__c}"/>
+                 </apex:column>
+                 <apex:column >
+                        <apex:facet name="header">Description</apex:facet>
+                        <apex:outputtext style="font-size:14px" value="{!test.testDescription__c}"/>
+                 </apex:column>
+                
+                <!--<apex:column >
+
+                        <apex:facet name="header">AssignTo</apex:facet>
+                        <apex:outputText style="font-size:14px" value="{!test.testAssignTo__c}"/>
+
+                </apex:column>-->
+                <apex:column >
+                        <apex:facet name="header">SampleInput</apex:facet>
+                        <apex:outputText style="font-size:14px" value="{!test.sampleInputData__c}"/>
+                </apex:column>
+                <apex:column >
+                        <apex:facet name="header">ExpectedOutput</apex:facet>
+                        <apex:outputText style="font-size:14px" value="{!test.expectedOutput__c}"/>
+                </apex:column>
+                 <apex:column >
+                        <apex:facet name="header">Action</apex:facet>
+                        <apex:commandLink value="Edit" action="{!callEdit}" style="font-weight:bold">
+                        <apex:param name="SelectedName"
+                                    value="{!test.Name}"
+                                    assignTo="{!SelectedTestName}"/>
+                        </apex:commandLink> | 
+                        <a href="javascript:if (window.confirm('Are you sure?')) DeleteAccount('{!test.Name}');" style="font-weight:bold">Del</a>
+                </apex:column>
+                <apex:column >
+                        <apex:facet name="header">Last Modified By</apex:facet>
+                        <apex:outputText value="{!test.lastModified__r.empName__c}" style="font-weight:bold"/> <!-- style="{!if(test.lastModified__c==test.userID__c,'color:black;font-weight: bold;', 'color:red')}"/> style="{!if(test.lastModified__c==test.userID__c,'color:black;font-weight: bold;', 'color:red')}" --> 
+                </apex:column>                        
+        </apex:dataTable>
+        <apex:pageMessage summary="No testcases added yet for this requirement..." severity="info" rendered="{!testCount2}" strength="2"/>        
+        <br></br><div align="right"><apex:commandButton value="Back" action="{!previous}"/></div>
+        </td>
+        </tr>
+   </table>
+   </center>
+           <apex:actionFunction action="{!DeleteAccount}" name="DeleteAccount" reRender="refresh">
+           <apex:param name="testName" value="" assignTo="{!deleteSelectedTest}"/>
+           </apex:actionFunction>
+  </apex:form>
+ </apex:outputpanel>
+
+ <apex:outputPanel id="refresh1" rendered="{!showform}">
+  <apex:form id="AddTestCaseForm">
+
+             <Table border="0" cellpadding="5" cellspacing="5"  width="60%" align="center">
+                <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Add TestCase</th></tr>
+                <TR>
+                    <Td >TestCase Name</Td> 
+                    <TD ><apex:inputText id="testName" value="{!testcaseInstance.testName__c}" size="45"/>
+                    <div id="dtestName" style="background-color:white;visibility:visible;"></div>
+                    </TD>
+                </TR>
+                <TR>
+                    <Td>Specification</Td>
+                    <TD><apex:inputTextarea rows="2" id="specification" value="{!testcaseInstance.testDescription__c}" cols="49"/>
+                    <div id="dSpecification" style="background-color:white;visibility:visible;"></div></TD>
+                </TR>
+                <TR>
+                    <Td>Prerequisite</Td>
+                    <TD><apex:inputTextarea id="prerequisite" value="{!testcaseInstance.prerequisites__c}" cols="49"/>
+                    <div id="dPrerequisite" style="background-color:white;visibility:visible;"></div></TD>
+                </TR>
+                <TR>
+                    <Td>Test Steps</Td>
+                    <TD><apex:inputTextarea id="teststeps" value="{!testcaseInstance.testSteps__c}" cols="49"/>
+                    <div id="dteststeps" style="background-color:white;visibility:visible;"></div></TD>
+                </TR>
+                <TR>
+                    <Td>SampleInput</Td>
+                    <TD><apex:inputTextarea id="sampleinput" value="{!testcaseInstance.sampleInputData__c}" cols="49"/></TD>
+                </TR>
+                <TR>
+                    <Td>ExpectedOutput</Td>
+                    <TD><apex:inputTextarea id="expectedoutput" value="{!testcaseInstance.expectedOutput__c}" cols="49"/>
+                    <div id="expectedOutput" style="background-color:white;visibility:visible;"></div></TD>
+                </TR>
+                <TR>
+                    <TD colspan="2"><div align="right"><!--<apex:commandButton value="Submit" action="{!addtestcaseObject}" />-->
+                    <input type="button" class='btn' value="Save" onclick="TestcaseFormValidation('{!reqIns1.id}');" />
+                    <apex:commandButton value="Back" action="{!viewtestcases}"/>
+                    <!--<apex:param name="selectedid" value="{!reqIns1.id}" assignTo="{!selectedreqid}" />--></div>
+                    </TD>
+                </TR>
+             </Table>
+
+    <apex:actionFunction action="{!DeleteAccount}" name="addTestcase">
+       <apex:param name="selectedid" value="" assignTo="{!selectedreqid}"/>
+    </apex:actionFunction>
+    
+     <apex:actionFunction action="{!addtestcaseObject}" name="addTestcase">
+       <apex:param name="selectedid" value="" assignTo="{!selectedreqid}"/>
+    </apex:actionFunction>
+  </apex:form>
+ </apex:outputPanel>
+ <apex:form >
+<!-- <apex:outputPanel rendered="{!showBack}">
+<apex:commandButton value="Back" action="{!viewtestcases}"/></div>
+</apex:outputPanel> -->
+</apex:form>
+ </apex:page>

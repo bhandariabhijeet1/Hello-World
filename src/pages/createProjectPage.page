@@ -1,0 +1,258 @@
+<apex:page controller="ProjectController" showHeader="false" sidebar="false" id="projectPage" standardStylesheets="true">
+       <style>
+         .tabStyle{
+                  background-color:white;font-size:14px;
+          }
+          .tabHeader{
+                  background-color:#3399CC;font-size:14px;
+           }
+         P{font-size:10px;color:red;}
+    
+            
+       </style>
+      <apex:include pageName="header"/>
+      <apex:includeScript value="{!$Resource.ValidationForm}"/>
+
+      <script>
+         
+             
+             
+             function step1()
+             {
+                //var q=document.getElementById("projectPage:myform:prjTitle").value;
+                    var ctr=1;
+                    document.getElementById("title").innerHTML="";
+                    document.getElementById("description").innerHTML="";    
+              
+                    if((document.getElementById("projectPage:myform:prjTitle").value=="") || (isDigit(document.getElementById("projectPage:myform:prjTitle").value)))
+                    {
+                       //document.getElementById("title").style.visibility = 'visible';
+                       document.getElementById("title").innerHTML="<P>Error: You must enter a valid Project title</P>";
+                        ctr=0;
+                    }    
+                    if(document.getElementById("projectPage:myform:description").value=="")
+                    {
+                       //document.getElementById("description").style.visibility = 'visible';
+                       document.getElementById("description").innerHTML="<P>Error: You must enter a valid Description</P>";
+                       ctr=0;
+                    }
+                    if(ctr)
+                    {  
+                         gotoStep2();
+                         
+                    }
+               } 
+             function step2()
+             {
+                var ctr=1;
+                var startDate=document.getElementById("projectPage:myform:startdate").value;
+                var endDate=document.getElementById("projectPage:myform:enddate").value;
+                
+                if(startDate==endDate)
+                {
+                     document.getElementById("dateCheck").innerHTML="<P>* Start Date and End Date cannot be same!</P>";
+                     ctr=0;
+                }     
+                if(isChar(document.getElementById("projectPage:myform:budget").value)||((document.getElementById("projectPage:myform:budget").value)<0))
+                {
+                    //document.getElementById("budgt").style.visibility = 'visible';
+                    document.getElementById("budgt").innerHTML="<P>* Enter only valid Numeric values!</P>";
+                    ctr=0;
+                }
+                
+                if(ctr==1)
+                {  
+                      gotoStep3();
+                         
+                }     
+             }   
+             function ClientFormValidation()
+             {
+                var ctr=1; 
+                document.getElementById("dcorg").innerHTML="";
+                document.getElementById("dcname").innerHTML="";
+                //document.getElementById("dcontactno").innerHTML="";
+                document.getElementById("demailid").innerHTML="";
+                
+                //var phoneno=document.getElementById("projectPage:myform:contactno").value;   
+                if((document.getElementById("projectPage:myform:corg").value=="")||(isDigit(document.getElementById("projectPage:myform:corg").value)))
+                {
+                    //document.getElementById("dcorg").style.visibility = 'visible';
+                    document.getElementById("dcorg").innerHTML = "<P>Error: You must enter a valid organisation name</P>";
+                    ctr=0;
+                }    
+                if((document.getElementById("projectPage:myform:cname").value=="")||(isDigit(document.getElementById("projectPage:myform:cname").value)))
+                {
+                    //document.getElementById("dcname").style.visibility = 'visible';
+                    document.getElementById("dcname").innerHTML="<P>Error: You must enter a valid value</P>";
+                    ctr=0;
+                }
+                /*if((phoneno.value=="") || isChar(phoneno) || (phoneno.length > 10))
+                {
+                    //document.getElementById("dcontactno").style.visibility = 'visible';
+                    document.getElementById("dcontactno").innerHTML="<P>Error: You must enter a valid contactno</P>";
+                    ctr=0;
+                }*/
+                if((document.getElementById("projectPage:myform:emailid").value)=="")
+                {
+                    //document.getElementById("demailid").style.visibility = 'visible';
+                    document.getElementById("demailid").innerHTML="<P>Error: You must enter a valid emailid</P>";
+                    ctr=0;
+                }
+                if(ctr)
+                {  
+                      InsertCmd(); 
+                }
+             } 
+      </script>
+    
+     <Table cellpadding="10" cellspacing="10" width="80%" align="center">
+         <TR>
+             <TH colspan="2" style="background-color:#3399CC;color:white;font-size:20px;">Create new Project</TH>
+         </TR>
+         <TR>
+              <TD align="right" colspan="2" style="font-size:14px;"><apex:form >Welcome <apex:outputLabel value="{!currentUser}" /> | 
+              <apex:commandlink action="{!backToHomePage}">My Projects</apex:commandLink> |&nbsp;&nbsp;  
+              <apex:commandlink action="/apex/homePage">Logout</apex:commandLink></apex:form> </TD>
+          </TR>  
+          <TR>
+          
+          <TD colspan="2">
+              <apex:form id="myform">
+                    <apex:tabPanel switchtype="client" selectedTab="{!mySelectedTab}" id="wizardTabPanel" activeTabClass="tabHeader" >
+                       <apex:tab id="step1" label="Step 1" labelwidth="20px" name="step1" disabled="{!distab1}" styleClass="tabStyle" >
+                            <table cellpadding="10" cellspacing="10" border="0">
+                               <tr><th colspan="3" style="background-color:#3399CC;color:white;" >General Project Details</th></tr>
+                               <tr><th><apex:pagemessages ></apex:pagemessages></th></tr>
+                               <tr>
+                                    <th>Project Title:</th>
+                                    <td><apex:inputText id="prjTitle" value="{!projIns.projectTitle__c}"/><br/><div id="title" style="background-color:white;visibility:visible;"></div></td>
+                                    
+                               </tr>
+                                <tr>
+                                    <th>Project Version</th>
+                                    <td><apex:inputText id="prjVersion" value="{!projIns.projectVersion__c}"/><br/><div id="version" style="background-color:white;visibility:visible;"></div></td>
+                                </tr>
+                                <tr>
+                                      <th>Technology:</th>
+                                      <td><apex:inputField id="technology" value="{!projIns.technology__c}"/></td>
+                                         
+                                 </tr>
+                                 <tr>
+                                        <th>Project Description:</th>
+                                        <td><apex:inputTextarea id="description" value="{!projIns.ProjectDescription__c}"/><br/><div id="description" style="background-color:white;visibility:visible;"></div></td>
+                                 </tr>
+                                 <tr>
+                                         <td align="right" colspan="2">
+                                         <!--<apex:commandButton value="continue" action="{!moveToStep2}" /></td>-->
+                                         
+                                         <input type="Button" class="btn" value="Continue" onclick="step1();"/> </td>
+                                        
+                                         <!--<td><apex:pagemessages ></apex:pagemessages></td>-->
+                                 </tr>
+                             </table>
+                       </apex:tab>
+                      
+                       <apex:tab id="step2" label="Step 2" labelwidth="20px" name="step2" disabled="{!distab2}" styleClass="tabStyle" >
+                         <table cellpadding="10" cellspacing="10" border="0">
+                                 <tr><th colspan="3" style="background-color:#3399CC;color:white;" >Time and Cost</th></tr>
+                                  <tr>
+                                        <th>Assigned Budget to this Project:</th>
+                                        <td><apex:inputText id="budget" value="{!projIns.budget__c}"/><br/><div id="budgt" style="background-color:white;visibility:visible;"></div></td>
+                                       
+                                 </tr>
+                                 <tr>
+                                        <th>Start Date:</th>
+                                         <!-- <td><apex:inputField value="{!projIns.startDate__c}"/></td> -->
+                                       <td><apex:inputField id="startdate" value="{!projIns.startDate__c}" /></td>
+                                 </tr>
+                                 <tr>
+                                        <th>Proposed End Date:</th>
+                                        <!-- <td><apex:inputField value="{!projIns.endDate__c}"/></td> -->
+                                        <td><apex:inputField id="enddate" value="{!projIns.endDate__c}"/><br/><div id="dateCheck" style="background-color:white;visibility:visible;"></div></td>
+                                 </tr>
+                                 <tr>
+                                      <td align="right"> <apex:commandButton value="Previous" action="{!moveToStep1}" /></td>
+                                      <td><input  type="Button" class="btn" value="Next" onclick="step2();"/> </td>
+                                       <!--<td><apex:commandButton value="Next" action="{!moveToStep3}" /></td> -->
+                                       <td></td>
+                                 </tr>  
+                         </table>
+                       </apex:tab>
+                       <apex:tab id="step3" label="Step 3" labelwidth="20px" name="step3" disabled="{!distab3}" styleClass="tabStyle">
+                         <table cellpadding="10" cellspacing="10" align="left">
+                                <tr><th colspan="2" style="background-color:#3399CC;color:white;" >Other Details</th></tr>
+                                 <apex:outputPanel id="startPanel" rendered="{!clientControlObject.showTopPanel}">
+                                 <tr>
+                                     <th>Client Organization:</th>
+                                     <td><apex:selectList size="1" value="{! clientControlObject.selectedClient}" >
+                                         <apex:selectOptions value="{!clientControlObject.items}"/>
+                                        </apex:selectList>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                        <th colspan="2" >
+                                        <apex:commandButton value="Add new Client" action="{!clientControlObject.showClientInputForm}" />                             
+                                        </th>
+                                 </tr>
+                                  </apex:outputPanel>
+                                  <apex:outputPanel id="middlePanel" rendered="{!clientControlObject.showMiddlePanel}">
+                                 <tr>
+                                     <td colspan="3">
+                                     <table cellpadding="10" cellspacing="10" border="0">
+                                          <tr><th>Client Organization</th>
+                                              <td><apex:inputText id="corg" value="{!clientControlObject.clientIns.clientCompany__c}"/><br/><div id="dcorg" style="background-color:white;visibility:visible;"></div></td>
+                                              
+                                         </tr>
+                                         <tr><th>Client Name</th>
+                                             <td><apex:inputText id="cname" value="{!clientControlObject.clientIns.clientName__c}"/><br/><div id="dcname" style="background-color:white;visibility:visible;"></div></td>
+                                         </tr>
+                                         <tr>  <th>Contact no.</th>
+                                               <td><apex:inputField id="contactno" value="{!clientControlObject.clientIns.clientContactNo__c}" /></td>
+                
+                                         </tr>
+                                         <tr>
+                                                <th>Email ID</th>
+                                                <td><apex:inputText id="emailid" value="{!clientControlObject.clientIns.clientEmailID__c}"/><br/><div id="demailid" style="background-color:white;visibility:visible;"></div></td>
+                                         </tr>
+                                         <tr>
+                                                <th>Registration date:</th>
+                                                <td><apex:inputField id="regdate" value="{!clientControlObject.clientIns.registrationDate__c}"/></td>
+                                  
+                                         </tr>
+                                          <tr>
+                                                <!-- <th colspan="3" align="center"><apex:commandButton value="Insert" action="{!clientControlObject.addClientItems}" /></th>-->
+                                                     <th colspan="2"  align="right"><input type="button" class="btn" value="Insert" onclick="ClientFormValidation();" /></th>
+                                         </tr>
+                                     </table>
+                                     </td>
+                                 </tr>
+                                  </apex:outputPanel>
+                                  <apex:outputPanel id="lastPanel" rendered="{!clientControlObject.showLastPanel}">
+                                   <tr>
+                                        <th>Current Status of Project:</th>
+                                        <td>
+                                        <!--<apex:selectList value="{!projIns.status__c}" size="1">
+                                       <apex:selectOption itemLabel="Completed" itemValue="completed"></apex:selectOption>
+                                       <apex:selectOption itemLabel="In progress" itemValue="inprogress"></apex:selectOption>
+                                       </apex:selectList>-->
+                                       <apex:outputtext value="Initiated"></apex:outputtext>
+                                        </td>
+                                   </tr>
+                                   <tr>
+                                         <td colspan="2" align="right"> <apex:commandButton value="Previous" action="{!moveToStep2}" /> 
+                                         <apex:commandButton value="Finish" action="{!addItems}" />
+                                         </td>
+                                   </tr>
+                                 </apex:outputPanel>
+                         </table>                           
+                     </apex:tab>
+                 </apex:tabPanel>
+                 <apex:actionFunction name="gotoStep2" action="{!moveToStep2}"/>
+                 <apex:actionFunction name="gotoStep3" action="{!moveToStep3}"/>
+                 <apex:actionFunction name="InsertCmd" action="{!clientControlObject.addClientItems}"/>
+         </apex:form>  
+         </td>
+         </tr>
+     </table>     
+</apex:page>

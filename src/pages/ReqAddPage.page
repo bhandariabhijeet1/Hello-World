@@ -1,0 +1,187 @@
+<apex:page controller="ReqAddCon" showHeader="false" sidebar="false">
+<style>
+    .center
+    {
+        text-align:center;
+    }
+    
+    
+        .progressBar{
+            background-color: #f8f8f8;
+            border:1px solid #DDDDDD;
+            height: 19px;
+            width: 150px;
+            -moz-border-radius: 5px; 
+            -webkit-border-radius: 5px;
+        }
+        .progress{
+            
+            background-color:#CAFF70;            
+            border:1px solid #CAFF70;
+            height: 100%;
+            margin: -1px;
+            text-align: center;
+            -moz-border-radius: 5px; 
+            -webkit-border-radius: 5px;
+            line-height: 18px;
+        }
+         
+    
+</style>
+ <script>
+  var newWin=null; 
+  var mybool={!booleanAttachjs};
+  if(mybool)
+  {
+  url='https://c.ap1.content.force.com/servlet/servlet.FileDownload?file=00P90000000KTbb';
+  newWin=window.open('{!url}', 'Popup','height=550,width=450,left=100,top=100,res?izable=no,scrollbars=yes,toolbar=no,status=no');
+  mybool=false;
+  }
+  </script>
+    <apex:form id="f">
+      <!-- <apex:pageMessages /> -->
+    <center>
+        <apex:outputPanel rendered="{!var2}">             
+        <table width="95%" border="0" cellpadding="5" cellspacing="5">
+           <tr><th colspan="2" style="font-size:14px;font-weight:bolder;color:white;background-color:#3399CC;">Select any module to manipulate related requirements</th></tr>
+           <tr>    
+               <td>                  
+                   <apex:OutputPanel id="only">   
+                       <!-- ---------------- module wrapper -------------------------------------------------------->
+                       <apex:dataTable align="center" value="{!moduleListWrapper}" var="row" cellpadding="5" cellspacing="5" rendered="{!modAdd1}">
+                           <apex:column >
+                               <apex:facet name="header">Module Name</apex:facet>
+                               <apex:commandLink style="font-size:14px" value="{!row.modObj.moduleName__c}" action="{!checkAttachment}">                          
+                                   <apex:param value="{!row.modObj.id}" assignTo="{!modID}" name="modID"/>
+                               </apex:commandLink>
+                           </apex:column>
+                           <apex:column >
+                               <apex:facet name="header">Description</apex:facet>
+                               <apex:outputText style="font-size:14px" value="{!row.modObj.moduleSpecification__c}"/>
+                           </apex:column>
+                           <apex:column >
+                               <apex:facet name="header">Status</apex:facet>
+                               <div class="progressBar">
+                                   <div class="progress" style="width: {!row.width}%;">
+                                       <apex:outputLabel value="{!row.width}">%</apex:outputLabel>
+                                   </div>
+                               </div>
+                           </apex:column>
+                           <apex:column >
+                               <apex:facet name="header">Priority</apex:facet>
+                               <apex:outputText style="font-size:14px" value="{!row.modObj.priority__c}"/>    
+                           </apex:column>
+                           <apex:column >
+                               <apex:facet name="header">Start Date</apex:facet>
+                               <apex:outputText value="{0,date,MM'-'dd'-'yyyy}"><apex:param value="{!row.modObj.startDate__c}" /> </apex:outputText>
+                           </apex:column>
+                           <apex:column >
+                               <apex:facet name="header">End Date</apex:facet>
+                               <apex:outputText value="{0,date,MM'-'dd'-'yyyy}"><apex:param value="{!row.modObj.endDate__c}" /> </apex:outputText>
+                           </apex:column>
+                       </apex:dataTable>
+                       <apex:pageMessage rendered="{!modAdd2}" summary="No module added yet under this project..." severity="info" strength="2"/>
+                       <!-- ---------------- module wrapper end ---------------------------------------------------->
+                    </apex:OutputPanel>
+                </td>
+            </tr>
+        </table>
+        </apex:outputPanel>
+        <br/>
+        <br/>                                    
+        <apex:outputPanel rendered="{!var1}">
+            <table align="center" border="0" width="95%" cellpadding="5" cellspacing="5">
+                <tr><th colspan="2" style="font-size:14px;font-weight:bolder;color:white;background-color:#3399CC;">Requirements for the Module:<apex:outputLabel value="{!modname.moduleName__c}"/></th></tr>
+                <tr>
+                    <td>
+                        <apex:outputPanel id="refresh" >                                       
+                            <apex:dataTable align="center" value="{!reqWrapperList}" var="row" border="0" cellpadding="5" cellspacing="5" rendered="{!reqAdd1}">
+                                <apex:column >
+                                    <apex:facet name="header">Requirement Name</apex:facet>
+                                    <apex:outputLabel style="font-size:14px" value="{!row.req.reqName__c}"/>
+                                </apex:column>
+                                <apex:column >
+                                    <apex:facet name="header">Requirement Description</apex:facet>
+                                    <apex:outputLabel style="font-size:14px" value="{!row.req.reqDescription__c}"/>
+                                </apex:column>
+                                <apex:column >
+                                    <apex:facet name="header">Requirement Priority</apex:facet>
+                                    <apex:outputLabel style="font-size:14px" value="{!row.req.reqPriority__c}"/>
+                                </apex:column>
+                                <apex:column >
+                                    <apex:facet name="header">Requirement Type</apex:facet>
+                                    <apex:outputLabel style="font-size:14px" value="{!row.req.reqType__c}"/>
+                                </apex:column>
+                                <apex:column >
+                                    <apex:facet name="header">Action</apex:facet>
+                                    <apex:commandLink value="Edit" style="font-weight:bold" action="{!loadEdit}">
+                                        <apex:param assignTo="{!reqName}" name="reqName" value="{!row.req.Name}"/>                                                          
+                                    </apex:commandLink>
+                                    <apex:outputLabel >|</apex:outputLabel>
+                                        <a href="javascript:if (window.confirm('Are you sure?')) DeleteRequirement('{!row.req.Name}');" style="font-weight:bold">Del</a>                                                   
+                                </apex:column>
+                                <apex:column >
+                                    <apex:facet name="header">Attachment/s</apex:facet> 
+                                    <apex:outputLabel rendered="{!row.message}">No Attachments</apex:outputLabel>
+                                    <apex:commandLink value="View Attachment" style="font-weight:bold" action="{!selectAttach}" rendered="{!row.haveAttachment}" >
+                                        <apex:param assignTo="{!reqAttachId}" name="reqAttaachId" value="{!row.req.Id}"/>                                                          
+                                    </apex:commandLink>
+                                </apex:column>
+                            </apex:dataTable>
+                        </apex:outputPanel>
+                        <apex:pageMessage rendered="{!reqAdd2}" summary="No Requirement added yet for this module..." strength="2" severity="info"/>
+                    </td>    
+                </tr>
+                <tr>
+                    <td>
+                        <div align="right"><apex:commandButton value="Add Requirement" action="{!loadForm}"/></div >                             
+                    </td>
+                </tr>
+            </table>
+        </apex:outputPanel>                                                    
+        <apex:outputPanel rendered="{!atmt}">
+            <table width="60%">
+                <tr><th colspan="2" style="font-size:14px;font-weight:bolder;color:white;background-color:#3399CC;">Attachments for the Requirement:<apex:outputLabel value="{!requirename.reqName__c}"/></th></tr>
+                <tr>
+                    <td>
+                        <center>
+                        <table width="60%">
+                            <tr>
+                                <td>
+                                <apex:outputLabel style="font-size:14px;font-style:italic;">Click on the name to View the Attachment</apex:outputLabel>
+                                <br/><br/>
+                                    <apex:dataTable width="100%" align="center" border="true" style="background-color:white" value="{!reqAttachList}" var="v" rendered="{!booleanAttachList}" cellpadding="5" headerClass="center">
+                                    <apex:column style="text-align:center;">
+                                        <apex:facet name="header">Attachment name</apex:facet>
+                                        <apex:commandLink value="{!v.Name}" action="{!viewAttach}">
+                                            <apex:param name="selectedAttachmentId" value="{!v.id}" assignTo="{!selectedAttachmentId}"/>
+                                        </apex:commandLink>
+                                    </apex:column>
+                                    <apex:column style="text-align:center;">
+                                        <apex:facet name="header">Action</apex:facet>
+                                        <apex:commandLink value="Delete" action="{!deleteAttach}">
+                                            <apex:param name="deleteAttachmentId" value="{!v.id}" assignTo="{!deleteAttachmentId}"/>
+                                        </apex:commandLink>
+                                    </apex:column>
+                                    <!--<apex:column >
+                                    <apex:outputText value="{!deleteAttachmentId}"></apex:outputText>
+                                    </apex:column>-->
+                                </apex:dataTable><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right"><apex:commandButton value="Back" action="{!cancelatt}"/></td>
+                            </tr>
+                        </table>
+                        </center>
+                    </td>
+                </tr>
+            </table>
+        </apex:outputPanel>           
+    </center>
+    <apex:actionFunction action="{!delReq}" name="DeleteRequirement" reRender="f">
+        <apex:param name="reqName1" value="" assignTo="{!reqName1}"/>
+    </apex:actionFunction>
+     
+    </apex:form>
+</apex:page>

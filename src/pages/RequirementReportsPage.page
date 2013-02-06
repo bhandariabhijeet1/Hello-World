@@ -1,0 +1,153 @@
+<apex:page sidebar="false" showheader="false" controller="RequirementReportsController" id="myPage">
+  
+    <style>
+        .exstyle{height:80px;width:350px;border:1px solid blue;}
+        
+        .center
+          {
+             text-align:center;
+          }
+          .RowEven
+          {
+             background-color:#E6E6FA;
+           }
+           
+          .RowOdd
+          {bakground-color:white;}
+  
+          .headerstyle{height:30px;font-weight:bold;color:white;background-color:#008AB8;text-align:left;}
+
+
+    </style>     
+    <script>
+         
+          function openPopup()
+          {   
+              var newWindow=null;
+              var url="https://ap1.salesforce.com/00O90000001Vgih";              
+              newWindow=window.open(url, 'Popup','height=750,width=950,left=200,top=100,res​izable=no,scrollbars=yes,toolbar=no,status=no');
+              newWindow.focus();       
+              return false; 
+          }
+          function PrintPage()
+          {
+               //document.getElementById("dSpecification").style.visibility = 'visible';
+
+               document.getElementById("myPage:myForm:reportButton").style.visibility='hidden';
+               document.getElementById("myPage:myForm:printButton").style.visibility='hidden';
+               document.getElementById("myPage:myForm:exportButton").style.visibility='hidden';
+               document.getElementById("myPage:myForm:linkSalesForceReport").style.visibility='hidden'; 
+               document.getElementById("showProjectDetail").style.visibility='visible';
+               window.print();    
+          }
+    </script>
+    
+    <apex:form id="myForm"><br/>
+    
+     <div id="showProjectDetail" style="visibility:hidden;">
+      <table border="0"><tr><td><b>Project Title:</b></td><td>
+      
+      
+      <apex:outputtext value="{!projectObj.projectTitle__c}"/></td>
+      
+         <td align="center"><b>StartDate:</b></td><td><apex:outputText value="{0,date,dd'-'MM'-'yyyy}" ><apex:param value="{!projectObj.startDate__c}"/></apex:outputText></td></tr>
+         
+         <tr><td><b>Project Version:</b></td><td align="center"><apex:outputtext value="{!projectObj.projectVersion__c}" /></td>
+         
+         <td align="center"><b>End Date:</b></td><td><apex:outputText value="{0,date,dd'-'MM'-'yyyy}" ><apex:param value="{!projectObj.endDate__c}"/></apex:outputText></td></tr>
+       </table>
+     </div>
+       <Table cellpadding="10" cellspacing="10" align="center" width="50%" border="0">
+         
+         <tr><td colspan="2" align="right"><apex:commandLink id="linkSalesForceReport" value="Standard Salesforce Requirement Report" onclick="openPopup();"/></td></tr>
+         <tr><td colspan="2" style="color:white;background-color:#3399CC;font-weight:bolder;">Custom Requirement Report</td></tr>
+         
+         <tr><td>
+             <apex:outputpanel id="ReqReport">
+              <table border="0">
+                    <tr><td>Summarise Information By:</td></tr>
+                    <tr><td><div class="exstyle" id="summariseInfo"><br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                       <apex:selectList id="info" size="1" value="{!SummariseParam}">
+                           <apex:selectOption itemlabel="-Any-" itemvalue="-Any-"/>
+                           <apex:selectOption itemlabel="RequirementStatus" itemValue="RequirementStatus" />
+                           <apex:selectOption itemlabel="RequirementPriority" itemvalue="RequirementPriority" />
+                           <apex:selectOption itemlabel="RequirementVersion" itemvalue="RequirementVersion" />
+                           <apex:selectOption itemLabel="Module Name" itemvalue="Module Name"/>                   
+                       </apex:selectList></div></td></tr>                           
+                  
+              </table>
+            </apex:outputpanel>  
+         </td><td>
+        <fieldset style="border:1px solid blue"><legend>Time frame</legend>
+         <table border="0"><tr><td></td><td></td></tr>
+             <tr><td>From</td><td>To</td></tr>
+             <tr><td><apex:inputfield id="StartDate" value="{!startDate.dateField__c}" /></td><td><apex:inputfield id="EndDate" value="{!endDate.dateField__c}"/></td></tr>
+            
+         </table></fieldset></td></tr>   
+         <!--<tr><td></td><td></td></tr>-->
+         <tr><td align="right"><!--<input id="reportButton" type="button" class="btn" value="Create Reports" onclick="SummariseReports();"/>-->
+             <apex:commandButton id="reportButton" value="Create Report" action="{!ReportSummarise}"/>
+             &nbsp;&nbsp;&nbsp;&nbsp;<apex:commandButton id="printButton" value="Print" onclick="PrintPage();"/>
+             
+             </td>
+             <td><apex:commandButton id="exportButton" value="Export" action="{!ShowRequirementReportPage}"/>&nbsp;&nbsp;&nbsp;&nbsp;             
+             <apex:actionFunction name="SummariseReports" action="{!ReportSummarise}"/>
+             
+             </td></tr>
+     
+       <tr><td colspan="2">
+       
+       <apex:outputPanel rendered="{!summaryShow}">
+             <!--<table width="100%" border="1">
+                 <tr><td>ReqID</td><td>Name</td><td>Description</td><td>Priority</td><td>Status</td><td>Version</td><td>Module</td><td>CreatedDate</td></tr>
+             </table>-->
+             <apex:repeat value="{!requirementReport}" var="outer" id="theRepeat">
+
+                 <div class="headerstyle">
+                     <apex:outputtext value="{!searchParam}:"></apex:outputtext>
+                     <apex:outputText value="{!outer.reportParam} " />
+                     <apex:outputText value="({!outer.count}records)" />
+                     
+                 </div>
+                        <apex:datatable value="{!outer.reqList}" var="inner" border="" width="100%" cellpadding="5" rowClasses="RowEven,RowOdd" columnClasses="center" headerClass="center">
+                             
+                             <apex:column >
+                               
+                                <apex:outputText value="{!inner.Name}" />
+                             </apex:column>
+                             <apex:column >
+                                
+                                <apex:outputText value="{!inner.reqName__c}" />
+                             </apex:column>
+                             <apex:column >
+                               
+                                <apex:outputText value="{!inner.reqDescription__c}" />
+                             </apex:column>
+                             <apex:column >
+                              
+                                <apex:outputText value="{!inner.reqPriority__c}" />
+                             </apex:column>
+                             <apex:column >
+                              
+                                <apex:outputText value="{!inner.reqStatus__c}" />
+                             </apex:column>
+                             <apex:column >
+                              
+                                <apex:outputText value="{!inner.reqVersion__c}" />
+                             </apex:column>
+                             <apex:column >
+                              
+                                <apex:outputText value="{!if(SummariseParam=='Module Name',"",inner.moduleID__r.moduleName__c)}" />
+                             </apex:column>
+                              <apex:column >
+                                <apex:outputText value="{0,date,dd'-'MM'-'yyyy}" ><apex:param value="{!inner.CreatedDate}"/></apex:outputText>
+                              </apex:column>
+                        </apex:datatable>
+                   
+             </apex:repeat>
+             
+       </apex:outputPanel>
+       </td></tr></table>
+       
+    </apex:form>  
+</apex:page>

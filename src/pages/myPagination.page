@@ -1,0 +1,52 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="true" controller="myPaginationController">
+            <br/><br/>
+            <apex:form >
+                   <apex:pageBlock >
+                    <apex:dataTable value="{!accounts}" var="account" border="1" width="60%">
+                        <apex:column >
+                            <apex:inputCheckbox value="{!account.selected}"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Name</apex:facet>
+                            <apex:outputtext >{!account.obj.name}</apex:outputtext>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Name</apex:facet>
+                            <apex:outputtext >{!account.obj.EmpID__r.Name}</apex:outputtext>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Name</apex:facet>
+                            <apex:outputtext >{!account.obj.EmpID__r.empName__c}</apex:outputtext>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Name</apex:facet>
+                            <apex:outputtext >{!account.obj.EmpID__r.empDesignation__c}</apex:outputtext>
+                        </apex:column>
+                        <apex:facet name="footer">
+                            <apex:outputPanel >
+                                <apex:outputText value="Page {!paginator.pageNumberDisplayFriendly} of {!paginator.pageCount} in {!paginator.recordCount} Results"/>
+                                <apex:outputPanel >   </apex:outputPanel>
+                                <apex:commandLink value="Previous" action="{!paginator.previous}" style="font-weight:bold;color:green;" rendered="{!IF(paginator.hasPrevious,'true','false')}"/>
+                                <apex:outputText value="Previous" rendered="{!IF(NOT(paginator.hasPrevious),'true','false')}"/>
+                                <apex:outputPanel > | </apex:outputPanel>
+                                <apex:commandLink value="Next" style="font-weight:bold;" action="{!paginator.next}" rendered="{!IF(paginator.hasNext,'true','false')}"/>
+                                <apex:outputText value="Next" rendered="{!IF(NOT(paginator.hasNext),'true','false')}"/>
+                            </apex:outputPanel>
+                           
+                        </apex:facet>
+                    </apex:Datatable>
+                    </apex:pageBlock>
+                    <apex:commandButton value="Show Selected" action="{!getemployeeSelected}"/>
+                    
+                    <apex:outputpanel id="Azax" rendered="{!bool}">
+                         <apex:dataTable value="{!Liststr}" var="cc">
+                         
+                           <apex:column value="{!cc.name}"/>
+                         </apex:dataTable>
+                    </apex:outputpanel>
+                
+                
+                
+            </apex:form>
+        
+</apex:page>

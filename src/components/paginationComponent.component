@@ -1,0 +1,371 @@
+<apex:component controller="PageController" id="paginationCompo">
+ 
+ <style>
+
+.firstPage {
+    background-image: url("/img/paginationArrows.gif");
+    background-position: 0 1px;
+    background-repeat: no-repeat;
+    height: 10px;
+    width: 9px;
+}
+
+.firstPageoff {
+    background-image: url("/img/paginationArrows.gif");
+    background-position: 0 -10px;
+    background-repeat: no-repeat;
+    height: 10px;
+    width: 9px;
+}
+
+.prevPage {
+    background-image: url("/img/paginationArrows.gif");
+    background-position: -10px 1px;
+    background-repeat: no-repeat;
+    height: 10px;
+    margin: 0;
+    padding: 0;
+    width: 9px;
+}
+.prevPageoff {
+    background-image: url("/img/paginationArrows.gif");
+    background-position: -10px -10px;
+    background-repeat: no-repeat;
+    height: 10px;
+    margin: 0;
+    padding: 0;
+    width: 9px;
+}
+
+.nextPage {
+    background-image: url("/img/paginationArrows.gif");
+    background-position: -17px 1px;
+    background-repeat: no-repeat;
+    height: 10px;
+    width: 9px;
+}
+
+.nextPageoff {
+    background-image: url("/img/paginationArrows.gif");
+    background-position: -17px -10px;
+    background-repeat: no-repeat;
+    height: 10px;
+    width: 9px;
+}
+
+.lastPageoff {
+    background-image: url("/img/paginationArrows.gif");
+    background-position: -27px -10px;
+    background-repeat: no-repeat;
+    height: 10px;
+    width: 9px;
+}
+.lastPage {
+    background-image: url("/img/paginationArrows.gif");
+    background-position: -27px 1px;
+    background-repeat: no-repeat;
+    height: 10px;
+    width: 9px;
+}
+
+.selectArrow {
+    background-image: url("/img/func_icons/util/selectArrow12.gif");
+    background-position: left center;
+    background-repeat: no-repeat;
+    height: 12px;
+    left: 2px;
+    position: relative;
+    top: 1px;
+    width: 14px;
+}
+
+.pageInput {
+    font-size: 98%;
+    margin: 0 3px;
+    text-align: center;
+    vertical-align: middle;
+    width: 2em;
+}
+.optUnselected {
+    background-color: transparent;
+    color: transparent;
+    white-space: nowrap;
+    z-index:9999;
+}
+.tabHide{
+    background-color: white;
+    color: white;
+    white-space: nowrap;
+    z-index:9999;
+}
+.hdCls{
+display:none;
+width:100%;
+}
+.rowCls{
+
+height:10px;
+}
+.tableScroller {
+    overflow: auto;
+    position: absolute;
+}
+
+.bottomPageNav {
+    background: url("/img/alohaSkin/listFooter.png") repeat-x scroll 0 0 #F2F2F2;
+    border: 1px solid #EAEAEA;
+}
+
+.loader{
+   height:20px;
+   width:20px;
+   position : absolute;
+   bottom:50%;
+   left:50%;
+
+}
+.tableHeader{
+    background: url("/img/alohaSkin/grid_headerbg.gif") repeat-x scroll 0 bottom #FFFFFF;
+    border-color: #BFCFD4;
+    border-style: solid;
+    border-width: 1px 0;
+    color: #000000;
+    font-size: 0.9em;
+    font-weight: bold;
+    padding: 0;
+    
+}
+
+A:link {text-decoration: none}
+A:visited {text-decoration: none}
+A:active {text-decoration: none}
+A:hover {text-decoration: none}
+
+</style>
+
+<script>
+
+function showOptions(){
+var pagesize=document.getElementById('{!$Component.paginationCompo.frmId.ipText}').value;
+var tdName1,tdName2;
+var optionsTab=document.getElementById('optionsTabId');
+//alert('in shOpt');
+        if (optionsTab.style.visibility=="visible"){
+            displayDefaultRow(pagesize,'false');
+            optionsTab.style.display="none";
+            optionsTab.style.visibility="hidden";
+            
+            }
+        else {
+            optionsTab.style.display="block";
+            optionsTab.style.visibility="visible";
+            displayDefaultRow(pagesize,'true');     
+        }     
+}
+
+function displayDefaultRow(pagesize,showData){
+      
+        switch(pagesize){
+            case '200':   tdName1='td7';tdName2='td8';   
+                        break;            
+            case '100':   tdName1='td5';tdName2='td6';
+                        break;
+            case '50':    tdName1='td3';tdName2='td4';
+                        break;
+            case '25':    tdName1='td1';tdName2='td2';
+                        break;
+            case '10':  //  alert('in case 10');
+                        tdName1='td';tdName2='td0';
+                        break;          
+        }
+
+   if(showData=='true'){
+        showRowOptions(tdName1,tdName2);
+    
+    }else {
+        hideRowOptions(tdName1,tdName2);
+     
+    }      
+}
+
+function showRowOptions(tdName1,tdName2){
+//alert('Hiii  in Td'+p1+'-----------'+p2);
+    var rowElem1=document.getElementById(tdName1);
+    var rowElem2=document.getElementById(tdName2);
+    rowElem1.style.backgroundColor="DarkCyan";
+    rowElem1.style.visibility="visible";
+    rowElem2.style.backgroundColor="DarkCyan";   
+    rowElem2.style.visibility="visible";
+}
+
+function hideRowOptions(tdName1,tdName2){
+ // alert('Hiii  in Td---------'+pagesize);
+    var rowElem1=document.getElementById(tdName1);
+    var rowElem2=document.getElementById(tdName2);
+    rowElem1.style.backgroundColor="Azure";
+    rowElem1.style.visibility="hidden";
+    rowElem2.style.backgroundColor="Azure";    
+    rowElem2.style.visibility="hidden";
+    
+    var pagesize=document.getElementById('{!$Component.paginationCompo.frmId.ipText}').value;         
+    displayDefaultRow(pagesize,'true');        
+}
+
+function hideOptionsTab(newpageSize){
+var oldPageSize=document.getElementById('{!$Component.paginationCompo.frmId.ipText}').value;
+  // alert('in hide tab        '+oldPageSize); 
+      displayDefaultRow(oldPageSize,'false');
+      fetchRecords(newpageSize);
+   var optionsTab=document.getElementById('optionsTabId');
+   optionsTab.style.display="none";
+   optionsTab.style.visibility="hidden";
+   hideDataTab();
+}
+
+function callChagePageNum(pageNum){
+    chagePageNum(pageNum);
+    hideDataTab();
+}
+
+function hideDataTab(){
+    var dataTab=document.getElementById('{!$Component.paginationCompo.frmId.pgBlkId.pgBlkOpId}'); 
+    dataTab.style.visibility="hidden";
+}
+
+function nevigationCall(nevigateTo){
+    hideDataTab();
+    switch(nevigateTo){
+        case 'first': first();
+                       break;
+        case 'previous':previous();
+                       break;
+        case 'next':   next(); 
+                       break;
+        case 'last':   last();
+                       break;    
+    }
+
+}
+ 
+</script>
+ 
+    
+    <apex:attribute name="record" type="String" description=" Record Name" assignTo="{!objectName}"/>  
+    <apex:attribute name="columnTitleList" type="String[]" description="Contains the list of column name displayed on page."  assignTo="{!colNameList}"/>
+    <apex:attribute name="soql" type="String" description="Contains the title of the pageBlock displayed on page." assignTo="{!queryString}"/>
+ 
+  
+          <apex:form id="frmId" >
+            
+               <!--div id="divId" class="x-grid3-scroller" style="width: 80%; height:600px;" -->
+                     <apex:outputPanel id="popup" rendered="true">
+                     <apex:outputPanel styleClass="loader" rendered="true">
+                                <apex:actionStatus id="sendStatus">    
+                                    <apex:facet name="start">
+                                        <apex:image styleClass="loader" value="/img/loading.gif" alt="loading.."/>
+                                     </apex:facet>
+                                </apex:actionStatus>   
+                      </apex:outputPanel>
+                      </apex:outputPanel> 
+                      
+                  
+                    
+                       <apex:pageBlock title="{!objLabel} Records" id="pgBlkId"> 
+                      
+                        <apex:outputPanel style="position:absolute;width: 84%;left:15.2%;top:13%; height:25px;" >
+                        <apex:image styleClass="tableHeader" style="top:13%;width:100%;height:25px;"/>     
+                       <table width="100%" height="25px" class="tableHeader"  rules="cols">
+                          <tr>
+                             <apex:repeat value="{!colLabelList}" var="colLabel">                            
+                
+                                  <td  width="{!tableWidth}%"> &nbsp; <apex:outputText value=" {!colLabel}"/></td>
+                                                                 
+                             </apex:repeat> 
+                             <td width="2%"> </td>
+                           </tr>
+                       </table>
+                         
+                          </apex:outputPanel>   
+                            
+                      <apex:outputPanel style="width: 84%; height:66%;left:15.2%; bottom:15%;top:19%; position:absolute;overflow:auto;"  id="pgBlkOpId" >
+                
+               <!--div id="divId" class="x-grid3-scroller" style="width: 80%; height:600px;" -->
+              
+                     <apex:pageBlockTable value="{!records}" var="objName"  >          
+                             
+                         <apex:repeat value="{!columnTitleList}" var="colName">                            
+                              
+                              <apex:column value="{!objName[colName]}" headerClass="hdCls"  width="{!tableWidth}%" />                         
+                                                                 
+                         </apex:repeat>        
+                    </apex:pageBlockTable>
+   
+            </apex:outputPanel> 
+          
+                       </apex:pageBlock>
+
+          <table  align="center"  width="100%"  class="bottomPageNav" style="position:absolute; bottom:7%; width: 84%;left: 15.2%;">
+                <tr>                         
+                    <td width="200px">    
+                      {!fromRecordNo}-{!toRecordNo} of {!noOfRecords} <img src="/s.gif" class="selectArrow" onclick="showOptions()"/>              
+                    </td>                    
+
+                    <td align="center">                          
+                        <apex:panelGrid columns="4" style="text-decoration: none">
+                        <apex:commandLink onclick="nevigationCall('first');" rendered="{!hasPrevious}" reRender="dummy">&nbsp;<img class="firstPage" alt="First Page" title="First Page" src="/s.gif"/></apex:commandlink>
+                        <apex:commandLink onclick="nevigationCall('previous');" rendered="{!hasPrevious}" reRender="dummy"><img class="prevPage" alt="Last Page" title="Last Page" src="/s.gif"/>Previous &nbsp;</apex:commandlink>
+                        <apex:commandLink onclick="nevigationCall('next');" rendered="{!hasNext}" reRender="dummy">Next<img class="nextPage" alt="Last Page" title="Last Page" src="/s.gif"/></apex:commandlink>
+                        <apex:commandLink onclick="nevigationCall('last');" rendered="{!hasNext}" reRender="dummy"><img class="lastPage" alt="Last Page" title="Last Page" src="/s.gif"/>&nbsp;</apex:commandlink>
+                        </apex:panelGrid>                                           
+                    </td>
+                    
+                    <td width="200px" align="right">                                                          
+                  <span class="right">Page<input value="{!pageNo}" onchange="callChagePageNum(this.value);" maxlength="4" class="pageInput"/>of {!noOfPages} &nbsp;</span>
+                    </td>
+                </tr>
+          </table>
+          
+           
+         
+      
+       <apex:inputText id="ipText" value="{!pagesize}" style="position:absolute; bottom:3%; width: 50%;left: 15%; display:none;"/>
+          
+           <apex:actionFunction name="chagePageNum" status="sendStatus" action="{!changePageNum}" reRender="frmId">
+            <apex:param name="pageNum" value="" />            
+        </apex:actionFunction> 
+
+         <apex:actionFunction name="fetchRecords" status="sendStatus" action="{!fetchRecords}" reRender="frmId">
+            <apex:param name="one" value="" />            
+        </apex:actionFunction>   
+        
+        <apex:actionFunction name="first" action="{!first}" status="sendStatus" reRender="frmId"/>
+            
+        <apex:actionFunction name="previous" action="{!previous}" status="sendStatus" reRender="frmId"/>
+          
+        <apex:actionFunction name="next" action="{!next}" status="sendStatus" reRender="frmId"/>
+     
+        <apex:actionFunction name="last" action="{!last}" status="sendStatus" reRender="frmId"/>
+         
+             
+       </apex:form>  
+       
+       <table style="position:absolute; visibility:hidden; bottom:15%;;left:15.3%;background-color:Azure;" id='optionsTabId'>
+           <tr onmouseover="showRowOptions('td0','td');" onmouseout="hideRowOptions('td0','td');" onclick="hideOptionsTab('10');">
+               <td id='td' style="visibility:hidden;">Display</td><td align="center" style="font-size:15px"> 10 </td><td id='td0' style="visibility:hidden;">records per page</td>
+           </tr>
+           <tr onmouseover="showRowOptions('td1','td2');" onmouseout="hideRowOptions('td1','td2');" onclick="hideOptionsTab('25');">
+               <td id='td1' style="visibility:hidden;">Display</td><td align="center" style="font-size:15px"> 25 </td><td style="visibility:hidden;" id='td2'>records per page</td>
+           </tr>
+           <tr onmouseover="showRowOptions('td3','td4');" onmouseout="hideRowOptions('td3','td4');" onclick="hideOptionsTab('50');">
+               <td id='td3' style="visibility:hidden;">Display</td><td align="center" style="font-size:15px"> 50 </td><td style="visibility:hidden;" id='td4'>records per page</td>
+           </tr>
+           <tr onmouseover="showRowOptions('td5','td6');" onmouseout="hideRowOptions('td5','td6');" onclick="hideOptionsTab('100');">
+               <td id='td5' style="visibility:hidden;">Display</td><td align="center" style="font-size:15px"> 100 </td><td style="visibility:hidden;" id='td6'>records per page</td>
+           </tr>
+           <tr onmouseover="showRowOptions('td7','td8');" onmouseout="hideRowOptions('td7','td8');" onclick="hideOptionsTab('200');">
+               <td id='td7' style="visibility:hidden;">Display</td><td align="center" style="font-size:15px"> 200 </td><td style="visibility:hidden;" id='td8'>records per page</td>
+           </tr>
+      </table>
+
+
+</apex:component>

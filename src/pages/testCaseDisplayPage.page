@@ -1,0 +1,156 @@
+<apex:page showHeader="false" sidebar="false" controller="TesterController" id="myPage" > 
+    
+    <style>        
+            
+         P{font-size:10pt;font-style:regular;color:red;}
+      </style>
+     <script> 
+       /*
+        var newWin=null; 
+        if({!booleanResult})
+        {
+        newWin=window.open("{!url}", 'Popup','modal=yes,height=550,width=450,left=100,top=100,res?izable=no,scrollbars=yes,toolbar=no,status=no');
+        window.location="{!prevUrl}";
+        }*/
+        function testCaseValidationForm()
+        {
+                //alert("In the function");
+                var ctr=1;
+                document.getElementById("dRadioCheck").innerHTML="";
+                document.getElementById("dActualResult").innerHTML="";
+                
+                if((document.getElementById('myPage:myForm:selectRadio:0').checked==false) && (document.getElementById('myPage:myForm:selectRadio:1').checked==false))
+                {
+                      ctr=0;
+                      document.getElementById("dRadioCheck").innerHTML="<P>Error: You must select an option!</P>";
+     
+                }           
+                if(document.getElementById('myPage:myForm:actualOutput').value=="")
+                {
+                
+                       ctr=0;
+                       document.getElementById("dActualResult").innerHTML="<P>Error: You must enter actual test result!</P>";
+
+                } 
+                if(ctr)
+                   
+                {
+                    if({!showSave}==true)
+                    {
+                        updateReqStatus();
+                    }
+                    else
+                    {
+                        defectForm();
+                    }
+                     //saveTestCase();
+                     //ReqStatusUpdate();
+                }   
+                             
+        } 
+       /* function DefectFormValidation()
+         {
+                
+                 var ctr=1;
+                    document.getElementById("dDefectName").innerHTML="";
+                    document.getElementById("dDefectDescription").innerHTML="";    
+              
+                    if(document.getElementById("myPage:myForm1:defectName").value=="")
+                    {
+                      
+                       document.getElementById("dDefectName").innerHTML="<P>Error: You must enter a Defect Name!</P>";
+                        ctr=0;
+                    }    
+                    if(document.getElementById("myPage:myForm1:defectDescription").value=="")
+                    {
+                       
+                       document.getElementById("dDefectDescription").innerHTML="<P>Error: You must enter a Defect Description!</P>";
+                       ctr=0;
+                    }
+                    if(ctr)
+                    {  
+                       if({!showAddDefect}==true)
+                        DefectAdd();
+                        else
+                        saveTestCase();
+                        
+                       
+                         
+                    }
+
+         }      */
+      </script>
+   
+   <Table celllpadding="10" cellspacing="10" width="80%" align="center">
+    <TR><TD>
+     <apex:form id="myForm" >
+        <Table border="0" cellpadding="5" cellspacing="5"  width="100%">
+           <TR><TH colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">TestCase</TH></TR>
+           <TR>
+               <TH width="100" height="40" align="center">TestCase Name</TH> 
+               <TD align="center"><apex:inputText value="{!referedTestObject.testName__c}" disabled="true" size="30"/></TD>
+           </TR>
+           <TR>
+                <TH width="100" height="40" align="center">Prerequisites</TH> 
+                <TD align="center"><apex:inputText value="{!referedTestObject.prerequisites__c}" disabled="true" size="30"/></TD>
+           </TR>
+           <TR>
+                <TH  width="100" height="40" align="center">Specification</TH>
+                <TD align="center"><apex:inputTextarea value="{!referedTestObject.testDescription__c}" cols="30" disabled="true" /> </TD>
+           </TR>
+           <TR>
+                 <TH  width="100" height="40" align="center">Test Steps</TH>
+                 <TD align="center" ><apex:inputTextarea value="{!referedTestObject.testSteps__c}" cols="30" disabled="true"/> </TD>
+           </TR>
+           <TR>
+                 <TH width="100" height="40" align="center">SampleInput</TH>
+                 <TD align="center"><apex:inputTextArea value="{!referedTestObject.sampleInputData__c}" cols="30" disabled="true" /></TD>
+           </TR>
+           <TR>
+                  <TH width="100" height="40" align="center">ExpectedOutput</TH>
+                  <TD align="center"><apex:inputTextArea value="{!referedTestObject.expectedOutput__c}" disabled="true" cols="30"/></TD>
+           </TR>
+         </Table><br/>
+         <fieldset><legend><b><i>Add Result</i></b></legend>
+         <table  border="0" cellpadding="5" cellspacing="5"  width="100%">
+             <TR>
+                 <TH width="100" height="40" align="center">Result:</TH>
+                 <TD align="center">
+                     <apex:selectRadio id="selectRadio" value="{!result}" onclick="assignResult();" >
+                         <apex:selectOption itemValue="pass" itemLabel="Pass"/>
+                         <apex:selectOption itemValue="fail" itemLabel="Fail" itemDisabled="{!booleanFail}" />
+                     </apex:selectRadio>
+                     <apex:actionFunction name="assignResult" action="{!fetchActualOutput}" />
+                     <br/>
+                     <div id="dRadioCheck" style="background-color:white;visibility:visible;"></div>
+                  </TD>
+                </TR>
+                <TR>
+                    <TH width="100" height="40" align="center">Actual Output:</TH>
+                    <TD align="center">
+                        <apex:inputTextArea value="{!actualOutput}" id="actualOutput"/>
+                        <div id="dActualResult" style="background-color:white;visibility:visible;"></div>
+                    </TD>
+                </TR>
+                <TR>
+                    
+                    <TD>
+                       
+                        <apex:commandButton value="Save" onclick="testCaseValidationForm();" oncomplete="return false" rendered="{!showSave}"/>
+                        <apex:commandButton value="Add Defect" onclick="testCaseValidationForm();" oncomplete="return false" rendered="{!showAddDefect}"/>
+                       
+                    </TD>
+                    <TD>
+                        <apex:commandButton value="Cancel" action="{!callCancel}" />
+                    </TD>
+                </TR>
+          </Table>
+         </fieldset> 
+         
+         <apex:actionFunction name="updateReqStatus" action="{!updateReqStatus}"/>
+         <apex:actionFunction name="defectForm" action="{!defectForm}"/>
+     </apex:form>
+     </TD></TR>
+   </Table>
+            
+</apex:page>

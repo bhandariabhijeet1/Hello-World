@@ -1,0 +1,35 @@
+<apex:page showHeader="false" sidebar="false" controller="TesterController">
+   <apex:form >
+       <center>
+           <apex:outputPanel id="history">
+              <!-- test build starts ------------------------------------------------------------>
+                <table border="0" cellpadding="5" cellspacing="0"  width="95%">
+                <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">TestCase Builds</th></tr>
+                <tr><td>
+                    <apex:dataTable width="80%" border="0" value="{!referedTestBuild}" var="row" style="background-color:white" cellpadding="5" columnClasses="center" headerClass="center">                 
+                         <apex:column >
+                             <apex:facet name="header">TestBuildID</apex:facet>
+                             <apex:outputText value="{!row.Name}" style="font-size:14px"/>
+                         </apex:column>
+                         <apex:column >
+                             <apex:facet name="header">Execution Date</apex:facet>
+                             <apex:outputText value="{0,date,MM'-'dd'-'yyyy}" style="font-size:14px"><apex:param value="{!row.executedOn__c}"/></apex:outputText>
+                         </apex:column>
+                         <apex:column >
+                             <apex:facet name="header">Actual Output</apex:facet>
+                             <apex:outputText value="{!row.actualOutput__c}" style="font-size:14px"/>
+                         </apex:column>
+                         <apex:column >
+                             <apex:facet name="header">Result</apex:facet>
+                             <apex:outputText value="{!row.result__c}" style="font-size:14px"/>
+                         </apex:column>
+                     </apex:dataTable>
+                </td></tr>
+                <tr><td align="right">
+                   <apex:commandButton value="Back" action="{!callReq}"/>
+                </td></tr>         
+                </table>
+            <!-- test build end --------------------------------------------------------------->
+            </apex:outputPanel></center>
+       </apex:form>
+   </apex:page>

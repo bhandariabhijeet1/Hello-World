@@ -1,0 +1,32 @@
+<apex:page showHeader="false" sidebar="false" controller="ProjectCon">
+    <apex:include pageName="header" />
+     <Table cellpadding="5" cellspacing="5" width="50%"  align="center" style="font-family:Arial;" >
+        <TR><TD>
+                <Table cellpadding="5" cellspacing="5" align="center"  width="50%">
+                  <apex:form >
+                      <TR>
+                          <TH colspan="2" style="color:white;background-color:#3399CC;">Please authenticate yourself by your organization username and password </TH>
+                      </TR>
+                      <TR>
+                          <TD style="font-weight:bolder;"> <apex:outputLabel value="Name: " for="chooseName" ></apex:outputLabel> </TD>
+                          <TD><apex:inputText size="30" value="{!currentUser}" style="{! loginObject.nameStyle}" id="chooseName"/></TD>
+                      </TR>
+                      <TR>
+                          <TD style="font-weight:bolder;"><apex:outputLabel value="password: " for="choosePass" ></apex:outputLabel></TD>
+                          <TD><apex:inputSecret size="30" value="{! loginObject.pass}" id="choosePass" style="{! loginObject.passStyle}" /></TD>
+                      </TR>
+                      <TR>
+                          <TD colspan="2" align="center"><apex:commandButton value="login" action="{!performLogin}"/></TD>                         
+                      </TR>                                 
+                       <TR>   
+                           <TH colspan="2" style="color:white;background-color:#3399CC;"></TH>
+                      </TR>
+                      <TR>
+                          <TD><apex:pageMessages ></apex:pageMessages></TD>
+                      </TR>
+                  </apex:form>
+                </Table>
+             </TD>
+          </TR>
+      </Table>
+  </apex:page>

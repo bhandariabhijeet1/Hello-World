@@ -1,0 +1,50 @@
+<apex:page controller="TestCaseReportController1" showHeader="false" sidebar="false">
+      <apex:form id="form">
+    <!--  <apex:selectList value="{!projresult}" required="true" size="1">
+            <apex:selectOption itemValue="pass" itemLabel="Pass" ></apex:selectOption>
+            <apex:selectOption itemValue="fail" itemLabel="Fail"></apex:selectOption>
+            <apex:selectOption itemValue="all" itemLabel="All"></apex:selectOption>
+      </apex:selectList>
+      <apex:selectList value="{!moduleresult}" required="true" size="1">
+            <apex:selectOption itemValue="pass" itemLabel="Pass" ></apex:selectOption>
+            <apex:selectOption itemValue="fail" itemLabel="Fail"></apex:selectOption>
+            <apex:selectOption itemValue="all" itemLabel="All"></apex:selectOption>
+      </apex:selectList>-->
+      
+      
+      <apex:outputLabel value="Requirements"></apex:outputLabel>
+      <apex:selectList value="{!reqStatus}" required="true" size="1">
+            <apex:selectOption itemValue="bug" itemLabel="Bug" ></apex:selectOption>
+            <apex:selectOption itemValue="pending" itemLabel="Pending"></apex:selectOption>
+            <apex:selectOption itemValue="success" itemLabel="Success"></apex:selectOption>
+      </apex:selectList>
+      <apex:selectList value="{!reqPriority}" required="true" size="1">
+            <apex:selectOption itemValue="high" itemLabel="High" ></apex:selectOption>
+            <apex:selectOption itemValue="medium" itemLabel="Medium"></apex:selectOption>
+            <apex:selectOption itemValue="low" itemLabel="Low"></apex:selectOption>
+      </apex:selectList>
+      <apex:commandButton value="Filter" action="{!viewRequirementReport}"> 
+      </apex:commandButton>
+      
+      
+        <apex:pageBlock title="Requirements">
+          <apex:pageMessages ></apex:pageMessages>
+            <apex:pageBlockTable value="{!requirementlist}" var="req">
+
+                 <apex:column headerValue="ReqID">
+                       <apex:outputText value="{!req.Name}"/>
+                 </apex:column>
+                 <apex:column headerValue="RequirementName">
+                       <apex:outputText value="{!req.reqName__c}"/>
+                 </apex:column>
+                 <apex:column headerValue="RequirementStatus">
+                       <apex:outputText value="{!req.reqStatus__c}"/>
+                 </apex:column>
+                 <apex:column headerValue="RequirementPriority">
+                       <apex:outputText value="{!req.reqPriority__c}"/>
+                 </apex:column>
+
+            </apex:pageBlockTable> 
+         </apex:pageBlock>
+       </apex:form>
+</apex:page>

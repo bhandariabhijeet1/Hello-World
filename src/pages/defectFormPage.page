@@ -1,0 +1,130 @@
+<!-- page to add defect for an failed test case -->
+<apex:page showHeader="false" sidebar="false" controller="TesterController" id="myPage"> 
+   
+   <script>
+         function DefectFormValidation()
+         {
+                 var ctr=1;
+                    document.getElementById("dDefectName").innerHTML="";
+                    document.getElementById("dDefectDescription").innerHTML="";    
+              
+                    if(document.getElementById("myPage:myForm:defectName").value=="")
+                    {
+                      
+                       document.getElementById("dDefectName").innerHTML="<P>Error: You must enter a Defect Name!</P>";
+                        ctr=0;
+                    }    
+                    if(document.getElementById("myPage:myForm:defectDescription").value=="")
+                    {
+                       
+                       document.getElementById("dDefectDescription").innerHTML="<P>Error: You must enter a Defect Description!</P>";
+                       ctr=0;
+                    }
+                    if(ctr)
+                    {  
+                        DefectAdd();
+                       // window.close();
+                         
+                    }
+
+         }
+   </script>
+   <style>
+              
+            
+         P{font-size:10pt;font-style:regular;color:red;}
+     
+   </style>
+    <apex:form id="myForm">
+       <!-- ---------------Test Case info display---------------------- -->
+    <table  width="100%" cellspacing="10" cellpadding="10" align="center">
+    <tr>
+        <td>
+        <fieldset >
+            <legend colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Test Case Information</legend>
+            <table border="0" width="95%" align="center">
+            <tr>
+                <td style="font-size:14px"><b><big><apex:outputLabel value="Test Case ID:"/></big></b></td>           
+                    <TD style="font-size:14px"><apex:outputText value="{!referedTestObject.Name}"></apex:outputText></TD>
+                </tr>
+                <tr>
+                    <TD style="font-size:14px"><b><apex:outputLabel value="Test Case Name:"/></b></TD>
+                    <TD style="font-size:14px"><apex:outputText value="{!referedTestObject.testName__c}"></apex:outputText></TD>
+                </tr>
+                <tr>
+                    <TD style="font-size:14px"><b><apex:outputLabel value="Test Case Description:"/></b></TD>
+                    <TD style="font-size:14px"><apex:outputText value="{!referedTestObject.testDescription__c}"></apex:outputText></TD>
+                </tr>
+                <tr>
+                    <TD style="font-size:14px"><b><apex:outputLabel value="Expected Output:"/></b></TD>
+                    <TD style="font-size:14px"><apex:outputText value="{!referedTestObject.expectedOutput__c}"></apex:outputText></TD>
+                </tr> 
+                <tr>
+                    <TD style="font-size:14px"><b><apex:outputLabel value="Actual Output:"/></b></TD>
+                    <TD style="font-size:14px"><apex:outputText value="{!actualOutput}"></apex:outputText></TD>
+                </tr>
+                <tr>
+                    <TD style="font-size:14px"><b><apex:outputLabel value="Result:"/></b></TD>
+                    <TD style="font-size:14px"><apex:outputText value="{!result}"></apex:outputText></TD>
+                </tr>
+            </table>
+        </fieldset>
+        </td>
+    </tr>  
+    </table>                   
+
+    <!-- ---------------------end of Test Case info panel -------------------------- --->
+      <!-- ------------------------------------Defect Form -------------------------------------------->  
+ 
+      <table  align="center" width="80%">
+        <tr><td>
+          <table border="0" cellpadding="5" cellspacing="5"  width="100%">
+              <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Defect Form</th></tr>
+              <tr>
+                 <td><apex:outputText value="Name:"></apex:outputText></td>
+                 <td><apex:inputText id="defectName" size="33" value="{!defectObj.defectName__c}"/><br/><div id="dDefectName" style="background-color:white;visibility:visible;"></div></td>
+              </tr>
+              <tr>
+                  <td><apex:outputText value="Description:"></apex:outputText></td>
+                  <td><apex:inputTextarea id="defectDescription" cols="35" value="{!defectObj.defectDescription__c}"/><br/><div id="dDefectDescription" style="background-color:white;visibility:visible;"></div></td>
+              </tr>
+              <tr>
+                  <td><apex:outputText value="Severity:"></apex:outputText></td>
+                  <td><apex:selectList value="{!defectObj.defectSeverity__c}" size="1">
+                        <apex:selectOption itemValue="critical" itemLabel="critical"/>
+                        <apex:selectOption itemValue="medium" itemLabel="medium"/>
+                        <apex:selectOption itemValue="low" itemLabel="low"/>
+                  </apex:selectList></td>
+              </tr>
+              <tr>
+                  <td><apex:outputText value="Status:"></apex:outputText></td>
+                  <td><apex:selectList value="{!defectObj.defectStatus__c}" size="1">
+                      <apex:selectOption itemValue="open" itemLabel="open"/>
+                      <apex:selectOption itemValue="inprogress" itemLabel="in progress"/>
+                      <apex:selectOption itemValue="closed" itemLabel="closed"/>
+                  </apex:selectList></td>
+               </tr>
+               <tr>
+                  <td><apex:outputLabel value="Attach screenshot" for="file"/></td>
+                  <td><apex:inputFile value="{!attachment.body}" filename="{!attachment.name}" id="file"/></td>
+               </tr>
+                
+              <tr align="right" >
+                  
+                  <td colspan="2">
+                  
+                  <input type="button" value="Save" class="btn" onclick="DefectFormValidation();"/>
+                  <!--<apex:commandButton value="Save" action="{!updateReqStatus}" />-->
+                  &nbsp; &nbsp; <apex:commandButton value="Cancel"  action="{!callCancel}"/>&nbsp;</td>
+              </tr>
+           
+           </table>
+            </td></tr>
+            </table>
+           
+        
+     <apex:actionFunction name="DefectAdd" action="{!updateReqStatus}"/>      
+   <!-- --------------------------------Defect Form End ------------------------------------------> 
+      
+    </apex:form>
+</apex:page>

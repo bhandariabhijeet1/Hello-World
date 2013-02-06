@@ -1,0 +1,32 @@
+<apex:page showHeader="false" sidebar="false" controller="OrganizationLoginController" >
+  <script language="JavaScript">
+javascript:window.history.forward(1);
+</script>  
+
+   <apex:form >
+      <Table cellpadding="5" cellspacing="5" align="center"  width="50%">
+                 
+                      <TR>
+                          <TH colspan="2" style="color:white;background-color:#3399CC;">Please authenticate yourself by your organization username and password </TH>
+                      </TR>
+                      <TR>
+                          <TD style="font-weight:bolder;"> <apex:outputLabel value="Name: " for="chooseName" ></apex:outputLabel> </TD>
+                          <TD><apex:inputText size="30" value="{!name}" style="{! nameStyle}" id="chooseName"/></TD>
+                      </TR>
+                      <TR>
+                          <TD style="font-weight:bolder;"><apex:outputLabel value="password: " for="choosePass" ></apex:outputLabel></TD>
+                          <TD><apex:inputSecret size="30" value="{!pass}" id="choosePass" style="{! passStyle}" /></TD>
+                      </TR>
+                      <TR>
+                          <TD colspan="2" align="center"><apex:commandButton value="login" action="{!login}" /></TD>                         
+                      </TR>                                 
+                       <TR>   
+                           <TH colspan="2" style="color:white;background-color:#3399CC;"></TH>
+                      </TR>
+                      <TR>
+                          <TD><apex:pageMessages ></apex:pageMessages></TD>
+                      </TR>         
+              </Table>
+      </apex:form>
+
+</apex:page>

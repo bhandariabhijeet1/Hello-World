@@ -1,0 +1,116 @@
+<apex:page controller="ReqAddCon" showHeader="false" sidebar="false">
+<style>
+fieldset { border:1px solidgreen;
+ width:500px;
+ }
+
+legend {
+  padding: 0.2em 0.5em;
+  border:1px  solid green;
+  color:green;
+  font-size:90%;
+  text-align:right;
+  }
+
+</style>
+    <apex:form >
+    <br/>
+    <br/>
+    <center>
+        <apex:outputPanel id="form" >
+        <!--<fieldset style="width:450px;">
+        <legend>Edit Requirement</legend>-->                
+            <table border="0" cellpadding="5" cellspacing="5"  width="70%">
+                <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Edit Requirement</th></tr>
+                <tr>
+                    <td width="300"><apex:outputLabel value="Requirement Name"></apex:outputLabel></td>
+                    <td width="300"><apex:inputText size="40" value="{!tobeEdited2.reqName__c}" /></td>                                 
+                </tr>
+                <tr>
+                    <td><br/><apex:outputLabel value="Requirement Type"></apex:outputLabel></td>
+                    <td>
+                        <apex:selectList value="{!tobeEdited2.reqType__c}"  size="1">            
+                            <apex:selectOption itemValue="functional" itemLabel="functional" ></apex:selectOption>
+                            <apex:selectOption itemValue="Non functional" itemLabel="Non functional"></apex:selectOption>
+                        </apex:selectList> 
+                    </td>                               
+                </tr>
+                <tr>
+                    <td><apex:outputLabel value="Requirement Description"></apex:outputLabel></td>                    
+                    <td><apex:inputTextarea cols="43" value="{!tobeEdited2.reqDescription__c}" /></td>           
+                </tr>
+                <tr>
+                    <td><apex:outputLabel value="Priority"></apex:outputLabel></td>
+                    <td>
+                        <apex:selectList value="{!tobeEdited2.reqPriority__c}"  size="1">            
+                            <apex:selectOption itemValue="high" itemLabel="High" ></apex:selectOption>
+                            <apex:selectOption itemValue="medium" itemLabel="Medium"></apex:selectOption>
+                            <apex:selectOption itemValue="low" itemLabel="Low"></apex:selectOption>
+                        </apex:selectList>                                
+                    </td>                               
+                </tr>
+                <tr>
+                    <td><apex:outputLabel value="Requirement Version"></apex:outputLabel></td>
+                    <td><apex:inputText size="40" value="{!tobeEdited2.reqVersion__c}" /></td>             
+                </tr>
+                <!-- Attachment -------------------------------------------------------------->
+                <tr>
+                    <td colspan="2">
+                        <div align="left">
+                           <apex:commandButton value="Attach file" action="{!boolattach}"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr><td colspan="2">
+                <apex:outputPanel rendered="{!booleanAttach}">
+                    <apex:dataTable value="{!dynamicAttachmentList}" var="d">
+                       <apex:column >
+                       <center>
+                           <fieldset>
+                           <legend>Attachment</legend>
+                               <table cellpadding="5" cellspacin="5">
+                                   <tr>
+                                       <td>FileName:</td>
+                                       <td><apex:inputText size="34" value="{!d.name}"/></td>
+                                   </tr>
+                                   <tr>
+                                       <td>File:</td>
+                                       <td><apex:inputFile value="{!d.body}" filename="{!d.name}"/></td>
+                                   </tr>
+                                   <tr>
+                                       <td>File Description:</td>
+                                       <td><apex:inputTextarea cols="34" value="{!d.description}"/></td>
+                                   </tr>
+                               </table>                          
+                           </fieldset>
+                       </center>
+                       </apex:column>
+                       <!--<apex:column >
+                           <apex:inputText size="34" value="{!d.name}"/>
+                       </apex:column>
+                       <apex:column >
+                           <apex:inputFile value="{!d.body}" filename="{!d.name}" />
+                       </apex:column>
+                       <apex:column >
+                           <apex:inputTextarea cols="34" value="{!d.description}" />
+                       </apex:column>-->
+                       </apex:dataTable>
+                       <br/>
+                       <div align="right">
+                           <apex:commandButton value="Add more" action="{!AttachMoreList1}"/>
+                       </div>
+                </apex:outputPanel></td></tr>
+                <!-- End of Attachment ------------------------------------------------------->
+                <tr ><td colspan="2">
+                <div align="right">
+                <apex:commandButton value="Done" action="{!edititems}"/>
+                <apex:commandButton value="Cancel" action="{!cancelForm}" />
+                </div>
+                </td></tr>
+            </table>                     
+            <br/>             
+            <br/>                     
+        </apex:outputPanel>
+    </center>
+    </apex:form>
+</apex:page>

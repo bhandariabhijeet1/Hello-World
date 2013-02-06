@@ -1,0 +1,458 @@
+<apex:page sidebar="false" showHeader="false" controller="AccountController" id="myPage">
+  
+      <apex:includeScript value="{!$Resource.ValidationForm}"/>
+
+     <style>
+          .head
+          {
+             text-align:center;font-size:12px;color:white;background-image:none;background-color:#3399CC;
+          }
+         
+         .exstyle{height:150px;width:550px;border:1px solid blue;}
+    
+         P{font-size:10pt;font-style:regular;color:red;}
+         
+      </style>
+      
+      <script>
+      
+        var numberofModules={!count1};
+        var numberofRoles={!count3};
+        //var newWin=null; 
+       // document.getElementById('myPage:myForm:modulesId:7').checked=true;
+        //document.getElementById('myPage:myForm:rolesId:6').checked=true;
+        
+        function selectAllModules()
+        {           
+             
+             for(var i=0;i<=numberofModules;i++)
+             {
+                 document.getElementById('myPage:myForm:modulesId:' + i).checked=true;
+                           
+             }
+                        
+        }   
+        function deSelectAllModules(){
+            
+            for(var i=0;i<numberofModules;i++)
+             {
+                 document.getElementById('myPage:myForm:modulesId:' + i).checked=false;
+                           
+             }   
+        }
+         
+        function showInput()
+        {
+            document.getElementById('inputvalue').style.visibility = 'visible'; 
+
+        } 
+        function selectRole()
+        {
+             document.getElementById('myPage:myForm:modulesId:2').checked=true;
+        }  
+        
+        function openPopup()
+        {   
+           var url='/apex/ModuleWiseDisplayPage?projectID='+'{!currentProjectID}';    
+          // newWin=window.open("{!prevUrl}", 'Popup','height=550,width=450,left=100,top=100,res?izable=no,scrollbars=yes,toolbar=no,status=no');
+
+           newWin=window.open(url, 'Popup','height=600,width=900,left=200,top=400,res​izable=no,scrollbars=yes,toolbar=no,status=no');
+           newWin.focus();       
+           return false; 
+         }
+        function insertRoleValidation()
+        {
+                
+                    var ctr=1;
+                    document.getElementById("roleName").innerHTML="";
+                    document.getElementById("roleDescription").innerHTML="";    
+              
+                    if((document.getElementById("myPage:myForm:insertRole").value=="") || (isDigit(document.getElementById("myPage:myForm:insertRole").value)))
+                    {
+                       //document.getElementById("roleName").style.visibility = 'visible';
+                       document.getElementById("roleName").innerHTML="<P>Error: You must enter a valid Role Name</P>";
+                        ctr=0;
+                    }    
+                    if(document.getElementById("myPage:myForm:insertDesc").value=="")
+                    {
+                       
+                       document.getElementById("roleDescription").innerHTML="<P>Error: You must enter a valid Description</P>";
+                       ctr=0;
+                    }
+                    if(ctr)
+                    {  
+                        //alert('ok fine');
+                        InsertRole();
+                         
+                    }
+          }
+    function show(check)
+      {
+           
+            if(check==1)
+            {
+                //document.getElementById("myPage:myForm:m1").disabled="false";
+                document.getElementById("myPage:myForm:m1").value=document.getElementById("myPage:myForm:m").value;
+            
+            }
+            else if(check==2)
+            document.getElementById("myPage:myForm:r1").value=document.getElementById("myPage:myForm:r").value;
+           
+            else
+            document.getElementById("myPage:myForm:p1").value=document.getElementById("myPage:myForm:p").value;
+      }        
+       
+      </script> 
+    
+      <center><br/><br/><br/><br/>
+       <apex:form id="myForm">
+            <!-- <apex:actionFunction name="global" action="{!global}"/>    -->
+           <table border="0" width="65%">
+           <tr><td align="center" onMouseOver="this.style.backgroundColor='#CC99FF';" style="BORDER-BOTTOM-STYLE: solid" 
+                onmouseout="this.style.backgroundColor='#CCCCFF';" width="167" height="39" bgColor='#CCCCFF'>
+                <apex:commandLink value="PROJECT USERS" action="{!showUsersPanel}" style="TEXT-DECORATION:none;"/></td>
+                <td width="70"></td>
+                <td align="center" onMouseOver="this.style.backgroundColor='#CC99FF';" style="BORDER-BOTTOM-STYLE: solid" 
+                onmouseout="this.style.backgroundColor='#CCCCFF';" width="167" height="39" bgColor='#CCCCFF'>
+                
+                <apex:commandLink value="PROJECT ROLES" action="{!showRolesPanel}" style="TEXT-DECORATION:none;" /></td></tr>
+           <tr><td></td><td></td><td></td></tr>
+              <apex:outputpanel id="usersPanel" rendered="{!bool1}">
+                    <tr><td colspan="3"><apex:commandlink value="Available Users" action="{!showPresentUsers}" style="TEXT-DECORATION:none;"/>&nbsp;&nbsp;|&nbsp;&nbsp;<apex:commandLink value="Insert Users" action="{!showInsertUsers}" style="TEXT-DECORATION:none;"/>
+                    &nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:if (window.confirm('Are you sure?')) UsersDelete();" style="TEXT-DECORATION:none;">Delete Users</a>
+                    </td></tr>
+                   
+              </apex:outputpanel>
+              <apex:outputpanel id="rolesPanel" rendered="{!bool2}">
+                     <tr><td colspan="3"><apex:commandLink value="Available Roles" action="{!showRoles}" style="TEXT-DECORATION:none;"/>&nbsp;&nbsp;|&nbsp;&nbsp;<apex:commandLink value="Add Roles" action="{!showAddRoles}" style="TEXT-DECORATION:none;"/>
+                     &nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:if (window.confirm('Are you sure?')) RolesDelete();" style="TEXT-DECORATION:none;">Delete Roles</a></td></tr>
+              </apex:outputpanel>
+              <tr><td colspan="3"><apex:pagemessages ></apex:pagemessages></td></tr>
+              <tr><td colspan="3">
+                  <apex:outputpanel id="presentusers" rendered="{!bool3}">
+                 
+                   <apex:dataTable style="background-color:white" value="{!accounts}" var="account" cellpadding="5" cellspacing="5" columnClasses="center" headerClass="head">
+                   <apex:column style="{!if(account.userObject.isGlobal__c==true ,changeColor,"")}">
+
+                        <apex:facet name="header">Check</apex:facet>
+                        <apex:inputCheckbox value="{!account.selected}"/>
+
+                   </apex:column>
+                   <apex:column width="100" style="{!if(account.userObject.isGlobal__c==true ,changeColor,"")}">
+
+                        <apex:facet name="header" >Record ID</apex:facet>
+                        <apex:outputText value="{!account.userObject.Name}"/>
+
+                   </apex:column>
+                   <apex:column width="100" style="{!if(account.userObject.isGlobal__c==true ,changeColor,"")}">
+
+                        <apex:facet name="header" >EmpID</apex:facet>
+                        <apex:outputText value="{!account.userObject.EmpID__r.Name}"/>
+
+                   </apex:column>
+                   <apex:column width="100" style="{!if(account.userObject.isGlobal__c==true ,changeColor,"")}">
+
+                        <apex:facet name="header" >Name</apex:facet>
+                        <apex:outputText value="{!account.userObject.EmpID__r.empName__c}"/>
+
+                   </apex:column><!--
+                   <apex:column style="{!if(account.userObject.isGlobal__c==true ,changeColor,"")}">
+
+                        <apex:facet name="header">Designation</apex:facet>
+                       
+                        <apex:outputtext value="{!account.userObject.EmpID__r.empDesignation__c}"/>
+
+                   </apex:column>-->
+                
+                   <apex:column style="{!if(account.userObject.isGlobal__c==true ,changeColor,"")}">
+
+                        <apex:facet name="header">BU</apex:facet>
+                        <apex:outputText value="{!account.userObject.EmpID__r.BU__c}"/>
+
+                   </apex:column>
+                   <apex:column style="{!if(account.userObject.isGlobal__c==true ,changeColor,"")}">
+
+                        <apex:facet name="header">Role in Project</apex:facet>
+                        <apex:outputText value="{!account.userObject.ProjectUserRole__r.projectRole__c}"/>
+
+                   </apex:column>
+               
+                   <apex:column style="{!if(account.userObject.isGlobal__c==true ,changeColor,"")}">
+
+                        <apex:facet name="header">Module</apex:facet>
+                        <apex:outputText value="{!account.userObject.user_of_module__r.moduleName__c}"/>
+
+                   </apex:column>
+                   <apex:column style="{!if(account.userObject.isGlobal__c==true ,changeColor,"")}">
+
+                        <apex:facet name="header">Action</apex:facet>
+                        <apex:commandLink value="Edit" action="{!callEdit}" >
+                        <apex:param name="SelectedName" value="{!account.userObject.id}" assignTo="{!SelectedName}"/>
+                        </apex:commandLink>
+                       
+
+                   </apex:column>
+                        <apex:facet name="footer">
+                            <apex:outputPanel >
+                                <apex:outputText value="Page {!paginator.pageNumberDisplayFriendly} of {!paginator.pageCount} in {!paginator.recordCount} Results"/>
+                                <apex:outputPanel >    </apex:outputPanel>
+                                <apex:commandLink value="Previous" action="{!paginator.previous}" style="font-weight:bold;"
+                                    rendered="{!IF(paginator.hasPrevious,'true','false')}"/>
+                                <apex:outputText value="Previous" rendered="{!IF(NOT(paginator.hasPrevious),'true','false')}"/>
+                                <apex:outputPanel > | </apex:outputPanel>
+                                <apex:commandLink value="Next" action="{!paginator.next}" style="font-weight:bold;"
+                                    rendered="{!IF(paginator.hasNext,'true','false')}"/>
+                                <apex:outputText value="Next" rendered="{!IF(NOT(paginator.hasNext),'true','false')}"/>
+                                
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<apex:image id="GlobalImage" value="{!$Resource.GlobalTestCaseWriter}" />
+                                <b>Global Testcase Writer</b>
+                            </apex:outputPanel>
+                           
+                        </apex:facet>
+                    </apex:Datatable>                  
+                   
+                   </apex:outputpanel>
+           <!------------------EditPanel--------------- --> 
+           
+           <br/><br/>
+         <apex:outputpanel layout="block" styleClass="exstyle" rendered="{!showEditPanel}">
+         <table border="0" >
+         <tr>
+            <td><apex:outputLabel id="n" value="RecordID"></apex:outputLabel></td>
+            <td><apex:inputText id="k" value="{!ModuleUserInst.Name}" size="" disabled="true"/></td>
+            <td></td><td></td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Module Name"></apex:outputLabel></td>
+            <td><apex:inputtext id="m1" value="{!moduleSelected}" /></td>
+            <td><apex:selectList id="m" value="{!selectedModule}" disabled="{!if(ModuleUserInst.isGlobal__c==true||count2==count1,true,false)}" size="1" onchange="show(1);">
+                    <apex:selectOptions value="{!EditModules}"/>
+                </apex:selectList></td><td>*Select to edit</td>
+         </tr>
+         <tr>
+            <td><apex:outputLabel value="Role In Project"></apex:outputLabel></td>
+            <td><apex:inputText id="r1" value="{!roleSelected}"/></td>
+            <td><apex:selectList id="r" value="{!selectedRole}" disabled="{!if(ModuleUserInst.isGlobal__c==true||count2==count1,true,false)}" size="1" onchange="show(2);">
+                   <apex:selectoptions value="{!Roles}"></apex:selectoptions>
+                </apex:selectList></td>
+            <td>*Select to edit</td>
+            
+         </tr>
+         <tr><td><apex:outputlabel value="Accessibilty"/></td>
+             <td><apex:inputfield id="p1" value="{!ModuleUserInst.isGlobal__c}" rendered="{!if(ModuleUserInst.isGlobal__c==true||count2==count1,true,false)}" /></td> 
+             
+             <td>*Select to edit</td>         
+         </tr>
+                  
+         <tr><td colspan="2" height="70" align="center"><apex:commandButton value="Save" action="{!updateUser}" /></td>
+         <td colspan="2"><apex:commandButton value="cancel" action="{!cancelEdit}"/></td></tr>
+         </table>
+         </apex:outputpanel>
+        <!------------------------------------------------------------------------------------->      
+                   
+                <apex:outputpanel id="insertUsers" rendered="{!bool4}">
+                 
+                <fieldset>
+                  <center> 
+                  <fieldset> 
+                      <legend>Filter</legend>
+                      <table border="0" width="95%">
+                                 
+                      <tr><td><apex:outputLabel value="Search Employee By:" /></td>
+                      <td><apex:selectList id="searchcondition" size="1" multiselect="false" value="{!condition}">
+                          <apex:selectOption itemlabel="BU" itemvalue="BU" />
+                          <apex:selectoption itemlabel="Designation" itemvalue="Designation"/>
+                         
+                          <apex:selectoption itemlabel="Location" itemvalue="Location" />                      
+                      </apex:selectList>&nbsp;&nbsp;<apex:commandButton value="Go!" action="{!showFilteredResult}" /></td></tr>
+                      <tr><td></td><td></td></tr>
+                      <tr><td>                           
+                      <apex:outputLabel id="techLabel" value="Enter Value" for="inputTech"/></td>
+                      <td><apex:inputText id="inputparam" value="{!conditionvalue}"/></td></tr>
+                      <tr><td colspan="2" align="right"><apex:commandLink value="View modulewise available Users in the project" onclick="openPopup();"/></td></tr>
+                      
+                      </table>
+                  </fieldset>
+                  <br/>
+                  </center>
+                  <apex:outputpanel id="showUserDetails" rendered="{!queryResults}">
+                  
+                     
+                     <apex:dataTable style="background-color:white" value="{!Employee}" var="c" cellpadding="5" cellspacing="5" columnClasses="center" headerClass="head">
+                     <apex:column >
+                         <apex:facet name="header">Action</apex:facet>
+                         <apex:commandLink value="Add" action="{!roleAdder}">
+                        
+                             <apex:param assignTo="{!empID}" name="empId" value="{!c.id}"/>
+                         </apex:commandLink> 
+                        <!--<apex:inputCheckbox value="{!c.bool}"/>-->
+                     </apex:column>
+                    <apex:column width="100" >
+
+                        <apex:facet name="header" >Emp ID</apex:facet>
+                        <apex:outputText value="{!c.Name}"/>
+
+                   </apex:column>
+                   <apex:column width="100" >
+
+                        <apex:facet name="header" >Name</apex:facet>
+                        <apex:outputText value="{!c.empName__c}"/>
+
+                   </apex:column>
+                   <apex:column >
+
+                        <apex:facet name="header">Designation</apex:facet>
+                       
+                        <apex:outputtext value="{!c.empDesignation__c}"/>
+
+                   </apex:column>
+                
+                   <apex:column >
+
+                        <apex:facet name="header">BU</apex:facet>
+                        <apex:outputText value="{!c.BU__c}"/>
+
+                   </apex:column>
+                   <apex:column > 
+                    <apex:facet name="header">Location</apex:facet>
+                    <apex:outputtext value="{!c.empLocation__c}" /> 
+                   </apex:column>
+                 
+                </apex:dataTable>
+                </apex:outputpanel>
+                </fieldset>
+                </apex:outputpanel><!--
+                <apex:outputpanel id="deleteUsers" rendered="{!bool5}">
+                        
+                </apex:outputpanel>-->
+                <apex:outputpanel id="allRoles" rendered="{!bool6}">
+                     <apex:dataTable style="background-color:white" value="{!RolesDisplay}" var="c" cellpadding="5" cellspacing="5" columnClasses="center" headerClass="head">
+                         <apex:column >
+                           <apex:facet name="header">Check</apex:facet>
+                           <apex:inputCheckbox disabled="{!if(c.roleObject.projectRole__c=='Manager',true,false)}" value="{!c.bool}"/>
+                         </apex:column>
+                         <apex:column >
+                            <apex:facet name="header">Role</apex:facet>
+                            <apex:outputtext value="{!c.roleObject.projectRole__c}"/>
+                         </apex:column>
+                         <apex:column >
+                            <apex:facet name="header">Description</apex:facet>
+                            <apex:outputtext value="{!c.roleObject.Description__c}" />
+                         </apex:column>
+                      </apex:datatable>
+             
+                </apex:outputpanel>
+                <apex:outputpanel id="insertRoles" rendered="{!bool7}">
+                    <table border="0" width="90%">
+                        <tr><td></td><td></td></tr>
+                        <tr><td></td><td></td></tr>
+                        <tr><td><apex:outputlabel value="Role" for="insertRole" style="font-size:12px;font-weight:bold;" /></td>
+                        <td><apex:inputtext id="insertRole" size="64" value="{!prjRoleObj.projectRole__c}"/><br/><div id="roleName" style="background-color:white;visibility:visible;"></div></td></tr>
+                        <tr><td><apex:outputlabel value="Description" for="insertDesc" /></td>
+                        <td><apex:inputtextarea id="insertDesc" rows="5" cols="60" value="{!prjRoleObj.Description__c}" style="font-size:12px;font-weight:bold;"/><br/><div id="roleDescription" style="background-color:white;visibility:visible;"></div></td></tr>
+                        <tr><td><input type="Button" value="Save" class="btn" onclick="insertRoleValidation();" /></td><td><input type="Reset" class="btn" value="Clear" /></td></tr>
+                    </table>       
+                </apex:outputpanel>
+                <apex:outputpanel id="deleteRoles" rendered="{!bool8}">
+                        
+                </apex:outputpanel>
+<!---------------------------------------------------------------------------->
+                <apex:outputpanel id="roleadder" rendered="{!bool11}" >
+    
+                    <fieldset>
+                    <legend>Available Roles</legend>
+                    <apex:outputLabel >Select Roles for the Employee being added.</apex:outputLabel>
+                    <br/>
+                    <br/>
+ <!--===============================-->                   
+                    <apex:selectCheckboxes id="rolesId" value="{!roles1}" layout="pageDirection" title="Choose Role/s">
+                        <apex:selectOptions value="{!items}"/>
+                    </apex:selectCheckboxes>
+                    <br/>
+                    
+                    
+                    <!--=====================================================--> 
+                    <apex:selectRadio id="selectRadio" value="{!selectRadioOption}" onclick="enableButton();">
+                        <apex:selectoption itemlabel="Add Role without module" itemvalue="RoleCheck" />
+                        <apex:selectoption itemlabel="Add User with Global Role" itemvalue="GlobalCheck" />
+                        <apex:selectoption itemlabel="Add Modules for the roles" itemvalue="ModuleCheck" />
+                        
+                    </apex:selectRadio> 
+                    <br/>                 
+                    <div align="right">
+                    <apex:commandButton id="saveOperation" value="Save" action="{!insertRoles}" disabled="{!saveEnabled}" />&nbsp;&nbsp;
+                    <apex:commandButton id="nextOperation" value="Next" action="{!showModules}" disabled="{!nextEnabled}" />&nbsp;&nbsp;
+             
+                    </div>
+                    </fieldset>        
+                </apex:outputpanel>
+                <br/>
+                <!--=============================================================================================-->
+                
+                <apex:outputpanel id="moduleadder" rendered="{!bool12}" >
+                
+    
+                    <fieldset>
+                    <legend>Available Modules</legend>    
+                    
+                    <apex:commandLink id="selectall" value="Select All" onclick="selectAllModules();" />&nbsp;&nbsp;|&nbsp;&nbsp;<apex:commandLink value="Deselect All" onclick="deSelectAllModules();"/>
+                    <br/>
+                    <br/>
+                        <apex:selectCheckboxes id="modulesId" value="{!modules}" title="Choose Module/s" layout="pagedirection" disabled="false">  
+                            <apex:selectOptions value="{!Records}"/>                          
+                        </apex:selectCheckboxes>
+                    <br/>
+                    <div align="right">
+                        <apex:commandButton value="Save" onclick="finish" action="{!ModuleUsers}"/>&nbsp;&nbsp;
+                        <apex:commandButton value="Cancel" action="{!showPanel1n4}"/>&nbsp;&nbsp;
+                    </div>
+                    </fieldset>
+                </apex:outputpanel>
+                <br/><br/><br/>
+                <apex:outputPanel id="showInsertResult1" rendered="{!insertResult1}">
+                   <apex:outputText value="The Following Record/s Already Exits!" style="color:red;font-style:italic" /><br/>
+                   
+                   <apex:datatable value="{!setExample1}" var="cc" border="1" width="95%">
+                   
+                       <apex:column value="{!cc.Name}" />
+                       <apex:column value="{!cc.EmpID__r.Name}"/>
+                       <apex:column value="{!cc.EmpID__r.empName__c}"/>
+                       <apex:column value="{!cc.EmpID__r.empDesignation__c}"/>
+                       <apex:column value="{!cc.EmpID__r.BU__c}" />
+                       <apex:column value="{!cc.ProjectUserRole__r.projectRole__c}"/>
+                       <apex:column value="{!cc.user_of_module__r.moduleName__c}"/>
+                       <apex:column value="{!cc.isGlobal__c}" />
+                                    
+                   </apex:datatable>
+                </apex:outputPanel>
+                <br/><br/>
+                <apex:outputpanel id="showInsertResult2" rendered="{!insertResult2}">
+                  <apex:outputText value="The Following Record/s Added Successfully!" style="color:green;font-style:italic" /><br/>
+                   <apex:datatable value="{!setExample2}" var="cc" border="1" width="80%">
+                   
+                       <apex:column value="{!cc.Name}" />
+                       <apex:column value="{!cc.EmpID__r.Name}"/>
+                       <apex:column value="{!cc.EmpID__r.empName__c}"/>
+                       <apex:column value="{!cc.EmpID__r.empDesignation__c}"/>
+                       <apex:column value="{!cc.EmpID__r.BU__c}" />
+                       <apex:column value="{!cc.ProjectUserRole__r.projectRole__c}"/>
+                       <apex:column value="{!cc.user_of_module__r.moduleName__c}"/>
+                       <apex:column value="{!cc.isGlobal__c}" />
+                                    
+                   </apex:datatable>
+                
+                </apex:outputpanel> 
+                <apex:outputPanel id="BackToHome" rendered="{!showBack}">
+                   <apex:commandbutton value="Back" action="{!showPanel1n4}"/>
+                
+                </apex:outputPanel>
+             </td></tr>                   
+           </table>
+       <apex:actionFunction name="enableButton" action="{!ButtonEnabled}"/>
+       <apex:actionFunction name="UsersDelete" action="{!employeeDeleted}"/>  
+       <apex:actionfunction name="InsertRole" action="{!insertNewRole}"/> 
+       <apex:actionFunction name="RolesDelete" action="{!DeleteRoles}"/>   
+       </apex:form>
+      </center>  
+  
+</apex:page>

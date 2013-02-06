@@ -1,0 +1,28 @@
+<apex:page showHeader="false" sidebar="false" id="projectPage" controller="ProjectPageController">
+       <style>
+         .tabStyle{
+                  background-color:white;font-size:14px;
+                 }
+          .tabHeader{
+          background-color:#3399CC;font-size:14px;
+          }
+     </style>
+      <apex:outputPanel >
+      <Table cellpadding="5" cellspacing="5" align="center"  width="100%">
+                 
+                      <TR>
+                          <TH colspan="2" style="color:white;background-color:#3399CC;">Project Details </TH>
+                      </TR>
+                      <TR>
+                          <TD style="font-weight:bolder;"> <apex:outputLabel value="Project Title: "></apex:outputLabel> </TD>
+                          <TD><apex:outputLabel value="{!projObj.projectTitle__c}" /></TD>
+                      </TR>
+                      <TR>
+                          <TD style="font-weight:bolder;"><apex:outputLabel value="project Version: "></apex:outputLabel></TD>
+                          <TD><apex:outputLabel value="{!projObj.projectVersion__c}" /></TD>
+                      </TR>
+                                                       
+                  
+              </Table>
+      </apex:outputPanel>
+</apex:page>

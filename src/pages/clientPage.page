@@ -1,0 +1,8 @@
+<apex:page showHeader="false" sidebar="false" >
+    <apex:include pageName="header" />
+    <Table width="80%" align="center" border="1">
+        <TR><TD>
+         <Font color="blue" size="6"> This is a client page by which any client or user can add his / her test criteria.</Font>
+         </TD></TR>
+    </Table>
+</apex:page>

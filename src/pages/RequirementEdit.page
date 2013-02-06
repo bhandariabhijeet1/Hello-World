@@ -1,0 +1,22 @@
+<apex:page showHeader="false" sidebar="false" controller="RequirementViewCon"  >
+
+<apex:form >
+    <apex:outputLabel value="Requirement Name"></apex:outputLabel>    
+    <apex:inputText value="{!tobeEdited2.reqName__c}"/><br/>
+    <apex:outputLabel value="Requirement Type"></apex:outputLabel>
+    <apex:inputText value="{!tobeEdited2.reqType__c}" /> <br/>
+    <apex:outputLabel value="Requirement Description"></apex:outputLabel>
+    <apex:inputField value="{!tobeEdited2.reqDescription__c}"/><br/>
+    <apex:outputLabel value="Priority"></apex:outputLabel>
+    <apex:inputField value="{!tobeEdited2.reqPriority__c}"/><br/>
+    <apex:outputLabel value="Requirement Proposed By:"></apex:outputLabel>
+    <apex:inputField value="{!tobeEdited2.reqProposedBy__c}"/><br/>
+    <apex:outputLabel value="Requirement Status"></apex:outputLabel>
+    <apex:inputField value="{!tobeEdited2.reqStatus__c}"/><br/>
+    <apex:outputLabel value="Requirement Version"></apex:outputLabel>
+    <apex:inputField value="{!tobeEdited2.reqVersion__c}"/><br/>
+    <apex:commandButton value="edit" action="{!updateReq}"/>
+    <apex:commandButton value="cancel" action="{!returnEdit}"/>
+</apex:form>
+  
+</apex:page>

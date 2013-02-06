@@ -1,0 +1,75 @@
+<apex:page showHeader="false" sidebar="false" controller="ReportsController" contentType="application/vnd.ms-excel#Report.xls" >
+  
+  <Center><h2>Cloud Based Test Case Management Tool</h2><br/><apex:outputText value="DATE: {!NOW()}" />
+  </Center><br/>
+  <table border="0"><tr><td><b>Project Title:</b></td><td><apex:outputtext value="{!projectObj.projectTitle__c}"/></td>
+         <td align="center"><b>StartDate:</b></td><td><apex:outputtext value="{!projectObj.startDate__c}" /></td></tr>
+         <tr><td><b>Project Version:</b></td><td align="center"><apex:outputtext value="{!projectObj.projectVersion__c}" /></td>
+         <td align="center"><b>End Date:</b></td><td><apex:outputtext value="{!projectObj.endDate__c}"/></td></tr>
+  </table>
+  <br/><br/>
+  
+         <apex:dataTable value="{!testCaseList1}" style="background-color:lightgray;" var="r" border="1" cellpadding="5">
+            
+               <apex:column width="80">
+
+                        <apex:facet name="header" >TestCase ID</apex:facet>
+                        <apex:outputtext value="{!r.Name}"/>
+
+                </apex:column>
+                <apex:column width="200">
+
+                        <apex:facet name="header">TestCase Name</apex:facet>
+                        <apex:outputText value="{!r.testName__c}"/>
+
+                </apex:column>
+                
+                <apex:column width="200">
+
+                        <apex:facet name="header">Description</apex:facet>
+                       
+                        <apex:outputtext value="{!r.testDescription__c}"/>
+
+                </apex:column>
+                
+                <apex:column width="100">
+
+                        <apex:facet name="header">Requirement ID</apex:facet>
+                        <apex:outputText value="{!r.reqID__r.reqName__c}"/>
+
+                </apex:column>
+                 <apex:column width="100">
+
+                        <apex:facet name="header">Module Name</apex:facet>
+                        <apex:outputText value="{!r.reqID__r.moduleID__r.moduleName__c}"/>
+
+                </apex:column>
+                <apex:column width="100">
+
+                        <apex:facet name="header">Assigned TO</apex:facet>
+                        <apex:outputText value="{!r.testAssignTo__c}"/>
+
+                </apex:column>
+                <apex:column width="100">
+
+                        <apex:facet name="header">Expected OutPut</apex:facet>
+                        <apex:outputText value="{!r.expectedOutput__c}" />
+
+                </apex:column>
+                 <apex:column width="100">
+
+                        <apex:facet name="header">Actual OutPut</apex:facet>
+                        <apex:outputText value="{!r.actualOutput__c}" />
+
+                </apex:column>
+                <apex:column width="100">
+
+                        <apex:facet name="header">TestCase Result</apex:facet>
+                        <apex:outputText value="{!r.testResult__c}" />
+
+                </apex:column>
+
+           </apex:dataTable>
+
+    
+</apex:page>

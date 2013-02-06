@@ -1,0 +1,78 @@
+<apex:page showHeader="false" sidebar="false" controller="ModuleWiseController">
+
+   <style>
+    .center
+          {
+             text-align:center;
+          }
+          .RowEven
+          {
+             background-color:#E6E6FA;
+           }
+           
+          .RowOdd
+          {bakground-color:white;}
+  
+          .exstyle{height:30px;width:80%;font-weight:bold;color:white;background-color:#008AB8;text-align:left;}
+
+    </style>
+    
+     <center><br/><br/><br/>
+            
+        <table border="0" width="65%"><tr><td><b>Project Title:</b></td><td><apex:outputtext value="{!projectObj.projectTitle__c}"/></td>
+         <td align="center"><b>StartDate:</b></td><td><apex:outputText value="{0,date,MM'-'dd'-'yyyy}" ><apex:param value="{!projectObj.startDate__c}"/></apex:outputText></td></tr>
+         <tr><td><b>Project Version:</b></td><td align="center"><apex:outputtext value="{!projectObj.projectVersion__c}" /></td>
+         <td align="center"><b>End Date:</b></td><td><apex:outputText value="{0,date,MM'-'dd'-'yyyy}" ><apex:param value="{!projectObj.endDate__c}"/></apex:outputText></td></tr>
+        </table><br/><br/>
+         
+            <h3>Module wise list of available Users in the project</h3><br/><br/>
+           
+           <!-- <apex:dataTable value="{!moduleUserList}" var="outer" border="10px" style="background-color:white" width="65%">
+           
+                <apex:column >
+                        <apex:outputText value="Module Name: {!outer.moduleName}" />
+                </apex:column> 
+                <apex:column>
+                         <apex:outputtext value="{!outer.status}"/>
+                <apex:dataList value="{!moduleUserList}" var="outer" id="theList">-->
+               
+                
+                 <apex:repeat value="{!moduleUserList}" var="outer" id="theRepeat">
+
+
+                 <div class="exstyle">
+                     <apex:outputText value="Module Name: {!outer.moduleName}" />
+                 </div>
+                         <apex:datatable value="{!outer.userList}" var="inner" border="" width="80%" cellpadding="5" rowClasses="RowEven,RowOdd" columnClasses="center" headerClass="center">
+                        
+                             
+                              <apex:column >
+                                <!--<apex:facet name="header">RecordID</apex:facet>-->
+                                <apex:outputText value="{!inner.Name}" />
+                             </apex:column>
+                             <apex:column >
+                                <!--<apex:facet name="header">EmpID</apex:facet>-->
+                                <apex:outputText value="{!inner.EmpID__r.Name}" />
+                             </apex:column>
+                             <apex:column >
+                                <!--<apex:facet name="header">Name</apex:facet>-->
+                                <apex:outputText value="{!inner.EmpID__r.empName__c}" />
+                             </apex:column>
+                             <apex:column >
+                               <!-- <apex:facet name="header">BU</apex:facet>-->
+                                <apex:outputText value="{!inner.EmpID__r.BU__c}" />
+                             </apex:column>
+                             <apex:column >
+                                <!--<apex:facet name="header">Project Role</apex:facet>-->
+                                <apex:outputText value="{!inner.ProjectUserRole__r.projectRole__c}" />
+                             </apex:column>
+                             
+                        </apex:datatable>
+               <!-- </apex:column>     
+            </apex:dataTable>-->
+             </apex:repeat>
+          
+     
+     </center>
+  
+</apex:page>

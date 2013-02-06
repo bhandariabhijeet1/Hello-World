@@ -1,0 +1,18 @@
+<apex:page showHeader="false" sidebar="false">
+    <Table cellpadding="5" cellspacing="5" align="center" width="50%" >
+      <TR>
+      <TD colspan="2" style="font-face:arial;color:green;font-size:16pt;"><br/>Project created successfully!<br/>You have successfully created a project.
+      you can keep on working by clicking 'Navigate to my Project Account' or can click 'Log out' to exit.</TD>
+      </TR>
+      <TR>
+     
+      <apex:form >
+      <TD>
+      <apex:commandLink action="/apex/index" style="font-size:16pt;">
+      Navigate to my Project Account</apex:commandLink></TD>
+     <TD> <apex:commandLink action="/apex/authenticate" style="font-size:16pt;" >Log out</apex:commandLink></TD>
+      </apex:form>
+      
+      </TR>
+  </Table>
+</apex:page>

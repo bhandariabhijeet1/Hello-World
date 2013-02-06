@@ -1,0 +1,78 @@
+<apex:page showHeader="false" sidebar="false" controller="TesterController">
+    <!-- ---------------Module info display---------------------- -->
+    <table  width="100%" cellspacing="10" cellpadding="10" align="center">
+    <tr>
+        <td>
+        <fieldset >
+            <legend colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Currently Selected Module</legend>
+            <table border="0" width="95%" align="center">
+            <tr>
+                <td style="font-size:14px"><b><apex:outputLabel value="Module ID:"/></b></td>           
+                    <TD style="font-size:14px"><apex:outputText value="{!moduleObj.Name}"></apex:outputText></TD>
+                </tr>
+                <tr>
+                    <TD style="font-size:14px"><b><apex:outputLabel value="Module Name:"/></b></TD>
+                    <TD style="font-size:14px"><apex:outputText value="{!moduleObj.moduleName__c}"></apex:outputText></TD>
+                </tr>
+                <tr>
+                    <TD style="font-size:14px"><b><apex:outputLabel value="Module Description:"/></b></TD>
+                    <TD style="font-size:14px"><apex:outputText value="{!moduleObj.moduleSpecification__c}"></apex:outputText></TD>
+                </tr> 
+            </table>
+        </fieldset>
+        </td>
+    </tr>  
+    </table>                   
+
+    <!-- ---------------------end of module info panel -------------------------- --->
+    &nbsp;&nbsp;&nbsp;&nbsp;<b><i>Please select any requirement to show testcases</i></b><br></br>
+    <table width="30%" align="Left">
+    <tr>
+        <td><apex:image value="{!$Resource.complete}"/></td><td align="left">COMPLETE</td>
+        <td><apex:image value="{!$Resource.inprogress}"/></td><td align="left">IN PROGRESS</td>
+       
+    </tr>
+    </table><br></br><br></br>
+    <table border="0" width="95%" align="center"> 
+        <tr><th colspan="2" style="font-size:15px;font-weight:bolder;color:white;background-color:#3399CC;">Available Requirements</th></tr>
+        <tr><td>
+        <apex:form id="form" >
+            <apex:pageMessages ></apex:pageMessages>
+            <apex:dataTable value="{!reqList}" var="row" style="background-color:white" cellpadding="5" width="100%" align="center" rendered="{!testerReq1}">
+                <apex:column >
+                    <apex:facet name="header">Status</apex:facet>
+                    <apex:image url="{!if(row.reqStatus__c=='complete' ,URLFOR($Resource.complete),null)}"/>
+                    <apex:image url="{!if(row.reqStatus__c=='inprogress' ,URLFOR($Resource.inprogress),null)}"/>
+                    <apex:image url="{!if(!(row.reqStatus__c=='complete')&&!(row.reqStatus__c=='inprogress') ,URLFOR($Resource.inprogress),null)}"/>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Name</apex:facet>
+                    <apex:commandLink value="{!row.reqName__c}"  action="{!callTestCase}" style="font-size:14px" >
+                           <apex:param name="SelectedTestName" value="{!row.id}" assignTo="{!SelectedTestName}"/>
+                    </apex:commandLink>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Description</apex:facet>
+                    <apex:outputLabel style="font-size:14px" value="{!row.reqDescription__c}"></apex:outputLabel>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Priority</apex:facet>
+                    <apex:outputText style="font-size:14px" value="{!row.reqPriority__c}"></apex:outputText>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Type</apex:facet>
+                    <apex:outputLabel style="font-size:14px" value="{!row.reqType__c}"></apex:outputLabel>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Version</apex:facet>
+                    <apex:outputLabel style="font-size:14px" value="{!row.reqVersion__c}"></apex:outputLabel>
+                </apex:column>
+            </apex:dataTable><br/>
+            <apex:pageMessage rendered="{!testerReq2}" severity="info" strength="2" summary="Their are no existing requirements under this Module..."/>
+            <div align="right">
+                <apex:commandButton value="Back" action="{!callCancel}" />
+            </div>
+        </apex:form>
+        </td></tr>
+    </table>
+</apex:page>
